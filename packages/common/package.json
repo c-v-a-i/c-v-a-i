@@ -1,11 +1,10 @@
 {
-  "name": "app-common",
-  "version": "4.0.1",
+  "name": "@cv-creator/common",
+  "version": "0.1.0",
   "private": true,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "dependencies": {
-  },
+  "type": "module",
   "devDependencies": {
     "@types/lodash": "^4.14.182",
     "@types/node": "^16.11.24"

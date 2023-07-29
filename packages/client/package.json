@@ -1,5 +1,5 @@
 {
-  "name": "app-client",
+  "name": "@cv-creator/client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -15,20 +15,13 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "tslib": "^2.6.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-//    "start": "../../node_modules/.bin/react-scripts start",
-//    "build": "../../node_modules/.bin/react-scripts build",
-//    "test": "../../node_modules/.bin/react-scripts test",
-//    "eject": "../../node_modules/.bin/react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "start": "react-scripts start",
+    "build": "react-scripts build"
   },
   "browserslist": {
     "production": [
