@@ -1,6 +1,6 @@
 import React from 'react';
 import { Section, Header, SubHeader } from './body-components';
-import { AchievementData } from '../../model/';
+import { AchievementData } from '../../model';
 
 interface AchievementsProps {
   data: AchievementData[];
