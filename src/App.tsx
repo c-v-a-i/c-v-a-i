@@ -1,26 +1,62 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import { ContactInfo, Container, WorkExperience } from './components/atoms'
+import {
+  achievementsData,
+  contactInfoData,
+  educationData,
+  projectsData,
+  skillsData,
+  workExperienceData,
+} from './model/data'
+import { Education } from './components/atoms/Education'
+import { Skills } from './components/atoms/Skills'
+import { Projects } from './components/atoms/Projects'
+import { Achievements } from './components/atoms/Achievments'
+import { COLORS, ThemeType } from './styles'
+import styled from '@emotion/styled'
 
-function App() {
+const App: React.FC = () => {
+  const [ theme, setTheme ] = useState<ThemeType>(ThemeType.LIGHT)
+
+  const toggleTheme = () => setTheme(theme === ThemeType.LIGHT ? ThemeType.DARK : ThemeType.LIGHT)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Container theme={theme}>
+      <ThemeButton onClick={toggleTheme} theme={theme} />
+      <ContactInfo data={contactInfoData}/>
+      <WorkExperience data={workExperienceData}/>
+      <Education data={educationData}/>
+      <Skills data={skillsData}/>
+      <Projects data={projectsData}/>
+      <Achievements data={achievementsData}/>
+    </Container>
+  )
 }
 
-export default App;
+
+interface ThemeButtonProps {
+  theme: ThemeType
+}
+const ThemeButton = styled.button<ThemeButtonProps>`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 25px;
+  background: ${({ theme }) => theme === ThemeType.LIGHT ? COLORS.DARK : COLORS.LIGHT};
+  border-radius: 50px ;
+  
+  &:hover {
+    cursor: pointer;
+  }
+  
+  &:focus {
+    outline: none;
+  }
+  
+  &:active {
+    transform: scale(0.9);
+  }
+`
+
+export default App
