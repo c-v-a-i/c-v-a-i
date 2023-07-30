@@ -1,6 +1,6 @@
 import React from 'react';
 import { Section, Header, SubHeader } from './body-components';
-import { EducationData } from '../../model';
+import { EducationData } from '@cv-creator/common';
 
 interface EducationProps {
   data: EducationData[];

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Section, Header, SubHeader } from './body-components'
-import { ContactInfoData } from '../../model'
+import { ContactInfoData } from '@cv-creator/common'
 
 
 interface ContactInfoProps {

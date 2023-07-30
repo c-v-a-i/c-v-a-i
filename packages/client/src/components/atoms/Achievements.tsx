@@ -1,6 +1,7 @@
 import React from 'react';
+import { AchievementData } from '@cv-creator/common';
+
 import { Section, Header, SubHeader } from './body-components';
-import { AchievementData } from '../../model';
 
 interface AchievementsProps {
   data: AchievementData[];

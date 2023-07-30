@@ -1,6 +1,7 @@
+import { WorkExperienceData } from '@cv-creator/common'
+
 import React from 'react';
 import { Section, Header, SubHeader } from './body-components'
-import { WorkExperienceData } from '../../model'
 
 interface WorkExperienceProps {
   data: WorkExperienceData[];

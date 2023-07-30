@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
-import { ContactInfo, Container, WorkExperience } from './components/atoms'
+import {
+  Education,
+  Skills,
+  Projects,
+  Achievements,
+  ContactInfo,
+  Container,
+  WorkExperience
+} from './components/atoms'
 import {
   achievementsData,
   contactInfoData,
@@ -7,11 +15,7 @@ import {
   projectsData,
   skillsData,
   workExperienceData,
-} from './model/data'
-import { Education } from './components/atoms/Education'
-import { Skills } from './components/atoms/Skills'
-import { Projects } from './components/atoms/Projects'
-import { Achievements } from './components/atoms/Achievments'
+} from '@cv-creator/common'
 import { COLORS, ThemeType } from './styles'
 import styled from '@emotion/styled'
 

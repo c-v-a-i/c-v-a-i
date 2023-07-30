@@ -1,6 +1,7 @@
 import React from 'react'
+import { SkillsData } from '@cv-creator/common'
+
 import { Section, Header, SubHeader } from './body-components'
-import { SkillsData } from '../../model'
 
 interface SkillsProps {
   data: SkillsData;

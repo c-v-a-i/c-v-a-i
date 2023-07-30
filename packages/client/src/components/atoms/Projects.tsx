@@ -1,6 +1,7 @@
 import React from 'react';
+import { ProjectData } from '@cv-creator/common'
+
 import { Section, Header, SubHeader } from './body-components';
-import { ProjectData } from '../../model';
 
 interface ProjectsProps {
   data: ProjectData[];
