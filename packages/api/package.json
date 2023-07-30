@@ -17,7 +17,7 @@
     "nodemon": "^2.0.15"
   },
   "scripts": {
-    "start": "tsc -b && tsc -b -w & NODE_OPTIONS=--preserve-symlinks yarn nodemon ./build/index.js",
+    "start": "tsc -b -w & NODE_OPTIONS=--preserve-symlinks yarn nodemon ./build/index.js",
     "build": "tsc -b"
   }
 }
