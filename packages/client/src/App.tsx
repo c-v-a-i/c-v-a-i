@@ -28,11 +28,10 @@ const App: React.FC = () => {
     <Container theme={theme}>
       <ThemeButton onClick={toggleTheme} theme={theme} />
       <ContactInfo data={contactInfoData}/>
+      <Projects data={projectsData}/>
       <WorkExperience data={workExperienceData}/>
       <Education data={educationData}/>
       <Skills data={skillsData}/>
-      <Projects data={projectsData}/>
-      <Achievements data={achievementsData}/>
     </Container>
   )
 }
