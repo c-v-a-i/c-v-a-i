@@ -3,13 +3,11 @@ import {
   Education,
   Skills,
   Projects,
-  Achievements,
   ContactInfo,
   Container,
   WorkExperience
 } from './components/atoms'
 import {
-  achievementsData,
   contactInfoData,
   educationData,
   projectsData,
