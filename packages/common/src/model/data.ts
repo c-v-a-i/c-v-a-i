@@ -33,16 +33,12 @@ export const workExperienceData: WorkExperienceData[] = [
 
 export const projectsData: ProjectData[] = [
   {
+    name: 'Creating a GPT-based chat bot for a 3D product configurator',
+    description: 'A novel approach to product configuration using GPT-4. We take GPT-4 api, write the prompt and connect it with the 3D configurator. Pretty cool, huh?',
+  },
+  {
     name: 'Fine-tuning of OpenAI Whisper model',
     description: 'Using Python and HuggingFace. The repo could be found here: https://github.com/SkuratovichA/whisper_ft',
-  },
-  {
-    name: 'Creating a GPT-based chat bot for a 3D product configurator',
-    description: 'A novel approach to product configuration using GPT-4',
-  },
-  {
-    name: 'Creating a GPT-based chat bot for a 3D product configurator',
-    description: 'A novel approach to product configuration using GPT-4',
   },
   {
     name: 'KNN-based image classifier and BGMM-based speech classifiers',
@@ -50,11 +46,11 @@ export const projectsData: ProjectData[] = [
   },
   {
     name: 'Latent Dirichlet Allocation for document and topic classification project',
-    description: 'Bayesian statistics masters course project',
+    description: 'Bayesian statistics masters course project. I used Gibbs sampling and variational inference to train the model. I love Bayesian statistics because of its elegance and craziness',
   },
   {
     name: 'Joint intent classification and slot filling using BERT',
-    description: 'Natural language processing masters course project',
+    description: 'Natural language processing masters course project - I just used BERT with a linear layer on top of it, trained a bunch of models, compare them and wrote a report. Nothing special.',
   },
   {
     name: 'Lightweight compiler for Lua language',
@@ -62,7 +58,7 @@ export const projectsData: ProjectData[] = [
   },
   {
     name: 'Diagram editor',
-    description: 'Written in C++ and QT from scratch during 15 days of a programming marathon.',
+    description: '8k lines of code written in C++ and QT from scratch during 15 days of a programming marathon.',
   },
   {
     name: 'Domain adaptation for speech recognition',
