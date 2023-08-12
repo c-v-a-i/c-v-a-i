@@ -1,32 +1,50 @@
 import React from 'react'
 import { SkillsData } from '@cv-creator/common'
 
-import { Section, Header, SubHeader } from './body-components'
+import { Section, Header, SubHeader, ListItem } from './body-components'
+import { WithTheme } from '../../types'
+import styled from '@emotion/styled'
 
-interface SkillsProps {
+type SkillsProps = WithTheme<{
   data: SkillsData;
-}
+}>
 
-export const Skills: React.FC<SkillsProps> = ({ data }) => (
+export const Skills: React.FC<SkillsProps> = ({ data, theme }) => (
   <Section>
-    <Header>Skills</Header>
-    <SubHeader>Soft Skills</SubHeader>
-    <ul>
-      {data.softSkills.map((skill, index) => (
-        <li key={index}>{skill}</li>
-      ))}
-    </ul>
-    <SubHeader>Hard Skills</SubHeader>
-    <ul>
-      {data.hardSkills.map((skill, index) => (
-        <li key={index}>{skill}</li>
-      ))}
-    </ul>
-    <SubHeader>Tools</SubHeader>
-    <ul>
-      {data.tools.map((tool, index) => (
-        <li key={index}>{tool}</li>
-      ))}
-    </ul>
+    <Header theme={theme}>Skills</Header>
+    <SkillsWrapper>
+
+      <div>
+        <SubHeader theme={theme}>Soft Skills</SubHeader>
+        <ul>
+          {data.softSkills.map((skill, index) => (
+            <ListItem theme={theme} key={index}>{skill}</ListItem>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <SubHeader theme={theme}>Hard Skills</SubHeader>
+        <ul>
+          {data.hardSkills.map((skill, index) => (
+            <ListItem theme={theme} key={index}>{skill}</ListItem>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <SubHeader theme={theme}>Tools</SubHeader>
+        <ul>
+          {data.tools.map((tool, index) => (
+            <ListItem theme={theme} key={index}>{tool}</ListItem>
+          ))}
+        </ul>
+      </div>
+    </SkillsWrapper>
   </Section>
 )
+
+const SkillsWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`

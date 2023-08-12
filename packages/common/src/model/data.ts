@@ -34,7 +34,7 @@ export const workExperienceData: WorkExperienceData[] = [
 export const projectsData: ProjectData[] = [
   {
     name: 'Creating a GPT-based chat bot for a 3D product configurator',
-    description: 'A novel approach to product configuration using GPT-4. We take GPT-4 api, write the prompt and connect it with the 3D configurator. Pretty cool, huh?',
+    description: 'A novel approach to product configuration using GPT-4. We take GPT-4 API, write the prompt and connect it with the 3D configurator. Pretty cool, huh?',
   },
   {
     name: 'Fine-tuning of OpenAI Whisper model',

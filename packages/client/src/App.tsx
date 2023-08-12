@@ -5,7 +5,7 @@ import {
   Projects,
   ContactInfo,
   Container,
-  WorkExperience
+  WorkExperience,
 } from './components/atoms'
 import {
   contactInfoData,
@@ -16,48 +16,81 @@ import {
 } from '@cv-creator/common'
 import { COLORS, ThemeType } from './styles'
 import styled from '@emotion/styled'
+import { useTheme } from './contexts/theme-context'
+import { WithTheme } from './types'
+
 
 const App: React.FC = () => {
-  const [ theme, setTheme ] = useState<ThemeType>(ThemeType.LIGHT)
-
-  const toggleTheme = () => setTheme(theme === ThemeType.LIGHT ? ThemeType.DARK : ThemeType.LIGHT)
+  const { theme, toggleTheme } = useTheme()
 
   return (
     <Container theme={theme}>
-      <ThemeButton onClick={toggleTheme} theme={theme} />
-      <ContactInfo data={contactInfoData}/>
-      <Projects data={projectsData}/>
-      <WorkExperience data={workExperienceData}/>
-      <Education data={educationData}/>
-      <Skills data={skillsData}/>
+      <ThemeButton
+        onClick={toggleTheme}
+        theme={theme}
+      />
+      <ContactInfo
+        data={contactInfoData}
+        theme={theme}
+      />
+      <Separator theme={theme}/>
+
+      <Education
+        data={educationData}
+        theme={theme}
+      />
+      <Separator theme={theme}/>
+
+      <WorkExperience
+        data={workExperienceData}
+        theme={theme}
+      />
+      <Separator theme={theme}/>
+
+      <Projects
+        data={projectsData}
+        theme={theme}
+      />
+      <Separator theme={theme}/>
+
+      <Skills
+        data={skillsData}
+        theme={theme}
+      />
     </Container>
   )
 }
 
+const Separator = styled.div<WithTheme<{}>>`
+  width: 100%;
+  height: 1px;
+  background: ${({ theme }) => COLORS.background(theme === ThemeType.DARK ? ThemeType.LIGHT : ThemeType.DARK)};
+  margin: 20px 0;
+`
 
-interface ThemeButtonProps {
-  theme: ThemeType
-}
-const ThemeButton = styled.button<ThemeButtonProps>`
+const ThemeButton = styled.button<WithTheme<{}>>`
+  background: ${({ theme }) => COLORS.background(theme === ThemeType.DARK ? ThemeType.LIGHT : ThemeType.DARK)};
+
   position: absolute;
   top: 20px;
   right: 20px;
   width: 50px;
   height: 25px;
-  background: ${({ theme }) => theme === ThemeType.LIGHT ? COLORS.DARK : COLORS.LIGHT};
-  border-radius: 50px ;
-  
+
+  border-radius: 50px;
+
   &:hover {
     cursor: pointer;
   }
-  
+
   &:focus {
     outline: none;
   }
-  
+
   &:active {
     transform: scale(0.9);
   }
+
 `
 
 export default App
