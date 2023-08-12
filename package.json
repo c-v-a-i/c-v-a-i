@@ -1,8 +1,9 @@
 {
   "name": "cv-creator",
+  "private": true,
   "version": "0.1.0",
   "workspaces": [
-    "packages/*"
+    "packages/**"
   ],
   "engines": {
     "node": "16.15.1",
@@ -13,6 +14,7 @@
     "typescript": "5.1.6"
   },
   "scripts": {
+    "watch": "tsc -b -w packages/common/tsconfig.json packages/api/tsconfig.json",
     "build": "yarn build-client && yarn build-api",
     "build-client": "yarn workspace @cv-creator/client build",
     "build-api": "yarn workspace @cv-creator/api build",

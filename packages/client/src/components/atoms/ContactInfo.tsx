@@ -1,16 +1,31 @@
 import React from 'react'
 import { Section, Header, SubHeader } from './body-components'
-import { ContactInfoData } from '../../model'
+import { ContactInfoData } from '@cv-creator/common'
+import styled from '@emotion/styled'
+import { WithTheme } from '../../types'
 
 
-interface ContactInfoProps {
+
+type ContactInfoProps = WithTheme<{
   data: ContactInfoData
+}>
+
+export const ContactInfo: React.FC<ContactInfoProps> = ({data, theme}) => {
+  return (
+    <Section>
+      <Header theme={theme}>Contact Information</Header>
+      <ContactInfoWrapper>
+        {Object.entries(data).map(([ key, value ]) => (
+          <Section>{key}: {value}</Section>))
+        }
+      </ContactInfoWrapper>
+    </Section>
+  )
 }
 
-export const ContactInfo: React.FC<ContactInfoProps> = ({data}) => (
-  <Section>
-    <Header>Contact Information</Header>
-    <SubHeader>LinkedIn: {data.linkedIn}</SubHeader>
-    <SubHeader>GitHub: {data.gitHub}</SubHeader>
-  </Section>
-)
+const ContactInfoWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 auto;
+`

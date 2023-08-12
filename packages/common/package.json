@@ -4,7 +4,6 @@
   "private": true,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "type": "module",
   "devDependencies": {
     "@types/lodash": "^4.14.182",
     "@types/node": "^16.11.24"

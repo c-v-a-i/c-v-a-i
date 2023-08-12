@@ -14,8 +14,7 @@ export interface SkillsData {
 }
 
 export interface ContactInfoData {
-  linkedIn: string;
-  gitHub: string;
+  [key: string]: string;
 }
 
 export interface WorkExperienceData {

@@ -1,20 +1,23 @@
-import React from 'react';
-import { Section, Header, SubHeader } from './body-components';
-import { ProjectData } from '../../model';
+import React from 'react'
+import { ProjectData } from '@cv-creator/common'
 
-interface ProjectsProps {
-  data: ProjectData[];
+import { Paragraph, Section, Header, SubHeader } from './body-components'
+import { WithTheme } from '../../types'
+
+type ProjectsProps = WithTheme<{
+  data: ProjectData[]
+}>
+
+export const Projects: React.FC<ProjectsProps> = ({ data, theme }) => {
+  return (
+    <Section>
+      <Header theme={theme}>Projects</Header>
+      {data.map((project, index) => (
+        <div key={index}>
+          <SubHeader theme={theme}>{project.name}</SubHeader>
+          <Paragraph theme={theme}>{project.description}</Paragraph>
+        </div>
+      ))}
+    </Section>
+  )
 }
-
-export const Projects: React.FC<ProjectsProps> = ({ data }) => (
-  <Section>
-    <Header>Projects</Header>
-    {data.map((project, index) => (
-      <div key={index}>
-        <SubHeader>{project.name}</SubHeader>
-        <p>{project.description}</p>
-      </div>
-    ))}
-  </Section>
-);
-
