@@ -13,7 +13,7 @@ import {
   projectsData,
   skillsData,
   workExperienceData,
-  aboutMeData
+  aboutMeData,
 } from '@cv-creator/common'
 import { COLORS, ThemeType } from './styles'
 import styled from '@emotion/styled'
@@ -25,44 +25,46 @@ const App: React.FC = () => {
   const { theme, toggleTheme } = useTheme()
 
   return (
-    <Container theme={theme}>
+    <>
       <ThemeButton
         onClick={toggleTheme}
         theme={theme}
       />
-      <ContactInfo
-        data={contactInfoData}
-        theme={theme}
-      />
-      <Separator theme={theme}/>
-      <About theme={theme}>
-        {aboutMeData}
-      </About>
-      <Separator theme={theme}/>
+      <Container theme={theme}>
+        <ContactInfo
+          data={contactInfoData}
+          theme={theme}
+        />
+        <Separator theme={theme}/>
+        <About theme={theme}>
+          {aboutMeData}
+        </About>
+        <Separator theme={theme}/>
 
-      <Education
-        data={educationData}
-        theme={theme}
-      />
-      <Separator theme={theme}/>
+        <Education
+          data={educationData}
+          theme={theme}
+        />
+        <Separator theme={theme}/>
 
-      <WorkExperience
-        data={workExperienceData}
-        theme={theme}
-      />
-      <Separator theme={theme}/>
+        <WorkExperience
+          data={workExperienceData}
+          theme={theme}
+        />
+        <Separator theme={theme}/>
 
-      <Projects
-        data={projectsData}
-        theme={theme}
-      />
-      <Separator theme={theme}/>
+        <Projects
+          data={projectsData}
+          theme={theme}
+        />
+        <Separator theme={theme}/>
 
-      <Skills
-        data={skillsData}
-        theme={theme}
-      />
-    </Container>
+        <Skills
+          data={skillsData}
+          theme={theme}
+        />
+      </Container>
+    </>
   )
 }
 
