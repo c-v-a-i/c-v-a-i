@@ -13,33 +13,18 @@ export const Skills: React.FC<SkillsProps> = ({ data, theme }) => (
   <Section>
     <Header theme={theme}>Skills</Header>
     <SkillsWrapper>
-
-      <div>
-        <SubHeader theme={theme}>Soft Skills</SubHeader>
-        <ul>
-          {data.softSkills.map((skill, index) => (
-            <ListItem theme={theme} key={index}>{skill}</ListItem>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <SubHeader theme={theme}>Hard Skills</SubHeader>
-        <ul>
-          {data.hardSkills.map((skill, index) => (
-            <ListItem theme={theme} key={index}>{skill}</ListItem>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <SubHeader theme={theme}>Tools</SubHeader>
-        <ul>
-          {data.tools.map((tool, index) => (
-            <ListItem theme={theme} key={index}>{tool}</ListItem>
-          ))}
-        </ul>
-      </div>
+      {
+        Object.entries(data).map(([key, value]) => (
+            <div>
+              <SubHeader theme={theme}>{key}</SubHeader>
+              <ul>
+                {value.map((skill, index) => (
+                  <ListItem theme={theme} key={index}>{skill}</ListItem>
+                ))}
+              </ul>
+            </div>
+        ))
+      }
     </SkillsWrapper>
   </Section>
 )

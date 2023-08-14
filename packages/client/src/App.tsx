@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Education,
   Skills,
   Projects,
   ContactInfo,
   Container,
-  WorkExperience,
+  WorkExperience, About,
 } from './components/atoms'
 import {
   contactInfoData,
@@ -13,6 +13,7 @@ import {
   projectsData,
   skillsData,
   workExperienceData,
+  aboutMeData
 } from '@cv-creator/common'
 import { COLORS, ThemeType } from './styles'
 import styled from '@emotion/styled'
@@ -33,6 +34,10 @@ const App: React.FC = () => {
         data={contactInfoData}
         theme={theme}
       />
+      <Separator theme={theme}/>
+      <About theme={theme}>
+        {aboutMeData}
+      </About>
       <Separator theme={theme}/>
 
       <Education
@@ -90,7 +95,6 @@ const ThemeButton = styled.button<WithTheme<{}>>`
   &:active {
     transform: scale(0.9);
   }
-
 `
 
 export default App

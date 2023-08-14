@@ -1,13 +1,11 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { COLORS, FONTS, ThemeType } from '../../styles'
+import { COLORS, FONTS } from '../../styles'
 import { css } from '@emotion/react'
+import { WithTheme } from '../../types'
 
-interface WithTheme {
-  theme: ThemeType
-}
 
-export const Container = styled.div<WithTheme>`
+export const Container = styled.div<WithTheme<{}>>`
   font-family: ${FONTS.PRIMARY};
   padding: 20px;
 
@@ -29,19 +27,19 @@ export const Section = styled.section`
   padding: 0 16px;
 `
 
-export const Header = styled.h1<WithTheme>`
+export const Header = styled.h1<WithTheme<{}>>`
   color: ${(props) => COLORS.text(props.theme).primary};
   font-size: 2rem;
   text-align: center;
   letter-spacing: 0.3rem;
 `
 
-export const SubHeader = styled.h2<WithTheme>`
+export const SubHeader = styled.h2<WithTheme<{}>>`
   color: ${(props) => COLORS.text(props.theme).secondary};
   font-size: 1.4rem;
 `
 
-export const Paragraph = styled.p<WithTheme>`
+export const Paragraph = styled.p<WithTheme<{}>>`
   color: ${({theme}) => COLORS.text(theme).tertiary}
   font-size: 1rem;
   margin-bottom: 10px;
@@ -49,8 +47,23 @@ export const Paragraph = styled.p<WithTheme>`
   margin-left: 2rem;
 `
 
-export const ListItem = styled.li<WithTheme>`
+export const ListItem = styled.li<WithTheme<{}>>`
   color: ${({ theme }) => COLORS.text(theme).tertiary}
   font-size: 1rem;
   font-family: 'Fira Code', monospace;
+`
+
+export const Anchor = styled.a`
+  color: inherit;
+  text-decoration: none;
+  font-size: 1rem;
+  font-family: 'Fira Code', monospace;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+  
+  &:visited {
+    color: inherit;
+  }
 `
