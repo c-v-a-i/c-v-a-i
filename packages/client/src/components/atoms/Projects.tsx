@@ -15,7 +15,11 @@ export const Projects: React.FC<ProjectsProps> = ({ data, theme }) => {
       {data.map((project, index) => (
         <div key={index}>
           <SubHeader theme={theme}>{project.name}</SubHeader>
-          <Paragraph theme={theme}>{project.description}</Paragraph>
+          <Paragraph
+            dangerouslySetInnerHTML={{__html: project.description}}
+            theme={theme}
+          >
+          </Paragraph>
         </div>
       ))}
     </Section>
