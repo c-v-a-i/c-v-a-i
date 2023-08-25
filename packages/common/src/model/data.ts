@@ -1,8 +1,10 @@
 import { AchievementData, ContactInfoData, EducationData, ProjectData, SkillsData, WorkExperienceData } from './types'
 
 export const contactInfoData: ContactInfoData = {
-  linkedIn: 'Aliaksandr Skuratovich',
-  gitHub: 'SkuratovichA',
+  LinkedIn: 'https://www.linkedin.com/in/aliaksandr-skuratovich-4a2ab01a0/',
+  GitHub: 'https://github.com/SkuratovichA',
+  Email: 'skuratovich.aliaksandr@gmail.com',
+  Phone: '+420 735 594 008',
 }
 
 export const workExperienceData: WorkExperienceData[] = [
@@ -29,40 +31,45 @@ export const workExperienceData: WorkExperienceData[] = [
       "Using and contributing to the frameworks such as SpeechBrain, Nvidia NeM and HuggingFace."
     ],
   },
+  {
+    position: 'Junior Researcher',
+    company: 'BUT VeriFIT',
+    location: 'Brno',
+    duration: 'May 2021 - October 2021',
+    responsibilities: [
+      "Writing asymptotic complexity analyzer (Looper) based on Facebook Infer framework.",
+    ],
+  },
+
 ]
 
 export const projectsData: ProjectData[] = [
   {
     name: 'Creating a GPT-based chat bot for a 3D product configurator',
-    description: 'A novel approach to product configuration using GPT-4. We take GPT-4 API, write the prompt and connect it with the 3D configurator. Pretty cool, huh?',
+    description: [
+      `A novel approach to product configuration using GPT-4. We take GPT-4 API, write the prompt and connect it with the 3D configurator.`,
+      `Skills: Typescript, Node.js, React.js, OpenAI API, Prompt Engineering, Koa.js, UI/UX`
+      ].join('</br>'),
   },
   {
-    name: 'Fine-tuning of OpenAI Whisper model',
-    description: 'Using Python and HuggingFace. The repo could be found here: https://github.com/SkuratovichA/whisper_ft',
+    name: 'A couple of coding projects',
+    description: [
+      `As light-weight compiler for Lua language as possible written purely in C without any side tools.`,
+      `A diagram editor written in C++ and QT from scratch during 15 days of a programming marathon.`,
+      `Information system for organizing conferences: Django + React + Postgres.`,
+      `Smaller projects - packet sniffer, spreadsheet processors, a simple 3D engine in pure C++, IoT projects, bash scripts etc.`,
+      `Written over 50 different Python scripts for dataset preparation`
+    ].join('</br>'),
   },
   {
-    name: 'KNN-based image classifier and BGMM-based speech classifiers',
-    description: 'Machine learning and pattern recognition masters course project. Trained on a small unbalanced dataset. The classifiers were rated as the best among all students.',
-  },
-  {
-    name: 'Latent Dirichlet Allocation for document and topic classification project',
-    description: 'Bayesian statistics masters course project. I used Gibbs sampling and variational inference to train the model. I love Bayesian statistics because of its elegance and craziness',
-  },
-  {
-    name: 'Joint intent classification and slot filling using BERT',
-    description: 'Natural language processing masters course project - I just used BERT with a linear layer on top of it, trained a bunch of models, compare them and wrote a report. Nothing special.',
-  },
-  {
-    name: 'Lightweight compiler for Lua language',
-    description: 'Written in C from scratch. Deep knowledge of both the compiler design and C language.',
-  },
-  {
-    name: 'Diagram editor',
-    description: '8k lines of code written in C++ and QT from scratch during 15 days of a programming marathon.',
-  },
-  {
-    name: 'Domain adaptation for speech recognition',
-    description: 'During Machine Translation Marathon (MTM22), I was a lead developer in a team specialized on domain adaptation for ASR using Wav2Vec2 using transformer adapters.'
+    name: 'A couple of ML projects',
+    description: [
+      `A dozen of different E2E ASR systems (including a streamable ones). Created a script for fine-tuning Whisper model back then when it was released. Participated in Albaizyn ASR challenge, MTM22 challenge (domain adaptation for ASR using W2V and transformer adaptors).`,
+      `NER (both using CRF and BERT + projection layer).`,
+      `Voice identification (BGMM) + image identification. Everything was trained on a small unbalanced dataset. The system won the challenge among all master students (I was in the second year of bachelor's).`,
+      `Document and topic classification using LDA (trained using Gibbs sampling and Variational Bayes techniques).`,
+      `Used WandB a lot. Still want to learn more about quantization, pruning and other optimizations for efficient inference.`
+    ].join('</br>'),
   },
 ]
 
@@ -88,7 +95,16 @@ export const educationData: EducationData[] = [
 ]
 
 export const skillsData: SkillsData = {
-  softSkills: [ 'Teamwork', 'Problem Solving', 'Fast Learning' ],
-  hardSkills: [ 'JS/TS', 'Python', 'C/C++', 'CSS/HTML', 'Bash' ],
-  tools: [ 'React', 'Node.js', 'Koa.js', 'Next.js', 'Pytorch', 'HuggingFace', 'Django' ],
+  'Soft Skills': [ 'Teamwork', 'Problem Solving', 'Fast Learning' ],
+  'Hard Skills': [ 'JS/TS', 'Python', 'C/C++', 'CSS/HTML', 'Bash' ],
+  'Tools': [ 'React', 'Node.js/Koa.js/Next.js', 'Pytorch', 'HuggingFace', 'Django/Flask', 'Postgres/MongoDB', 'Docker/Kubernetes' ],
+  'Languages': [ 'Russian', 'English', 'Czech', 'Belarusian' ]
 }
+
+export const aboutMeData = [
+  `Programming since the age of 17.`,
+  `I'm a software engineer with a blend of full-stack and machine learning experience.`,
+  `Studied at Brno University of Technology and Unicorn University, excelling as the top student with the highest grades. Pointlessly spent 3 years of my life studying 15 hours/day.`,
+  `Did some academic research at BUT@Speech, mostly preparing data, pipelines, and experimenting with architectures (mostly for ASR and NER).`,
+  `When not coding, I indulge in hobbies like cycling, running, swimming, learning neural biology, economics and history.`,
+].join(' ')

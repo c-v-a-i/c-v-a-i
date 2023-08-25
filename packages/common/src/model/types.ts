@@ -8,9 +8,7 @@ export interface AchievementData {
 }
 
 export interface SkillsData {
-  softSkills: string[];
-  hardSkills: string[];
-  tools: string[];
+  [key: string]: string[]
 }
 
 export interface ContactInfoData {
