@@ -23,5 +23,5 @@
     "start-client": "yarn workspace @cv-creator/client start",
     "start-api": "yarn workspace @cv-creator/api start"
   },
-  "packageManager": "yarn@3.1.4"
+  "packageManager": "yarn@4.1.1"
 }
