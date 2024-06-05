@@ -1,5 +1,4 @@
-import { Container as MuiContainer, Link as MuiLink, ListItem as MuiListItem, Typography } from '@mui/material';
-import { styled } from '@mui/system';
+import { Container as MuiContainer, Link as MuiLink, ListItem as MuiListItem, styled, Typography } from '@mui/material'
 
 export const Container = styled(MuiContainer)(({ theme }) => ({
   padding: theme.spacing(2),
