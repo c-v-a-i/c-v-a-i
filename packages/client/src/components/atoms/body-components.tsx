@@ -1,69 +1,55 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { COLORS, FONTS } from '../../styles'
-import { css } from '@emotion/react'
-import { WithTheme } from '../../types'
+import { Container as MuiContainer, Link as MuiLink, ListItem as MuiListItem, Typography } from '@mui/material';
+import { styled } from '@mui/system';
 
+export const Container = styled(MuiContainer)(({ theme }) => ({
+  padding: theme.spacing(2),
+  background: theme.palette.background.default,
+  color: theme.palette.text.primary,
+  // boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23)',
+  margin: '0 auto',
+}));
 
-export const Container = styled.div<WithTheme<{}>>`
-  font-family: ${FONTS.PRIMARY};
-  padding: 20px;
+export const Section = styled('section')(({ theme }) => ({
+  marginBottom: theme.spacing(2.5),
+  fontSize: '0.9rem',
+  lineHeight: '1.5rem',
+  padding: theme.spacing(2),
+}));
 
-  ${({theme}) => css`
-    background: ${COLORS.background(theme)};
-    color: ${COLORS.text(theme).primary};
-    box-shadow: 0px 0px 10px 0px ${COLORS.background(theme)};
-  `}
+export const Header = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  fontSize: '2rem',
+  textAlign: 'center',
+  letterSpacing: '0.3rem',
+}));
 
-  width: 1000px;
-  margin: 0 auto;
+export const SubHeader = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  fontSize: '1.4rem',
+}));
 
-`
+export const Paragraph = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  fontSize: '1rem',
+  marginBottom: theme.spacing(1.25),
+  marginLeft: theme.spacing(2),
+}));
 
-export const Section = styled.section`
-  margin-bottom: 20px;
-  font-size: 0.9rem;
-  line-height: 1.5rem;
-  padding: 0 16px;
-`
+export const ListItem = styled(MuiListItem)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  fontSize: '1rem',
+}));
 
-export const Header = styled.h1<WithTheme<{}>>`
-  color: ${(props) => COLORS.text(props.theme).primary};
-  font-size: 2rem;
-  text-align: center;
-  letter-spacing: 0.3rem;
-`
+export const Anchor = styled(MuiLink)(({ theme }) => ({
+  color: 'inherit',
+  textDecoration: 'none',
+  fontSize: '1rem',
 
-export const SubHeader = styled.h2<WithTheme<{}>>`
-  color: ${(props) => COLORS.text(props.theme).secondary};
-  font-size: 1.4rem;
-`
+  '&:hover': {
+    textDecoration: 'underline',
+  },
 
-export const Paragraph = styled.p<WithTheme<{}>>`
-  color: ${({theme}) => COLORS.text(theme).tertiary}
-  font-size: 1rem;
-  margin-bottom: 10px;
-  font-family: 'Fira Code', monospace;
-  margin-left: 2rem;
-`
-
-export const ListItem = styled.li<WithTheme<{}>>`
-  color: ${({ theme }) => COLORS.text(theme).tertiary}
-  font-size: 1rem;
-  font-family: 'Fira Code', monospace;
-`
-
-export const Anchor = styled.a`
-  color: inherit;
-  text-decoration: none;
-  font-size: 1rem;
-  font-family: 'Fira Code', monospace;
-  
-  &:hover {
-    text-decoration: underline;
-  }
-  
-  &:visited {
-    color: inherit;
-  }
-`
+  '&:visited': {
+    color: 'inherit',
+  },
+}));

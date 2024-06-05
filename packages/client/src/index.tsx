@@ -1,16 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+// import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ThemeProvider } from './contexts/theme-context'
+import { createTheme, ThemeProvider } from '@mui/material';
+
+const theme = createTheme({
+  palette: {
+    background: {
+      default: 'white',
+    },
+    text: {
+      primary: '#000000',
+      secondary: '#333333',
+    },
+  },
+  typography: {
+    fontFamily: 'Fira Code, monospace',
+  },
+});
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <ThemeProvider>
+    <ThemeProvider theme={theme}>
       <App />
     </ThemeProvider>
   </React.StrictMode>

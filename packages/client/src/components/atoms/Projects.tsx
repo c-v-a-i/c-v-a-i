@@ -1,27 +1,21 @@
-import React from 'react'
-import { ProjectData } from '@cv-creator/common'
+import { ProjectData } from '@cv-creator/common';
+import { Container, Typography } from '@mui/material';
+import React from 'react';
 
-import { Paragraph, Section, Header, SubHeader } from './body-components'
-import { WithTheme } from '../../types'
+type ProjectsProps = {
+  data: ProjectData[];
+};
 
-type ProjectsProps = WithTheme<{
-  data: ProjectData[]
-}>
-
-export const Projects: React.FC<ProjectsProps> = ({ data, theme }) => {
+export const Projects: React.FC<ProjectsProps> = ({ data }) => {
   return (
-    <Section>
-      <Header theme={theme}>Projects</Header>
+    <Container>
+      <Typography variant="h4" gutterBottom>Projects</Typography>
       {data.map((project, index) => (
-        <div key={index}>
-          <SubHeader theme={theme}>{project.name}</SubHeader>
-          <Paragraph
-            dangerouslySetInnerHTML={{__html: project.description}}
-            theme={theme}
-          >
-          </Paragraph>
+        <div key={index} style={{ marginBottom: '10px' }}>
+          <Typography variant="h6">{project.name}</Typography>
+          <Typography variant="body2" dangerouslySetInnerHTML={{ __html: project.description }}></Typography>
         </div>
       ))}
-    </Section>
-  )
-}
+    </Container>
+  );
+};

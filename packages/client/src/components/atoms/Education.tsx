@@ -1,30 +1,27 @@
 import React from 'react';
-import { Section, Header, SubHeader, Paragraph } from './body-components'
+import { Container, Typography, Grid, List, ListItem } from '@mui/material';
 import { EducationData } from '@cv-creator/common';
-import { WithTheme } from '../../types'
-import styled from '@emotion/styled'
 
-type EducationProps = WithTheme<{
-  data: EducationData[]
-}>
+type EducationProps = {
+  data: EducationData[];
+};
 
-export const Education: React.FC<EducationProps> = ({ data, theme }) => (
-  <Section>
-    <Header theme={theme}>Education</Header>
-    <EducationWrapper>
-      {data.map((education, index) => (
-        <div key={index}>
-          <SubHeader theme={theme}>{education.institution}</SubHeader>
-          <Paragraph theme={theme}>{education.degree}</Paragraph>
-          <Paragraph theme={theme}>{education.duration}</Paragraph>
-        </div>
-      ))}
-    </EducationWrapper>
-  </Section>
+// TODO make it looks the same as job experience
+export const Education: React.FC<EducationProps> = ({ data }) => (
+  <Container>
+    <Typography variant="h4" gutterBottom>Education</Typography>
+    {data.map((education, index) => (
+      <Container key={index} sx={{ marginBottom: '20px' }}>
+        <Typography variant="h6">{education.institution}</Typography>
+        <List>
+          <ListItem>
+            <Typography variant="body2">{education.degree}</Typography>
+          </ListItem>
+          <ListItem>
+            <Typography variant="body2">{education.duration}</Typography>
+          </ListItem>
+        </List>
+      </Container>
+    ))}
+  </Container>
 );
-
-
-const EducationWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`

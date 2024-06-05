@@ -1,102 +1,41 @@
-import React from 'react'
 import {
-  Education,
-  Skills,
-  Projects,
-  ContactInfo,
-  Container,
-  WorkExperience, About,
-} from './components/atoms'
-import {
-  contactInfoData,
+  aboutMeData, contactInfoData,
   educationData,
   projectsData,
   skillsData,
-  workExperienceData,
-  aboutMeData,
+  workExperienceData
 } from '@cv-creator/common'
-import { COLORS, ThemeType } from './styles'
-import styled from '@emotion/styled'
-import { useTheme } from './contexts/theme-context'
-import { WithTheme } from './types'
+import React from 'react'
+import {
+  About, ContactInfo,
+  Container, Education, Projects, Skills, WorkExperience
+} from './components/atoms'
 
 
 const App: React.FC = () => {
-  const { theme, toggleTheme } = useTheme()
-
   return (
-    <>
-      <ThemeButton
-        onClick={toggleTheme}
-        theme={theme}
+    <Container sx={{ gap: '40px', display: 'flex', flexDirection: 'column' }} maxWidth='xl'>
+      <ContactInfo
+        data={contactInfoData}
       />
-      <Container theme={theme}>
-        <ContactInfo
-          data={contactInfoData}
-          theme={theme}
-        />
-        <Separator theme={theme}/>
-        <About theme={theme}>
-          {aboutMeData}
-        </About>
-        <Separator theme={theme}/>
 
-        <Education
-          data={educationData}
-          theme={theme}
-        />
-        <Separator theme={theme}/>
+      <About>
+        {aboutMeData}
+      </About>
 
-        <WorkExperience
-          data={workExperienceData}
-          theme={theme}
-        />
-        <Separator theme={theme}/>
+      <WorkExperience
+        data={workExperienceData}
+      />
 
-        <Projects
-          data={projectsData}
-          theme={theme}
-        />
-        <Separator theme={theme}/>
+      {/* <Projects */}
+      {/*   data={projectsData} */}
+      {/* /> */}
 
-        <Skills
-          data={skillsData}
-          theme={theme}
-        />
-      </Container>
-    </>
+      <Education
+        data={educationData}
+      />
+    </Container>
   )
 }
-
-const Separator = styled.div<WithTheme<{}>>`
-  width: 100%;
-  height: 1px;
-  background: ${({ theme }) => COLORS.background(theme === ThemeType.DARK ? ThemeType.LIGHT : ThemeType.DARK)};
-  margin: 20px 0;
-`
-
-const ThemeButton = styled.button<WithTheme<{}>>`
-  background: ${({ theme }) => COLORS.background(theme === ThemeType.DARK ? ThemeType.LIGHT : ThemeType.DARK)};
-
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 50px;
-  height: 25px;
-
-  border-radius: 50px;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:active {
-    transform: scale(0.9);
-  }
-`
 
 export default App

@@ -1,35 +1,28 @@
-import React from 'react'
-import { SkillsData } from '@cv-creator/common'
+import React from 'react';
+import { Container, Typography, Grid, List, ListItem } from '@mui/material';
+import { SkillsData } from '@cv-creator/common';
 
-import { Section, Header, SubHeader, ListItem } from './body-components'
-import { WithTheme } from '../../types'
-import styled from '@emotion/styled'
-
-type SkillsProps = WithTheme<{
+type SkillsProps = {
   data: SkillsData;
-}>
+};
 
-export const Skills: React.FC<SkillsProps> = ({ data, theme }) => (
-  <Section>
-    <Header theme={theme}>Skills</Header>
-    <SkillsWrapper>
-      {
-        Object.entries(data).map(([key, value]) => (
-            <div>
-              <SubHeader theme={theme}>{key}</SubHeader>
-              <ul>
-                {value.map((skill, index) => (
-                  <ListItem theme={theme} key={index}>{skill}</ListItem>
-                ))}
-              </ul>
-            </div>
-        ))
-      }
-    </SkillsWrapper>
-  </Section>
-)
-
-const SkillsWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
+export const Skills: React.FC<SkillsProps> = ({ data }) => (
+  <Container>
+    {/* <Paper elevation={3} sx={{ padding: '20px', marginBottom: '20px' }}> */}
+      <Typography variant="h4" gutterBottom>Skills</Typography>
+      <Grid container spacing={2}>
+        {Object.entries(data).map(([key, value]) => (
+          <Grid item xs={12} sm={6} key={key}>
+            <Typography variant="h6">{key}</Typography>
+            <List sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+              {value.map((skill, index) => (
+                <ListItem key={index}>{skill}</ListItem>
+              ))}
+            </List>
+          </Grid>
+            
+        ))}
+      </Grid>
+    {/* </Paper> */}
+  </Container>
+);

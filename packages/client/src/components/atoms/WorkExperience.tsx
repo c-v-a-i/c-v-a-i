@@ -1,37 +1,37 @@
-import { WorkExperienceData } from '@cv-creator/common'
+import React from 'react';
+import { Container, Typography, Paper, Grid, List, ListItem } from '@mui/material';
+import { WorkExperienceData } from '@cv-creator/common';
 
-import React from 'react'
-import { Section, Header, SubHeader, Paragraph, ListItem } from './body-components'
-import { WithTheme } from '../../types'
-import styled from '@emotion/styled'
+type WorkExperienceProps = {
+  data: WorkExperienceData[];
+};
 
-type WorkExperienceProps = WithTheme<{
-  data: WorkExperienceData[]
-}>
-
-export const WorkExperience: React.FC<WorkExperienceProps> = ({ data, theme }) => {
+// create data display component for work experience & education
+export const WorkExperience: React.FC<WorkExperienceProps> = ({ data }) => {
   return (
-    <Section>
-      <Header theme={theme}>Work Experience</Header>
+    <Container>
+      <Typography variant="h4" gutterBottom>Work Experience</Typography>
       {data.map((job, index) => (
-        <div key={index}>
-          <WorkExperienceHeader>
-            <SubHeader theme={theme}>{job.position}, {job.company}, {job.location}</SubHeader>
-            <Paragraph theme={theme}>[{job.duration}]</Paragraph>
-          </WorkExperienceHeader>
-          <ul>
+        <Container key={index} sx={{ marginBottom: '20px' }}>
+          <Grid container justifyContent="space-between">
+            <Grid item>
+              <Typography variant="h6">{job.position}, {job.company}, {job.location}</Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="body2">[{job.duration}]</Typography>
+            </Grid>
+          </Grid>
+          <List>
             {job.responsibilities.map((responsibility, i) => (
-              <ListItem key={i} theme={theme}>{responsibility}</ListItem>
+              <ListItem key={i}>
+                <Typography variant='body2'>
+                  {responsibility}
+                </Typography>
+              </ListItem>
             ))}
-          </ul>
-        </div>
+          </List>
+        </Container>
       ))}
-    </Section>
-  )
-}
-
-const WorkExperienceHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-content: center;
-`
+    </Container>
+  );
+};

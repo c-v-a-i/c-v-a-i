@@ -1,46 +1,25 @@
-import React from 'react'
-import { Section, Header, Paragraph, Anchor } from './body-components'
-import { ContactInfoData } from '@cv-creator/common'
-import styled from '@emotion/styled'
-import { WithTheme } from '../../types'
+import React from 'react';
+import { Container, Typography, Paper, Link, Grid } from '@mui/material';
+import { ContactInfoData } from '@cv-creator/common';
 
+type ContactInfoProps = {
+  data: ContactInfoData;
+};
 
-
-type ContactInfoProps = WithTheme<{
-  data: ContactInfoData
-}>
-
-export const ContactInfo: React.FC<ContactInfoProps> = ({data, theme}) => {
+export const ContactInfo: React.FC<ContactInfoProps> = ({ data }) => {
   return (
-    <Section>
-      <Header theme={theme}>Contact Information</Header>
-      <ContactInfoWrapper>
-        {Object.entries(data).map(([ key, value ]) => (
-          <TwoColumnsWrapper>
-            <ContactInfoParagraph theme={theme}><b>{key}</b></ContactInfoParagraph>
-            <ContactInfoParagraph theme={theme}><Anchor href={`${value.includes('@') ? 'mailto:' : value.includes('+') ? 'tel:' : ''}${value}`}>{value}</Anchor></ContactInfoParagraph>
-          </TwoColumnsWrapper>
-        ))}
-      </ContactInfoWrapper>
-    </Section>
-  )
-}
-
-const TwoColumnsWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
-  margin: 0 auto;
-`
-
-const ContactInfoParagraph = styled(Paragraph)`
-  margin: 0;
-`
-
-const ContactInfoWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  flex-direction: column;
-  margin: 0 auto;
-`
+    <Container>
+        <Typography variant="h4" gutterBottom>Contact Information</Typography>
+        <Grid container spacing={2}>
+          {Object.entries(data).map(([key, value]) => (
+            <Grid item xs={12} sm={6} key={key}>
+              <Typography variant="body1"><b>{key}</b></Typography>
+              <Link href={`${value.includes('@') ? 'mailto:' : value.includes('+') ? 'tel:' : ''}${value}`} underline="hover">
+                {value}
+              </Link>
+            </Grid>
+          ))}
+        </Grid>
+    </Container>
+  );
+};
