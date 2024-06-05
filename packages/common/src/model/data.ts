@@ -9,66 +9,85 @@ export const contactInfoData: ContactInfoData = {
 
 export const workExperienceData: WorkExperienceData[] = [
   {
-    position: 'Full Stack Developer',
+    position: 'Senior Software Engineer',
+    company: 'Gen',
+    location: 'Prague, Czechia',
+    duration: 'May 2024 - Present',
+    responsibilities: [
+      'Doing internal projects for developers, product and project managers leveraging Spotify Backstage frameworks',
+      'Handling various aspects of the project lifecycle, including CI/CD, process establishment (Jira, Confluence), conflict resolution within the team, and communication with end users/customers and product shaping',
+      'Skills: Team leading, TeamCity, React, TypeScript, Kubernetes, Docker, etc'
+    ],
+  },
+  {
+    position: 'Chief Technology Officer',
+    company: 'TAP',
+    location: 'Planet Earth · Remote',
+    duration: 'May 2024 - Present',
+    responsibilities: [
+      'We are developing an ad aggregator platform that connects customers with businesses (telegram public channels)', 
+      'We use AI to analyze their target audience. They both can then match each other based on their target audience',
+      'Additionally, the platform serves as an escrow agent, ensuring secure and trustworthy transactions with smart contracts',
+      'Skills: Team leading, Management, Conflict resolution, Communication, Hiring, React/Remix, GraphQL, Node, GCP, you name it'
+    ],
+  },
+  {
+    position: 'Full Stack Engineer',
     company: 'Salsita Software',
-    location: 'Prague',
-    duration: 'February 2023 - present',
+    location: 'Prague, Czechia · Hybrid',
+    duration: 'February 2023 - May 2024',
     responsibilities: [
-      'Principal contributor in the development of an AI 3D product configurator, the first of its kind.',
-      'Led the implementation of a chat bot to assist users in product configuration.',
-      'Worked independently and as part of small team, contributing to decision-making and liaising with UX/Management teams.',
-      "Skills: Typescript, React, Node.js, OpenAI API, Prompt Engineering"
+      'Successfully developed an LLM-powered UI for a 3D product configurator from inception to MVP',
+      'Enhanced CI/CD pipelines and streamlined development processes for eBay’s Social Hub platform',
+      'Key Skills: NodeJS (Koa), OpenAI API, TypeScript/React, RxJS, Emotion React, Framer Motion, Kotlin (Spring Boot), Microservices, GraphQL, Jenkins'
     ],
   },
   {
     position: 'Junior Researcher',
-    company: 'BUT Speech@FIT',
-    location: 'Brno',
-    duration: 'October 2021 - October 2022',
+    company: 'BUT Speech',
+    location: 'Brno, South Moravia, Czechia · On-site',
+    duration: 'April 2022 - December 2022',
     responsibilities: [
-      "Training and fine-tuning models for ASR and NLP tasks.",
-      "Researching the state-of-the-art streamable ASR architectures such as RNNT.",
-      "Using and contributing to the frameworks such as SpeechBrain, Nvidia NeM and HuggingFace."
+      'Training and fine-tuning models for ASR and NLP tasks',
+      'Researching state-of-the-art streamable ASR architectures',
+      'Using and contributing to frameworks such as SpeechBrain, Nvidia NeMo, and HuggingFace'
     ],
   },
   {
-    position: 'Junior Researcher',
-    company: 'BUT VeriFIT',
-    location: 'Brno',
-    duration: 'May 2021 - October 2021',
+    position: 'Chief Executive Officer',
+    company: 'Skuratovich Aliaksandr',
+    location: 'Planet Earth · Remote',
+    duration: 'December 2000 - Present',
     responsibilities: [
-      "Writing asymptotic complexity analyzer (Looper) based on Facebook Infer framework.",
+      'Developing various projects, including a GPT-4 powered CV builder, a Telegram bot for managing conversations, and a GPT-powered event manager in Telegram',
+      'Spending time on Neovim configuration and other nerdy tasks such as tmux',
+      'Creating a multi-platform AI-powered application for managing debts and an ad aggregator platform using AI to analyze target audiences and ensure secure transactions with smart contracts'
     ],
   },
-
 ]
 
 export const projectsData: ProjectData[] = [
   {
-    name: 'Creating a GPT-based chat bot for a 3D product configurator',
+    name: 'AI 3D Product Configurator',
     description: [
-      `A novel approach to product configuration using GPT-4. We take GPT-4 API, write the prompt and connect it with the 3D configurator.`,
-      `Skills: Typescript, Node.js, React.js, OpenAI API, Prompt Engineering, Koa.js, UI/UX`
-      ].join('</br>'),
-  },
-  {
-    name: 'A couple of coding projects',
-    description: [
-      `As light-weight compiler for Lua language as possible written purely in C without any side tools.`,
-      `A diagram editor written in C++ and QT from scratch during 15 days of a programming marathon.`,
-      `Information system for organizing conferences: Django + React + Postgres.`,
-      `Smaller projects - packet sniffer, spreadsheet processors, a simple 3D engine in pure C++, IoT projects, bash scripts etc.`,
-      `Written over 50 different Python scripts for dataset preparation`
+      'Developed an innovative 3D product configurator using GPT-4 API for prompt engineering and UI/UX design.',
+      'Skills: TypeScript, Node.js, React, OpenAI API, Prompt Engineering, Koa.js, UI/UX'
     ].join('</br>'),
   },
   {
-    name: 'A couple of ML projects',
+    name: 'Various Coding Projects',
     description: [
-      `A dozen of different E2E ASR systems (including a streamable ones). Created a script for fine-tuning Whisper model back then when it was released. Participated in Albaizyn ASR challenge, MTM22 challenge (domain adaptation for ASR using W2V and transformer adaptors).`,
-      `NER (both using CRF and BERT + projection layer).`,
-      `Voice identification (BGMM) + image identification. Everything was trained on a small unbalanced dataset. The system won the challenge among all master students (I was in the second year of bachelor's).`,
-      `Document and topic classification using LDA (trained using Gibbs sampling and Variational Bayes techniques).`,
-      `Used WandB a lot. Still want to learn more about quantization, pruning and other optimizations for efficient inference.`
+      'Developed a lightweight compiler for Lua in C, a diagram editor in C++/Qt, and an information system for organizing conferences using Django, React, and Postgres.',
+      'Created numerous smaller projects including a packet sniffer, spreadsheet processors, and an IoT project.',
+      'Written over 50 Python scripts for dataset preparation.'
+    ].join('</br>'),
+  },
+  {
+    name: 'Machine Learning Projects',
+    description: [
+      'Developed several E2E ASR systems and fine-tuned Whisper model for Albaizyn ASR challenge and MTM22 challenge.',
+      'Worked on NER using CRF and BERT, voice and image identification, and document classification using LDA.',
+      'Utilized WandB extensively and explored quantization, pruning, and other optimizations for efficient inference.'
     ].join('</br>'),
   },
 ]
@@ -78,8 +97,11 @@ export const achievementsData: AchievementData[] = [
     name: 'Led the creation of the first AI 3D product configurator',
     description: '',
   },
+  {
+    name: 'Developed a GPT-4 powered CV builder',
+    description: '',
+  },
 ]
-
 
 export const educationData: EducationData[] = [
   {
@@ -95,16 +117,16 @@ export const educationData: EducationData[] = [
 ]
 
 export const skillsData: SkillsData = {
-  'Soft Skills': [ 'Teamwork', 'Problem Solving', 'Fast Learning' ],
-  'Hard Skills': [ 'JS/TS', 'Python', 'C/C++', 'CSS/HTML', 'Bash' ],
-  'Tools': [ 'React', 'Node.js/Koa.js/Next.js', 'Pytorch', 'HuggingFace', 'Django/Flask', 'Postgres/MongoDB', 'Docker/Kubernetes' ],
-  'Languages': [ 'Russian', 'English', 'Czech', 'Belarusian' ]
+  'Soft Skills': ['Teamwork', 'Problem Solving', 'Fast Learning'],
+  'Hard Skills': ['JavaScript/TypeScript', 'Python', 'C/C++', 'CSS/HTML', 'Bash'],
+  'Tools': ['React', 'Node.js/Koa.js/Next.js', 'Pytorch', 'HuggingFace', 'Django/Flask', 'Postgres/MongoDB', 'Docker/Kubernetes'],
+  'Languages': ['Russian', 'English', 'Czech', 'Belarusian']
 }
 
 export const aboutMeData = [
-  `Programming since the age of 17.`,
-  `I'm a software engineer with a blend of full-stack and machine learning experience.`,
-  `Studied at Brno University of Technology and Unicorn University, excelling as the top student with the highest grades. Pointlessly spent 3 years of my life studying 15 hours/day.`,
-  `Did some academic research at BUT@Speech, mostly preparing data, pipelines, and experimenting with architectures (mostly for ASR and NER).`,
-  `When not coding, I indulge in hobbies like cycling, running, swimming, learning neural biology, economics and history.`,
+  'Programming since the age of 17.',
+  'I\'m a software engineer with a blend of full-stack and machine learning experience.',
+  'Studied at Brno University of Technology and Unicorn University, excelling as the top student with the highest grades. Pointlessly spent 3 years of my life studying 15 hours/day.',
+  'Did some academic research at BUT Speech, mostly preparing data, pipelines, and experimenting with architectures (mostly for ASR and NER).',
+  'When not coding, I indulge in hobbies like cycling, running, swimming, learning neural biology, economics and history.'
 ].join(' ')
