@@ -6,13 +6,11 @@
     "packages/**"
   ],
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@mui/material": "^5.15.18",
     "concurrently": "7.0.0",
     "typescript": "5.1.6"
   },
   "scripts": {
+    "prettify": "prettier --write .",
     "watch": "tsc -b -w packages/common/tsconfig.json packages/api/tsconfig.json",
     "build": "yarn build-client && yarn build-api",
     "build-client": "yarn workspace @cv-creator/client build",
