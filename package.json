@@ -19,7 +19,8 @@
     "clean-build": "rm -rf packages/*/{lib,build,tsconfig.tsbuildinfo}",
     "start": "concurrently -n client,server 'yarn start-client' 'yarn start-api' --kill-others",
     "start-client": "yarn workspace @cv-creator/client start",
-    "start-api": "yarn workspace @cv-creator/api start"
+    "start-api": "yarn workspace @cv-creator/api start",
+    "deploy": "yarn workspace @cv-creator/client deploy"
   },
   "packageManager": "yarn@4.1.1"
 }
