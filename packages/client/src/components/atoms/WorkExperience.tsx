@@ -15,9 +15,11 @@ export const WorkExperience: React.FC<WorkExperienceProps> = ({ data }) => {
         <Container key={index} sx={{ marginBottom: '20px' }}>
           <Grid container justifyContent="space-between">
             <Grid item>
-              <Typography variant="h6">{job.position}, {job.company}, {job.location}</Typography>
+              <Typography variant="h6">{job.position}, {job.company}</Typography>
+              <Typography variant="body2">{job.type}</Typography>
             </Grid>
             <Grid item>
+              <Typography variant="body2">{job.location}, </Typography>
               <Typography variant="body2">[{job.duration}]</Typography>
             </Grid>
           </Grid>

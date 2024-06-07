@@ -8,7 +8,7 @@ export interface AchievementData {
 }
 
 export interface SkillsData {
-  [key: string]: string[]
+  [key: string]: string[];
 }
 
 export interface ContactInfoData {
@@ -19,6 +19,7 @@ export interface WorkExperienceData {
   position: string;
   company: string;
   location: string;
+  type: string;
   duration: string;
   responsibilities: string[];
 }
@@ -27,4 +28,7 @@ export interface EducationData {
   institution: string;
   degree: string;
   duration: string;
+  location: string;
+  description: string;
+  keywords: string[];
 }

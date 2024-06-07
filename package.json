@@ -2,25 +2,45 @@
   "name": "see-we-creator",
   "private": true,
   "version": "0.1.0",
+  "homepage": "https://<username>.github.io/<repo>",
   "workspaces": [
     "packages/**"
   ],
-  "dependencies": {
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/preset-env": "^7.15.6",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0",
+    "@types/gh-pages": "^6",
+    "@types/react": "^17.0.24",
+    "@types/react-dom": "^17.0.9",
+    "babel-loader": "^8.2.2",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "babel-plugin-tsconfig-paths": "^1.0.1",
     "concurrently": "7.0.0",
-    "typescript": "5.1.6"
+    "gh-pages": "^6.1.1",
+    "html-webpack-plugin": "^5.3.2",
+    "ts-loader": "^9.2.6",
+    "typescript": "5.1.6",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.2.1"
   },
   "scripts": {
     "prettify": "prettier --write .",
     "watch": "tsc -b -w packages/common/tsconfig.json packages/api/tsconfig.json",
-    "build": "yarn build-common && yarn build-client && yarn build-api",
     "build-common": "yarn workspace @cv-creator/common build",
     "build-client": "yarn workspace @cv-creator/client build",
     "build-api": "yarn workspace @cv-creator/api build",
     "clean-build": "rm -rf packages/*/{lib,build,tsconfig.tsbuildinfo}",
-    "start": "concurrently -n client,server 'yarn start-client' 'yarn start-api' --kill-others",
     "start-client": "yarn workspace @cv-creator/client start",
     "start-api": "yarn workspace @cv-creator/api start",
-    "deploy": "yarn workspace @cv-creator/client deploy"
+    "start": "concurrently \"yarn start-client\" \"yarn start-api\"",
+    "build": "yarn build-common && yarn build-client && yarn build-api",
+    "start-bundle": "webpack serve",
+    "build-bundle": "yarn build && webpack build",
+    "deploy": "gh-pages -d build"
   },
   "packageManager": "yarn@4.1.1"
 }

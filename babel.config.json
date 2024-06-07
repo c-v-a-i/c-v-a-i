@@ -1,0 +1,17 @@
+{
+  "presets": ["@babel/env", "@babel/react", "@babel/preset-typescript"],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    [
+      "babel-plugin-module-resolver",
+      {
+        "root": ["./packages"],
+        "alias": {
+          "api": "./packages/api",
+          "client": "./packages/client",
+          "common": "./packages/common"
+        }
+      }
+    ]
+  ]
+}

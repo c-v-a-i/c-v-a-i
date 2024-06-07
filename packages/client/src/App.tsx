@@ -34,6 +34,10 @@ const App: React.FC = () => {
       <Education
         data={educationData}
       />
+
+      <Skills
+        data={skillsData}
+      />
     </Container>
   )
 }
