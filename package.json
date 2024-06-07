@@ -12,7 +12,8 @@
   "scripts": {
     "prettify": "prettier --write .",
     "watch": "tsc -b -w packages/common/tsconfig.json packages/api/tsconfig.json",
-    "build": "yarn build-client && yarn build-api",
+    "build": "yarn build-common && yarn build-client && yarn build-api",
+    "build-common": "yarn workspace @cv-creator/common build",
     "build-client": "yarn workspace @cv-creator/client build",
     "build-api": "yarn workspace @cv-creator/api build",
     "clean-build": "rm -rf packages/*/{lib,build,tsconfig.tsbuildinfo}",
