@@ -2,6 +2,7 @@
   "name": "see-we-creator",
   "private": true,
   "version": "0.1.0",
+  "homepage": "https://<username>.github.io/<repo>",
   "workspaces": [
     "packages/**"
   ],
@@ -35,8 +36,10 @@
     "clean-build": "rm -rf packages/*/{lib,build,tsconfig.tsbuildinfo}",
     "start-client": "yarn workspace @cv-creator/client start",
     "start-api": "yarn workspace @cv-creator/api start",
-    "start": "webpack serve",
-    "build": "webpack build",
+    "start": "concurrently \"yarn start-client\" \"yarn start-api\"",
+    "build": "yarn build-common && yarn build-client && yarn build-api",
+    "start-bundle": "webpack serve",
+    "build-bundle": "yarn build && webpack build",
     "deploy": "gh-pages -d build"
   },
   "packageManager": "yarn@4.1.1"
