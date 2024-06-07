@@ -12,16 +12,24 @@ export const Education: React.FC<EducationProps> = ({ data }) => (
     <Typography variant="h4" gutterBottom>Education</Typography>
     {data.map((education, index) => (
       <Container key={index} sx={{ marginBottom: '20px' }}>
-        <Typography variant="h6">{education.institution}</Typography>
+
+        <Grid container justifyContent="space-between">
+          <Grid item>
+            <Typography variant="h6">{education.institution}</Typography>
+            <Typography variant="body2">{education.degree}</Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="body2">{education.location}</Typography>
+            <Typography variant="body2">[{education.duration}]</Typography>
+          </Grid>
+        </Grid>
         <List>
           <ListItem>
-            <Typography variant="body2">{education.degree}</Typography>
-          </ListItem>
-          <ListItem>
-            <Typography variant="body2">{education.duration}</Typography>
+            <Typography variant="body2" dangerouslySetInnerHTML={{ __html: education.description }}></Typography>
           </ListItem>
         </List>
+        <Typography variant="body2">Keywords: {education.keywords.join(', ')}.</Typography>
       </Container>
     ))}
-  </Container>
+  </Container >
 );

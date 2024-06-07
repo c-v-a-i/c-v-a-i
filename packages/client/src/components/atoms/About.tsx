@@ -8,7 +8,7 @@ type AboutProps = {
 export const About: React.FC<AboutProps> = ({ children }) => {
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>About</Typography>
+      <Typography variant="h4" gutterBottom>whoami</Typography>
       <Typography variant="body1">{children}</Typography>
     </Container>
   );
