@@ -19,9 +19,9 @@ const App: React.FC = () => {
         data={contactInfoData}
       />
 
-      <About>
-        {aboutMeData}
-      </About>
+      <About
+        data={aboutMeData}
+      />
 
       <WorkExperience
         data={workExperienceData}

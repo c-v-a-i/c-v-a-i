@@ -2,14 +2,17 @@ import React from 'react';
 import { Typography, Container } from '@mui/material';
 
 type AboutProps = {
-  children: React.ReactNode;
+  data: string[]
 };
 
-export const About: React.FC<AboutProps> = ({ children }) => {
+export const About: React.FC<AboutProps> = ({ data }) => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>whoami</Typography>
-      <Typography variant="body1">{children}</Typography>
+      <Typography 
+        variant="body1"
+        dangerouslySetInnerHTML={{ __html: data.join("<br />")}}
+      />
     </Container>
   );
 };
