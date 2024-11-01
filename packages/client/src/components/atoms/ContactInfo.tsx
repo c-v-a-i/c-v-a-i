@@ -1,6 +1,7 @@
 import React from 'react';
-import { Container, Typography, Paper, Link, Grid } from '@mui/material';
-import { ContactInfoData, name } from '@cv-creator/common';
+import { Typography, Paper, Link, Grid, Box } from '@mui/material'
+import { ContactInfoData, name } from '@c-v-a-i/common';
+import { ContactInfoItem } from './ContactInfoItem'
 
 type ContactInfoProps = {
   data: ContactInfoData;
@@ -8,19 +9,16 @@ type ContactInfoProps = {
 
 export const ContactInfo: React.FC<ContactInfoProps> = ({ data }) => {
   return (
-    <Container>
+    <Box>
       <Typography variant="h3" gutterBottom>{name}</Typography>
-      <Typography variant="h5" gutterBottom>Contact Information</Typography>
-      <Grid container spacing={2}>
-        {Object.entries(data).map(([key, value]) => (
-          <Grid item xs={12} sm={6} key={key}>
-            <Typography variant="body1"><b>{key}</b></Typography>
-            <Link href={`${value.includes('@') ? 'mailto:' : value.includes('+') ? 'tel:' : ''}${value}`} underline="hover">
-              {value}
-            </Link>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+
+      {/*<Grid container spacing={2}>*/}
+      {/*  {Object.entries(data).map(([key, value]) => (*/}
+      {/*    <Grid item xs={12} sm={12} md={6} key={key}>*/}
+      {/*      <ContactInfoItem name={key} value={value} />*/}
+      {/*    </Grid>*/}
+      {/*  ))}*/}
+      {/*</Grid>*/}
+    </Box>
   );
 };

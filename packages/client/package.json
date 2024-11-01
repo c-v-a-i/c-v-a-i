@@ -1,39 +1,51 @@
 {
-  "name": "@cv-creator/client",
+  "name": "@c-v-a-i/client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@cv-creator/common": "*",
+    "@apollo/client": "^3.11.8",
+    "@c-v-a-i/common": "*",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@graphql-codegen/typescript-operations": "^4.3.1",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.2",
     "@mui/material": "^5.15.18",
+    "graphql": "^16.9.0",
     "react": "^18.2.0",
     "react-dom": "latest",
-    "react-scripts": "^5.0.1",
+    "react-router-dom": "^6.27.0",
+    "react-toastify": "^10.0.6",
+    "ts-pattern": "^5.5.0",
     "tslib": "^2.6.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "deploy": "gh-pages -d build"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "vite --open",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "graphql-codegen": "graphql-codegen --config codegen.ts",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write .",
+    "codecheck": "yarn tsc --noEmit && yarn lint && yarn prettier",
+    "codecheck:fix": "yarn lint:fix && yarn prettier:fix"
   },
   "devDependencies": {
-    "@types/gh-pages": "^6",
+    "@c-v-a-i/common": "*",
+    "@c-v-a-i/tools": "*",
+    "@graphql-codegen/cli": "5.0.3",
+    "@graphql-codegen/client-preset": "4.5.0",
+    "@graphql-codegen/schema-ast": "^4.1.0",
+    "@parcel/watcher": "^2.4.1",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "gh-pages": "^6.1.1"
+    "@typescript-eslint/parser": "^8.12.2",
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "^9.13.0",
+    "eslint-plugin-react": "^7.36.1",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
   }
 }

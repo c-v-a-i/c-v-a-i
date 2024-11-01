@@ -1,0 +1,41 @@
+{
+  "name": "@c-v-a-i/tools",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write .",
+    "codecheck": "tsc --noEmit && yarn lint && yarn prettier",
+    "codecheck:fix": "yarn lint:fix && yarn prettier:fix"
+  },
+  "dependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@rushstack/eslint-patch": "^1.10.4",
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.3",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-json": "^4.0.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-lodash": "^8.0.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "typescript": "5.6.3"
+  },
+  "peerDependencies": {
+    "eslint": "*",
+    "prettier": "*"
+  },
+  "devDependencies": {
+    "@types/eslint-plugin-jsx-a11y": "^6",
+    "@types/eslint__eslintrc": "^2.1.2",
+    "@typescript-eslint/parser": "^8.12.2"
+  }
+}

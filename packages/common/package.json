@@ -1,11 +1,25 @@
 {
-  "name": "@cv-creator/common",
+  "name": "@c-v-a-i/common",
   "version": "0.1.0",
   "private": true,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc -b",
-    "watch": "tsc -b -w"
+    "watch": "tsc -b -w",
+    "lint": "eslint **/*.ts",
+    "lint:fix": "eslint **/*.ts --fix",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write .",
+    "codecheck": "yarn tsc --noEmit && yarn lint && yarn prettier",
+    "codecheck:fix": "yarn lint:fix && yarn prettier:fix"
+  },
+  "dependencies": {
+    "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "@c-v-a-i/tools": "*",
+    "eslint": "^9.13.0",
+    "prettier": "^3.3.3"
   }
 }

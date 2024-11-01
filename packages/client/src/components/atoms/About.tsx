@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Container } from '@mui/material';
+import { Typography, Container, Box } from '@mui/material'
 
 type AboutProps = {
   data: string[]
@@ -7,12 +7,11 @@ type AboutProps = {
 
 export const About: React.FC<AboutProps> = ({ data }) => {
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>whoami</Typography>
-      <Typography 
+    <Box>
+      <Typography variant="h5" gutterBottom>whoami</Typography>
+      <Typography
         variant="body1"
-        dangerouslySetInnerHTML={{ __html: data.join("<br />")}}
-      />
-    </Container>
+      >{data.join('\n')}</Typography>
+    </Box>
   );
 };

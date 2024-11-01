@@ -1,6 +1,6 @@
 import React from 'react';
-import { Container, Typography, Paper, Grid, List, ListItem } from '@mui/material';
-import { WorkExperienceData } from '@cv-creator/common';
+import { Typography, Paper, Grid, List, ListItem, Box } from '@mui/material'
+import { WorkExperienceData } from '@c-v-a-i/common';
 
 type WorkExperienceProps = {
   data: WorkExperienceData[];
@@ -9,31 +9,27 @@ type WorkExperienceProps = {
 // create data display component for work experience & education
 export const WorkExperience: React.FC<WorkExperienceProps> = ({ data }) => {
   return (
-    <Container>
+    <Box>
       <Typography variant="h4" gutterBottom>Work Experience</Typography>
+      <Box display="flex" flexDirection="column" gap={2}>
       {data.map((job, index) => (
-        <Container key={index} sx={{ marginBottom: '20px' }}>
+        <Box key={index}>
           <Grid container justifyContent="space-between">
             <Grid item>
               <Typography variant="h6">{job.position}, {job.company}</Typography>
-              <Typography variant="body2">{job.type}</Typography>
+              <Typography color="grey" variant="body2"><i>{job.type}</i></Typography>
             </Grid>
             <Grid item>
               <Typography variant="body2">{job.location}, </Typography>
               <Typography variant="body2">[{job.duration}]</Typography>
             </Grid>
           </Grid>
-          <List>
-            {job.responsibilities.map((responsibility, i) => (
-              <ListItem key={i}>
-                <Typography variant='body2'>
-                  {responsibility}
-                </Typography>
-              </ListItem>
-            ))}
-          </List>
-        </Container>
+          <Typography variant='body2'>
+            {job.responsibilities.join('\n')}
+          </Typography>
+        </Box>
       ))}
-    </Container>
+      </Box>
+    </Box>
   );
 };

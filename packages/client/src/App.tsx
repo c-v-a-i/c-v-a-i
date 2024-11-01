@@ -1,44 +1,23 @@
-import {
-  aboutMeData, contactInfoData,
-  educationData,
-  projectsData,
-  skillsData,
-  workExperienceData
-} from '@cv-creator/common'
 import React from 'react'
-import {
-  About, ContactInfo,
-  Container, Education, Projects, Skills, WorkExperience
-} from './components/atoms'
+import {Authentication} from "./components/authentication/Authentication";
+import {ApolloProvider } from "@apollo/client";
+import { ToastContainer} from 'react-toastify';
+import {ThemeProvider, useMediaQuery, useTheme} from "@mui/material";
+import {client} from "./apollo-client";
 
 
 const App: React.FC = () => {
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+
   return (
-    <Container sx={{ gap: '40px', display: 'flex', flexDirection: 'column' }} maxWidth='xl'>
-      <ContactInfo
-        data={contactInfoData}
-      />
-
-      <About
-        data={aboutMeData}
-      />
-
-      <WorkExperience
-        data={workExperienceData}
-      />
-
-      {/* <Projects */}
-      {/*   data={projectsData} */}
-      {/* /> */}
-
-      <Education
-        data={educationData}
-      />
-
-      <Skills
-        data={skillsData}
-      />
-    </Container>
+      <ThemeProvider theme={theme}>
+        <ApolloProvider client={client}>
+          <ToastContainer position={isDesktop ? 'bottom-left' : 'top-right'} />
+          <Authentication />
+          {/*// <CvPreview />*/}
+        </ApolloProvider>
+      </ThemeProvider>
   )
 }
 

@@ -1,5 +1,14 @@
 {
   "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+
+
+    "noEmit": true,
+    "incremental": true,
+    "strictNullChecks": false,
+    "removeComments": true,
+    "noImplicitAny": true,
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -16,7 +25,6 @@
     "importHelpers": true,
     "downlevelIteration": true,
     "noFallthroughCasesInSwitch": true,
-    "composite": true,
-    "sourceMap": true
-  }
+    "sourceMap": false,
+  },
 }
