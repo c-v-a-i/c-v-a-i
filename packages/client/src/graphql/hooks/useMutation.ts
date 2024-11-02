@@ -1,12 +1,12 @@
-import {
+import type {
   FetchResult,
   MutationFunctionOptions,
   MutationHookOptions,
   MutationResult,
   OperationVariables,
-  useMutation as useApolloMutation,
 } from '@apollo/client';
-import { DocumentNode } from 'graphql';
+import { useMutation as useApolloMutation } from '@apollo/client';
+import type { DocumentNode } from 'graphql';
 import { toast } from 'react-toastify';
 
 interface ToastConfig {
@@ -20,25 +20,18 @@ interface MutationOptions<TData, TVariables extends OperationVariables>
 }
 
 type MutationTuple<TData, TVariables extends OperationVariables> = [
-  (
-    options: MutationOptions<TData, TVariables>,
-  ) => Promise<FetchResult<TData> | null>,
+  (options: MutationOptions<TData, TVariables>) => Promise<FetchResult<TData> | null>,
   MutationResult<TData>,
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const useMutation = <
-  TData = any,
-  TVariables extends OperationVariables = OperationVariables
->(
+const useMutation = <TData = any, TVariables extends OperationVariables = OperationVariables>(
   mutation: DocumentNode,
-  options?: MutationHookOptions<TData, TVariables>,
+  options?: MutationHookOptions<TData, TVariables>
 ): MutationTuple<TData, TVariables> => {
   const [mutationFn, mutationState] = useApolloMutation(mutation, options as OperationVariables);
 
-  const mutationWithToast = async (
-    mutationOptions: MutationOptions<TData, TVariables>,
-  ) => {
+  const mutationWithToast = async (mutationOptions: MutationOptions<TData, TVariables>) => {
     const { toastConfig } = mutationOptions;
 
     try {
@@ -51,15 +44,12 @@ const useMutation = <
       }
 
       return data;
-    } catch (e) {
+    } catch (e: unknown) {
+      console.error(e);
       if (toastConfig) {
-        toast(
-          toastConfig.errorText ||
-              'Oops, something is wrong.',
-          {
-            type: 'error',
-          },
-        );
+        toast(toastConfig.errorText ?? 'Oops, something is wrong.', {
+          type: 'error',
+        });
       }
     }
 

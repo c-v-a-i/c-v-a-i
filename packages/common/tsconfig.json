@@ -4,12 +4,10 @@
     "importHelpers": false,
     "esModuleInterop": false,
     "outDir": "lib",
-    "rootDir": "src"
+    "rootDir": "src",
+    "noEmit": false,
   },
   "include": ["src"],
   "references": [
-    {
-      "path": "../tools/tsconfig.json"
-    }
   ]
 }

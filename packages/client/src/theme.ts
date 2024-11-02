@@ -1,4 +1,4 @@
-import {createTheme} from "@mui/material";
+import { createTheme } from '@mui/material';
 
 export const theme = createTheme({
   palette: {
@@ -14,7 +14,7 @@ export const theme = createTheme({
     fontFamily: 'Fira Code, monospace',
     body2: {
       lineHeight: 1.7,
-    }
+    },
   },
   // components: {
   //   MuiTypography: {
@@ -26,4 +26,3 @@ export const theme = createTheme({
   //   },
   // },
 });
-

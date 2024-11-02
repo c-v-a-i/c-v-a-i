@@ -10,8 +10,5 @@
     {
       "path": "../common/tsconfig.json",
     },
-    {
-      "path": "../tools/tsconfig.json",
-    },
   ]
 }

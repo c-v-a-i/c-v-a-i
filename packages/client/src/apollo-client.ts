@@ -1,46 +1,42 @@
-import {match} from "ts-pattern";
-import {ApolloClient, from, HttpLink, InMemoryCache} from "@apollo/client";
-import {onError} from "@apollo/client/link/error";
-import {toast} from "react-toastify";
+import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
+import { toast } from 'react-toastify';
+import { match } from 'ts-pattern';
 
 const env = import.meta.env.VITE_HOST_ENV;
 
 const uri = match(env as 'development')
-    .with('development', () => 'http://localhost:4000/graphql')
-    .exhaustive()
+  .with('development', () => 'http://localhost:4000/graphql')
+  .exhaustive();
 
 const cache = new InMemoryCache({
   typePolicies: {
     Query: {
-      fields: {
-      },
+      fields: {},
     },
   },
 });
 
 const httpLink = new HttpLink({
-  uri
-})
+  uri,
+});
 
-const errorLink = onError(
-  ({ graphQLErrors, networkError, operation, response }) => {
-    if (graphQLErrors)
-      graphQLErrors.forEach(({ message, extensions }) => {
-        // We don't want to show Unauth errors, so we will not spam user
-        // They are handled in auth.provider
-        // @ts-expect-error - better types later
-        if (extensions?.response?.statusCode !== 401) {
-
-          toast(message, { type: 'error', theme: 'colored' });
-        }
-      });
-    if (networkError) {
-      console.error(`[Network error]: ${networkError}`);
-      const { message } = networkError;
-      toast(message, { type: 'warning', theme: 'colored' });
-    }
-  },
-);
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, extensions }) => {
+      // We don't want to show Unauth errors, so we will not spam user
+      // They are handled in auth.provider
+      // @ts-expect-error - better types later
+      if (extensions?.response?.statusCode !== 401) {
+        toast(message, { type: 'error', theme: 'colored' });
+      }
+    });
+  if (networkError) {
+    console.error(`[Network error]: ${networkError}`);
+    const { message } = networkError;
+    toast(message, { type: 'warning', theme: 'colored' });
+  }
+});
 
 export const client = new ApolloClient({
   cache,

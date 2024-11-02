@@ -3,10 +3,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
 
-
     "noEmit": true,
     "incremental": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "removeComments": true,
     "noImplicitAny": true,
     "target": "es5",
@@ -26,5 +25,6 @@
     "downlevelIteration": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": false,
+    "composite": true,
   },
 }

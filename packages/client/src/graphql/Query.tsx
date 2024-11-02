@@ -1,38 +1,31 @@
-import {
-  ObservableQueryFields,
-  QueryDataOptions,
-  useQuery,
-} from '@apollo/client/react';
-import { OperationVariables } from '@apollo/client';
-import { Navigate } from 'react-router-dom';
+import type { OperationVariables } from '@apollo/client';
+import type { ObservableQueryFields, QueryDataOptions } from '@apollo/client/react';
+import { useQuery } from '@apollo/client/react';
 import { Box } from '@mui/material';
-import { BaseGqlComponentProps, LoaderElement } from './common';
+import { Navigate } from 'react-router-dom';
+import type { BaseGqlComponentProps } from './common';
+import { LoaderElement } from './common';
 
-interface ChildrenProps<TData, TVariables>
+interface ChildrenProps<TData, TVariables extends OperationVariables = OperationVariables>
   extends ObservableQueryFields<TData, TVariables> {
   data: TData;
   loading?: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface QueryProps<TData = any, TVariables = OperationVariables>
+export interface QueryProps<TData = any, TVariables extends OperationVariables = OperationVariables>
   extends Omit<QueryDataOptions<TData, TVariables>, 'children'>,
     BaseGqlComponentProps {
   children: (result: ChildrenProps<TData, TVariables>) => JSX.Element;
 }
 
-const Query = <TData, TVariables = OperationVariables>({
+const Query = <TData, TVariables extends OperationVariables = OperationVariables>({
   client,
   query,
   children,
   variables,
   loader = (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      flexGrow={1}
-    >
+    <Box display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
       <LoaderElement />
     </Box>
   ),
@@ -40,13 +33,10 @@ const Query = <TData, TVariables = OperationVariables>({
   disableLoader,
   ...otherProps
 }: QueryProps<TData, TVariables>) => {
-  const { loading, error, data, ...other } = useQuery<TData, TVariables>(
-    query,
-    {
-      variables,
-      ...otherProps,
-    },
-  );
+  const { loading, error, data, ...other } = useQuery<TData, TVariables>(query, {
+    variables,
+    ...otherProps,
+  });
 
   if (loading) {
     return disableLoader ? null : loader;

@@ -1,11 +1,11 @@
-import { Box, Link, Typography } from '@mui/material'
-import React from 'react'
+import { Box, Link, Typography } from '@mui/material';
+import React from 'react';
 
 type ContactInfoItemProps = {
   name: string;
   value: string;
-}
-export const ContactInfoItem = ({name, value}: ContactInfoItemProps) => {
+};
+export const ContactInfoItem = ({ name, value }: ContactInfoItemProps) => {
   return (
     <Box>
       <Typography variant="h6">{name}</Typography>
@@ -13,5 +13,5 @@ export const ContactInfoItem = ({name, value}: ContactInfoItemProps) => {
         {value}
       </Link>
     </Box>
-  )
-}
+  );
+};

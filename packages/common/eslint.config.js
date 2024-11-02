@@ -1,3 +1,3 @@
-const eslintrc  = require('@sc-v-a-i/tools')
+const eslintrc  = require('@c-v-a-i/tools')
 
 module.exports = eslintrc
