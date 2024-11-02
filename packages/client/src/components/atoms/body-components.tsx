@@ -1,4 +1,4 @@
-import { Container as MuiContainer, Link as MuiLink, ListItem as MuiListItem, styled, Typography } from '@mui/material'
+import { Container as MuiContainer, Link as MuiLink, ListItem as MuiListItem, styled, Typography } from '@mui/material';
 
 export const Container = styled(MuiContainer)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -39,7 +39,7 @@ export const ListItem = styled(MuiListItem)(({ theme }) => ({
   fontSize: '1rem',
 }));
 
-export const Anchor = styled(MuiLink)(({ theme }) => ({
+export const Anchor = styled(MuiLink)(() => ({
   color: 'inherit',
   textDecoration: 'none',
   fontSize: '1rem',

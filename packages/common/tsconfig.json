@@ -4,7 +4,10 @@
     "importHelpers": false,
     "esModuleInterop": false,
     "outDir": "lib",
-    "rootDir": "src"
+    "rootDir": "src",
+    "noEmit": false,
   },
-  "include": ["src"]
+  "include": ["src"],
+  "references": [
+  ]
 }

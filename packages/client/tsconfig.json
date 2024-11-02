@@ -1,13 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "build",
+    "outDir": "dist",
     "jsx": "react-jsx",
+    "types": ["vite/client"],
   },
   "include": ["src"],
   "references": [
     {
-      "path": "../common/tsconfig.json"
-    }
+      "path": "../common/tsconfig.json",
+    },
   ]
 }

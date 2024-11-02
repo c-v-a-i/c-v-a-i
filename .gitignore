@@ -8,14 +8,16 @@
 
 
 /packages/*/lib
-/packages/*/build
+/packages/*/dist
 /packages/*/tsconfig.tsbuildinfo
 
 # testing
 /coverage
 
 # production
-/build
+*/**/build
+*/**/dist
+*/**/node_modules
 
 # misc
 .DS_Store
@@ -29,6 +31,5 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea
-/yarn.lock
 node_modules
 **/node_modules

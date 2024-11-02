@@ -1,0 +1,8 @@
+directive @connection(filter: [String]!, key: String!) on FIELD
+
+"""Date custom scalar type"""
+scalar Date
+
+type Query {
+  healthCheck: String!
+}

@@ -1,8 +1,11 @@
 {
-  "name": "see-we-creator",
+  "name": "c-v-a-i",
   "private": true,
   "version": "0.1.0",
-  "homepage": "https://<username>.github.io/<repo>",
+  "homepage": "https://SkuratovichA.github.io",
+  "engines": {
+    "node": "22"
+  },
   "workspaces": [
     "packages/**"
   ],
@@ -12,6 +15,7 @@
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.15.0",
+    "@eslint/js": "^9.14.0",
     "@types/gh-pages": "^6",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
@@ -20,27 +24,37 @@
     "babel-plugin-tsconfig-paths": "^1.0.1",
     "concurrently": "7.0.0",
     "gh-pages": "^6.1.1",
+    "globals": "^15.9.0",
     "html-webpack-plugin": "^5.3.2",
+    "prettier": "^3.3.3",
     "ts-loader": "^9.2.6",
-    "typescript": "5.1.6",
+    "typescript": "5.6.3",
+    "typescript-eslint": "^8.5.0",
     "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.2.1"
   },
   "scripts": {
-    "prettify": "prettier --write .",
     "watch": "tsc -b -w packages/common/tsconfig.json packages/api/tsconfig.json",
-    "build-common": "yarn workspace @cv-creator/common build",
-    "build-client": "yarn workspace @cv-creator/client build",
-    "build-api": "yarn workspace @cv-creator/api build",
-    "clean-build": "rm -rf packages/*/{lib,build,tsconfig.tsbuildinfo}",
-    "start-client": "yarn workspace @cv-creator/client start",
-    "start-api": "yarn workspace @cv-creator/api start",
-    "start": "concurrently \"yarn start-client\" \"yarn start-api\"",
-    "build": "yarn build-common && yarn build-client && yarn build-api",
-    "start-bundle": "webpack serve",
-    "build-bundle": "yarn build && webpack build",
-    "deploy": "gh-pages -d build"
+    "client": "yarn workspace @c-v-a-i/client",
+    "server": "yarn workspace @c-v-a-i/server",
+    "common": "yarn workspace @c-v-a-i/common",
+    "tools": "yarn workspace @c-v-a-i/tools",
+    "build-common": "yarn common build",
+    "build-client": "yarn client build",
+    "build-server": "yarn server build",
+    "build-clean": "rm -rf packages/*/{lib,build,tsconfig.tsbuildinfo}",
+    "start": "concurrently -n client,server \"yarn server start\" \"yarn client start\"",
+    "dev": "concurrently -n client,server -c cyan,magenta 'yarn client dev' 'yarn server start:dev' --kill-others",
+    "build": "yarn common build && yarn client build && yarn server build",
+    "db:create": "chmod +x ./scripts/db_create.sh && ./scripts/db_create.sh",
+
+    "lint": "yarn common lint && yarn client lint && yarn server lint",
+    "lint:fix": "yarn common lint:fix && yarn client lint:fix && yarn server lint:fix",
+    "prettier:check": "yarn common prettier:check && yarn client prettier:check && yarn server prettier:check",
+    "prettier:fix": "yarn common prettier:fix && yarn client prettier:fix && yarn server prettier:fix",
+    "codecheck": "yarn common codecheck && yarn client codecheck && yarn server codecheck",
+    "codecheck:fix": "yarn common codecheck:fix && yarn client codecheck:fix && yarn server codecheck:fix"
   },
   "packageManager": "yarn@4.1.1"
 }
