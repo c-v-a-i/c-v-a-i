@@ -2758,6 +2758,7 @@ __metadata:
     "@nestjs/schematics": "npm:^10.2.3"
     "@nestjs/typeorm": "npm:^10.0.2"
     "@types/cookie-parser": "npm:^1"
+    "@types/lodash": "npm:^4.17.13"
     "@types/pg": "npm:^8"
     class-transformer: "npm:^0.5.1"
     class-validator: "npm:^0.14.1"
@@ -5216,6 +5217,13 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: 10/4e5aed58cabb2bbf6f725da13421aa50a49abb6bc17bfab6c31b8774b073fa7b50d557c61f961a09a85f6056151190f8ac95f13f5b48136ba5841f7d4484ec56
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:^4.17.13":
+  version: 4.17.13
+  resolution: "@types/lodash@npm:4.17.13"
+  checksum: 10/ddb34e20810c71be2d9445bcc4b64ec25b83976738454de709854b79c7f655b03704b76235445699956d65012987720e0e429a35489de65495cdb5420202d905
   languageName: node
   linkType: hard
 
