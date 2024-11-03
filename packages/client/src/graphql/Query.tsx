@@ -1,10 +1,10 @@
+import type { BaseGqlComponentProps } from './common';
+import { LoaderElement } from './common';
 import type { OperationVariables } from '@apollo/client';
 import type { ObservableQueryFields, QueryDataOptions } from '@apollo/client/react';
 import { useQuery } from '@apollo/client/react';
 import { Box } from '@mui/material';
 import { Navigate } from 'react-router-dom';
-import type { BaseGqlComponentProps } from './common';
-import { LoaderElement } from './common';
 
 interface ChildrenProps<TData, TVariables extends OperationVariables = OperationVariables>
   extends ObservableQueryFields<TData, TVariables> {

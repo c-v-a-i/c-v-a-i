@@ -1,5 +1,5 @@
-import { toast } from 'react-toastify';
 import { useHealthCheckQuery } from '../../generated/graphql';
+import { toast } from 'react-toastify';
 
 export const Authentication = () => {
   const { data, loading, error } = useHealthCheckQuery();

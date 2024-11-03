@@ -1,3 +1,5 @@
+import { About, ContactInfo, Education, Projects, Skills, WorkExperience } from '../atoms';
+import { ContactInfoItem } from '../atoms/ContactInfoItem';
 import {
   aboutMeData,
   contactInfoData,
@@ -7,8 +9,6 @@ import {
   workExperienceData,
 } from '@c-v-a-i/common';
 import { Box, Divider, Grid } from '@mui/material';
-import { About, ContactInfo, Education, Projects, Skills, WorkExperience } from '../atoms';
-import { ContactInfoItem } from '../atoms/ContactInfoItem';
 
 export const CvPreview = () => {
   return (
