@@ -1,9 +1,9 @@
-import { client } from './apollo-client';
-import { CvPreview } from './components/cv-preview';
 import { ApolloProvider } from '@apollo/client';
 import { ThemeProvider, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 import { ToastContainer } from 'react-toastify';
+import { CvPreview } from './components/cv-preview';
+import { client } from './apollo-client';
 
 const App: React.FC = () => {
   const theme = useTheme();

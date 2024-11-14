@@ -1,7 +1,7 @@
-import * as ApolloReactComponents from '../graphql/customGqlComponents';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 import * as React from 'react';
+import * as ApolloReactComponents from '../graphql/customGqlComponents';
 
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;

@@ -2,7 +2,7 @@ const reactHooks = require('eslint-plugin-react-hooks');
 const lodash = require('eslint-plugin-lodash');
 const unusedImports = require('eslint-plugin-unused-imports');
 const typescriptEslint = require('@typescript-eslint/eslint-plugin');
-const importPlugin = require('eslint-plugin-import');
+// const importPlugin = require('eslint-plugin-import');
 const typescriptParser = require('@typescript-eslint/parser');
 
 const eslintrc = [
@@ -12,7 +12,7 @@ const eslintrc = [
       lodash,
       'unused-imports': unusedImports,
       '@typescript-eslint': typescriptEslint,
-      import: importPlugin,
+      // import: importPlugin,
     },
     languageOptions: {
       parser: typescriptParser,
@@ -47,22 +47,16 @@ const eslintrc = [
       ],
       '@typescript-eslint/return-await': ['error', 'in-try-catch'],
 
-      // Import rules
-      'import/no-duplicates': 'error',
-      'import/order': 'error',
+      // // Import rules
+      // 'import/no-duplicates': 'error',
+      // 'import/order': 'off',
 
       // General rules
       'no-console': ['warn', { allow: ['error', 'debug'] }],
       'prefer-const': 'error',
       'spaced-comment': 'error',
     },
-    files: [
-        '**/*.{ts,tsx}',
-        '!**/react-app-env.d.ts',
-        '!**/graphql.tsx',
-        '!**/generated/*'
-    ],
-
+    files: ['**/*.{ts,tsx}', '!**/react-app-env.d.ts', '!**/graphql.tsx', '!**/generated/*'],
   },
   {
     files: ['**/*.spec.ts', '**/*.spec.tsx'],

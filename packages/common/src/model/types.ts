@@ -1,6 +1,7 @@
 export interface ProjectData {
   name: string;
   description: string;
+  skills: string[];
 }
 export interface AchievementData {
   name: string;
@@ -22,6 +23,7 @@ export interface WorkExperienceData {
   type: string;
   duration: string;
   responsibilities: string[];
+  skills: string[];
 }
 
 export interface EducationData {

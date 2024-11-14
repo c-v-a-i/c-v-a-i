@@ -5,8 +5,9 @@ module.exports = {
   singleQuote: true,
   useTabs: false,
   printWidth: 120,
-  importOrderParserPlugins: ["typescript", "decorators-legacy", "jsx"],
-  plugins: [
-      require.resolve('@trivago/prettier-plugin-sort-imports')
-  ],
+  // this conflicts with eslint
+  // importOrderParserPlugins: ["typescript", "decorators-legacy", "jsx"],
+  // plugins: [
+  //     require.resolve('@trivago/prettier-plugin-sort-imports')
+  // ],
 };
