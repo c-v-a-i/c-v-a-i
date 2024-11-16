@@ -1,9 +1,10 @@
 import { ApolloProvider } from '@apollo/client';
 import { ThemeProvider, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
-import { ToastContainer } from 'react-toastify';
-import { CvPreview } from './components/cv-preview';
 import { client } from './apollo-client';
+import { BrowserRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { IndexPage } from './components/IndexPage';
 
 const App: React.FC = () => {
   const theme = useTheme();
@@ -12,9 +13,10 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <ApolloProvider client={client}>
-        <ToastContainer position={isDesktop ? 'bottom-left' : 'top-right'} />
-        {/* <Authentication />*/}
-        <CvPreview />
+        <BrowserRouter>
+          <IndexPage />
+          <ToastContainer position={isDesktop ? 'bottom-left' : 'top-right'} />
+        </BrowserRouter>
       </ApolloProvider>
     </ThemeProvider>
   );

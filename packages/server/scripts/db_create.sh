@@ -15,8 +15,8 @@ CONTAINER_NAME="cvai_local_${CONTAINER_NAME:-cvai}"
 POSTGRES_PASSWORD="${TYPEORM_PASSWORD:-postgres}"
 POSTGRES_USER="${TYPEORM_USERNAME:-postgres}"
 POSTGRES_DB="${TYPEORM_DATABASE:-cvai}"
-HOST_PORT="${TYPEORM_PORT:-5430}"
-CONTAINER_PORT="5430"
+HOST_PORT="${TYPEORM_PORT:-5432}"
+CONTAINER_PORT="5432"
 
 echo "Removing old docker container..."
 (docker stop $CONTAINER_NAME && docker kill $CONTAINER_NAME || :) && (docker rm $CONTAINER_NAME || :)

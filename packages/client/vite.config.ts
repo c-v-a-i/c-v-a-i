@@ -34,7 +34,7 @@ export default defineConfig({
       interval: 300,
     },
   },
-  build: {
-    sourcemap: false,
-  },
+  // build: {
+  //   sourcemap: false,
+  // },
 });

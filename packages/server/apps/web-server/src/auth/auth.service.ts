@@ -53,6 +53,18 @@ export class AuthService {
     return generate(16);
   }
 
+  // TODO: the current type for DecodedUserObjectType is:
+  //   public client_id!: string;
+  //   public given_name!: string;
+  //   public family_name!: string;
+  //   public email!: string;
+  //   public scope!: ScopeObjectType;
+  //   However, JWT probably required SUB field (AuthJwtPayload class from from auth.jwt.payload.ts
+  //   export class AuthJwtPayload {
+  //     @IsString()
+  //     sub!: string;
+  //   }
+  //   So, that's why I have a question, whether or not I need to change something here.
   signAccessToken(payload: DecodedUserObjectType): string {
     return this.jwtService.sign(payload);
   }
