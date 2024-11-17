@@ -55,5 +55,5 @@
     "codecheck": "yarn common codecheck && yarn client codecheck && yarn server codecheck",
     "codecheck:fix": "yarn common codecheck:fix && yarn client codecheck:fix && yarn server codecheck:fix"
   },
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.5.1"
 }

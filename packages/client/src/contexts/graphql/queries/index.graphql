@@ -1,0 +1,11 @@
+query GetCurrentUser {
+  currentUser {
+    id
+    email
+    firstName
+    lastName
+    googleId
+    createdAt
+    deletedAt
+  }
+}

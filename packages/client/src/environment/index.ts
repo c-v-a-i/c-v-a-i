@@ -11,4 +11,5 @@ const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
 export const environment = {
   apiUrl,
   graphqlUrl: `${apiUrl}/graphql`,
+  openapiDocsUrl: `${apiUrl}/api-docs-json`,
 };

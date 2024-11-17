@@ -1,18 +1,24 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, Inject, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../entity-modules/user/user.service';
 import { RefreshTokenService } from '../entity-modules/refresh-token/refresh-token.service';
 import { CreateUserDto } from '../entity-modules/user/dto/create-user.dto';
-import { DecodedUserObjectType } from './dto';
-import { generate } from 'rand-token';
 import { User } from '@server/entities';
+import { ConfigType } from '@nestjs/config';
+import { refreshJwtConfig } from './config/refresh-jwt.config';
+import { JwtPayload } from './types';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-    private readonly refreshTokenService: RefreshTokenService
+    private readonly refreshTokenService: RefreshTokenService,
+    @Inject(refreshJwtConfig.KEY)
+    private readonly refreshJwtConfiguration: ConfigType<typeof refreshJwtConfig>
   ) {}
 
   async validateGoogleUser(googleUser: CreateUserDto) {
@@ -22,25 +28,18 @@ export class AuthService {
       user = await this.userService.create(googleUser);
     }
 
-    const tokenPayload = await this.generateTokenPayload(user);
+    const payload = await this.generateTokenPayload(user);
 
-    // Generate access and refresh tokens
-    const accessToken = this.signAccessToken(tokenPayload);
-    const refreshToken = this.generateRefreshToken();
+    const accessToken = this.signAccessToken(payload);
 
-    const validUntil = new Date(Date.now() + 1000 * 60 * 60 * 24 * 360);
+    const refreshToken = this.signRefreshToken(payload);
 
-    // Save the refresh token in the database
     await this.refreshTokenService.save({
-      id: refreshToken,
+      token: refreshToken,
       userId: user.id,
       validSince: new Date(),
-      validUntil,
+      validUntil: new Date(Date.now() + 1000 * 60 * 60 * 24 * 90), // 90 days
     });
-
-    console.log(
-      `AuthService.validateGoogleUser: generated accessToken & refreshToken: accessToken: ${accessToken}, refreshToken: ${refreshToken}`
-    );
 
     return {
       user,
@@ -49,55 +48,68 @@ export class AuthService {
     };
   }
 
-  generateRefreshToken(): string {
-    return generate(16);
-  }
-
-  // TODO: the current type for DecodedUserObjectType is:
-  //   public client_id!: string;
-  //   public given_name!: string;
-  //   public family_name!: string;
-  //   public email!: string;
-  //   public scope!: ScopeObjectType;
-  //   However, JWT probably required SUB field (AuthJwtPayload class from from auth.jwt.payload.ts
-  //   export class AuthJwtPayload {
-  //     @IsString()
-  //     sub!: string;
-  //   }
-  //   So, that's why I have a question, whether or not I need to change something here.
-  signAccessToken(payload: DecodedUserObjectType): string {
+  signAccessToken(payload: JwtPayload): string {
     return this.jwtService.sign(payload);
   }
 
-  async generateTokenPayload({ id }: Pick<User, 'id'>): Promise<DecodedUserObjectType> {
-    const user = await this.userService.findOne({ id });
-    if (!user) {
-      throw new InternalServerErrorException('User not found');
-    }
+  signRefreshToken(payload: JwtPayload): string {
+    return this.jwtService.sign(payload, {
+      secret: this.refreshJwtConfiguration.secret,
+      expiresIn: this.refreshJwtConfiguration.signOptions?.expiresIn || '90d',
+    });
+  }
 
-    const { id: client_id, email, firstName: given_name, lastName: family_name, googleId } = user;
-
+  async generateTokenPayload(user: User): Promise<JwtPayload> {
     return {
-      client_id,
-      given_name,
-      family_name,
-      email,
-      scope: {
-        googleId,
-      },
+      sub: user.id.toString(),
+      email: user.email,
     };
   }
 
-  async reissueAccessToken(refreshToken: string): Promise<DecodedUserObjectType | null> {
+  async validateUserById(userId: string): Promise<User | null> {
+    const user = await this.userService.findOne({ id: userId });
+
+    this.logger.debug(`validateUserById: found user: ${JSON.stringify(user, null, 2)}`);
+    return user;
+  }
+
+  async reissueAccessToken(refreshToken: string): Promise<string | null> {
     const existingRefreshToken = await this.refreshTokenService.getNonExpiredTokenByIdWithUser(refreshToken);
     if (!existingRefreshToken) {
       return null;
     }
-    const userId = existingRefreshToken.user.id;
-    return this.generateTokenPayload({ id: userId });
+    const user = existingRefreshToken.user;
+    const payload = await this.generateTokenPayload(user);
+    return this.signAccessToken(payload);
   }
 
   async updateRefreshTokenLastUsed(id: string): Promise<void> {
     await this.refreshTokenService.update(id, { lastUsed: new Date() });
+  }
+
+  async reauthenticateWithRefreshToken(req: Request, refreshToken: string): Promise<JwtPayload> {
+    const existingRefreshToken = await this.refreshTokenService.getNonExpiredTokenByIdWithUser(refreshToken);
+
+    if (!existingRefreshToken) {
+      this.logger.warn(`Invalid or expired refresh token: ${refreshToken}`);
+      req.res?.clearCookie('refreshToken');
+      req.res?.clearCookie('accessToken');
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const user = existingRefreshToken.user;
+    const payload = await this.generateTokenPayload(user);
+
+    const newAccessToken = this.signAccessToken(payload);
+    await this.updateRefreshTokenLastUsed(refreshToken);
+
+    req.res?.cookie('accessToken', newAccessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+    });
+
+    this.logger.log(`Reissued access token for user: ${user.id}`);
+    return payload;
   }
 }

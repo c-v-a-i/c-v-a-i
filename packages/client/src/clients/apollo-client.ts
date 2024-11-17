@@ -1,7 +1,7 @@
 import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { toast } from 'react-toastify';
-import { environment } from './environment';
+import { environment } from '../environment';
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -18,10 +18,8 @@ const httpLink = new HttpLink({
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, extensions }) => {
-      // We don't want to show Unauth errors, so we will not spam user
-      // They are handled in auth.provider
       // @ts-expect-error - better types later
-      if (extensions?.response?.statusCode !== 401) {
+      if (extensions?.originalError?.statusCode !== 401) {
         toast(message, { type: 'error', theme: 'colored' });
       }
     });
@@ -32,7 +30,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 
-export const client = new ApolloClient({
+export const apolloClient = new ApolloClient({
   cache,
   link: from([errorLink, httpLink]),
   defaultOptions: {

@@ -22,13 +22,13 @@ export class RefreshTokenService {
     });
 
   public save = async ({
-    id,
+    token,
     userId,
     validSince,
     validUntil,
-  }: Pick<RefreshToken, 'id' | 'userId' | 'validSince' | 'validUntil'>) => {
+  }: Pick<RefreshToken, 'token' | 'userId' | 'validSince' | 'validUntil'>) => {
     const refreshToken = this.refreshTokenRepository.create({
-      id,
+      token,
       userId,
       validSince,
       validUntil,

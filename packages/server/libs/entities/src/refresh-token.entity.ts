@@ -1,10 +1,12 @@
 import { User } from './user.entity';
 import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { BaseEntity } from '@server/entities/base-entity';
+import { VAR_CHAR } from '@server/entities/constants';
 
 @Entity()
-export class RefreshToken {
-  @PrimaryColumn({ type: 'varchar', length: 16 })
-  public id!: string;
+export class RefreshToken extends BaseEntity {
+  @PrimaryColumn({ ...VAR_CHAR, nullable: false, generated: false })
+  token!: string;
 
   @Column('timestamptz')
   public validSince!: Date;

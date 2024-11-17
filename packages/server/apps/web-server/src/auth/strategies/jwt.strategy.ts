@@ -1,89 +1,43 @@
 import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-jwt';
-import { Request } from 'express';
 import { AuthService } from '../auth.service';
-import { DecodedUserObjectType } from '../dto';
-import { JwtService } from '@nestjs/jwt';
-import { jwtConfig } from '../config/jwt.config';
 import { ConfigType } from '@nestjs/config';
+import { jwtConfig } from '../config/jwt.config';
+import { ExtractJwt } from 'passport-jwt';
+import { JwtPayload } from '../types';
+import { DecodedUserObjectType } from '../dto';
+import { Request } from 'express';
 
-type JwtMeta = {
-  exp: number;
-  iat: number;
-};
-
-type AccessToken = DecodedUserObjectType & JwtMeta;
-
-type RefreshTokenPayload = {
-  refreshToken: string;
-} & JwtMeta;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isAccessToken = (payload: any): payload is AccessToken => !!payload.client_id;
-
+// TODO: here's a small mess with refresh-token.
+//  It's not crucial rn, but ideally we wanna make this beautiful
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private authService: AuthService,
-    private jwtService: JwtService,
     @Inject(jwtConfig.KEY)
-    private jwtConfiguration: ConfigType<typeof jwtConfig>
+    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>
   ) {
     super({
-      jwtFromRequest: (req: Request) => {
-        return req?.cookies?.accessToken || req?.cookies?.refreshToken;
-      },
+      jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies?.accessToken || null]),
       secretOrKey: jwtConfiguration.secret,
       passReqToCallback: true,
-      ignoreExpiration: true,
     });
   }
 
-  async validate(req: Request, payload: AccessToken | RefreshTokenPayload) {
-    if (isAccessToken(payload)) {
-      const { exp } = payload;
-      const expirationDate = new Date(exp * 1000);
-      const isExpired = new Date() > expirationDate;
-
-      if (!isExpired) {
-        // Access token is valid
-        return payload;
-      } else {
-        // Access token is expired, attempt to reissue using refresh token
-        const refreshToken = req.cookies.refreshToken;
-        if (!refreshToken) {
-          throw new UnauthorizedException('Refresh token not found');
-        }
-
-        return this.reauthenticateWithRefreshToken(req, refreshToken);
-      }
-    } else {
-      // This is a refresh token
-      const { refreshToken } = payload;
-      return this.reauthenticateWithRefreshToken(req, refreshToken);
+  async validate(req: Request, payload: JwtPayload): Promise<DecodedUserObjectType> {
+    const user = await this.authService.validateUserById(payload.sub);
+    if (!user) {
+      throw new UnauthorizedException('Invalid token');
     }
-  }
-
-  private async reauthenticateWithRefreshToken(req: Request, refreshToken: string) {
-    const accessTokenPayload = await this.authService.reissueAccessToken(refreshToken);
-
-    if (!accessTokenPayload) {
-      req.res?.clearCookie('accessToken');
-      req.res?.clearCookie('refreshToken');
-      throw new UnauthorizedException();
-    }
-
-    const newAccessToken = this.authService.signAccessToken(accessTokenPayload);
-
-    await this.authService.updateRefreshTokenLastUsed(refreshToken);
-
-    req.res?.cookie('accessToken', newAccessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax', // Adjust based on your setup
-    });
-
-    return accessTokenPayload;
+    return {
+      client_id: user.id,
+      email: user.email,
+      family_name: user.lastName ?? '',
+      given_name: user.firstName ?? '',
+      scope: {
+        googleId: user.googleId,
+      },
+    };
   }
 }

@@ -12,6 +12,10 @@ export class UserService {
     return this.userRepository.findOne({ where });
   }
 
+  async getAllUsers() {
+    return this.userRepository.findAndCount();
+  }
+
   async findByEmail(email: User['email']): Promise<User | null> {
     return this.userRepository.findOne({
       where: { email },

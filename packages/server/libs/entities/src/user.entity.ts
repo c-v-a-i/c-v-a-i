@@ -8,20 +8,21 @@ import { Entity, Column, OneToMany } from 'typeorm';
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
+  @Field(() => String)
   @Column({ unique: true })
   email!: string;
 
-  @Field({ nullable: false })
+  @Field(() => String)
   @Column({ nullable: false, ...VAR_CHAR, unique: true })
   googleId!: string;
 
   @Field(() => String)
-  @Column({ nullable: false, ...VAR_CHAR })
-  firstName!: string;
+  @Column({ nullable: true, ...VAR_CHAR })
+  firstName?: string | null;
 
   @Field(() => String)
-  @Column({ nullable: false, ...VAR_CHAR })
-  lastName!: string;
+  @Column({ nullable: true, ...VAR_CHAR })
+  lastName?: string | null;
 
   @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
   public refreshTokens!: RefreshToken[];

@@ -1,10 +1,11 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, VerifyCallback } from 'passport-google-oauth20';
+import { Strategy } from 'passport-google-oauth20';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { googleOAuthConfig } from '../config/google-oauth.config';
 import { AuthService } from '../auth.service';
-import { GooglePayload } from '../payloads/google-profile-payload';
+import { Profile } from 'passport-google-oauth20';
+import { CreateUserDto } from '../../entity-modules/user/dto/create-user.dto';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -21,24 +22,22 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
 
-  async validate(_accessToken: string, _refreshToken: string, profile: GooglePayload | null, done: VerifyCallback) {
-    if (!profile) {
-      return done(new UnauthorizedException(), false);
-    }
-
+  async validate(_accessToken: string, _refreshToken: string, profile: Profile, done: Function) {
     const { emails, name, id } = profile;
 
-    console.log(`GoogleStrategy.validate: accessToken: ${_accessToken}, refreshToken: ${_refreshToken}`);
+    if (!emails || emails.length === 0) {
+      return done(new UnauthorizedException('No email associated with this account'), false);
+    }
 
-    // TODO: if I understand it correctly, we need to move validateGoogleUser logic into "validate" method of GoogleStrategy.
-    // How would we receive the accessToken then in this case?
-    const googleValidationResult = await this.authService.validateGoogleUser({
+    const googleUser: CreateUserDto = {
       email: emails[0].value,
-      firstName: name.givenName,
-      lastName: name.familyName,
+      firstName: name?.givenName,
+      lastName: name?.familyName,
       googleId: id,
-    });
+    };
 
-    done(null, googleValidationResult);
+    const user = await this.authService.validateGoogleUser(googleUser);
+
+    done(null, user);
   }
 }
