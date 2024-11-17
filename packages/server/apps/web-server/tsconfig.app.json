@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true, // Add this line
+
+    "outDir": "../../dist/apps/web-server"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist",
+    "src/test", "**/*spec.ts"]
+}

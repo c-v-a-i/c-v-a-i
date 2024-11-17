@@ -1,6 +1,7 @@
 import type { WorkExperienceData } from '@c-v-a-i/common';
 import { Typography, Grid, Box } from '@mui/material';
 import React from 'react';
+import { grey } from '@mui/material/colors';
 
 type WorkExperienceProps = {
   data: WorkExperienceData[];
@@ -31,6 +32,9 @@ export const WorkExperience: React.FC<WorkExperienceProps> = ({ data }) => {
               </Grid>
             </Grid>
             <Typography variant="body2">{job.responsibilities.join('\n')}</Typography>
+            <Typography variant="body2" color={grey[600]}>
+              Skills: {job.skills.join(', ')}
+            </Typography>
           </Box>
         ))}
       </Box>

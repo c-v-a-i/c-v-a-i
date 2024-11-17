@@ -3,6 +3,27 @@ directive @connection(filter: [String]!, key: String!) on FIELD
 """Date custom scalar type"""
 scalar Date
 
+type Mutation {
+  logout: Boolean!
+}
+
 type Query {
+  currentUser: User!
   healthCheck: String!
+  protectedData: String!
+  publicData: String!
+}
+
+type ScopeObjectType {
+  googleId: String!
+}
+
+type User {
+  createdAt: Date!
+  deletedAt: Date
+  email: String!
+  firstName: String!
+  googleId: String!
+  id: ID!
+  lastName: String!
 }

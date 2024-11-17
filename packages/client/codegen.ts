@@ -28,7 +28,7 @@ const config: CodegenConfig = {
             withRefetchFn: true,
             dedupeOperationSuffix: true,
             reactApolloVersion: 3,
-            apolloReactHooksImportFrom: '../graphql/customGqlHooks',
+            // apolloReactHooksImportFrom: '../graphql/customGqlHooks',
             apolloReactComponentsImportFrom: '../graphql/customGqlComponents'
         },
         hooks: {
