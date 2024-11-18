@@ -1,0 +1,26 @@
+import { Entity, Column, ManyToOne } from 'typeorm';
+import { ObjectType, Field } from '@nestjs/graphql';
+import { BaseEntity } from '../base-entity';
+import { CV } from './cv.entity';
+
+@ObjectType()
+@Entity()
+export class Project extends BaseEntity {
+  @Field(() => String)
+  @Column()
+  name!: string;
+
+  @Field(() => String)
+  @Column({ type: 'text' })
+  description!: string;
+
+  @Field(() => [String])
+  @Column('simple-array')
+  skills!: string[];
+
+  @ManyToOne(() => CV, (cv) => cv.projects)
+  cv!: CV;
+
+  @Column()
+  cvId!: string;
+}

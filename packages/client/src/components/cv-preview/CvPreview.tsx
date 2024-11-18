@@ -6,9 +6,10 @@ import {
   skillsData,
   workExperienceData,
 } from '@c-v-a-i/common';
-import { Box, Divider, Grid } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 import { About, ContactInfo, Education, Projects, Skills, WorkExperience } from '../atoms';
 import { ContactInfoItem } from '../atoms/ContactInfoItem';
+import { toPerc } from '../utils';
 
 export const CvPreview = () => {
   return (
@@ -30,16 +31,22 @@ export const CvPreview = () => {
 
       <Divider flexItem />
 
-      <Grid container gap="80px">
-        <Grid item xs={7} md={7} display="flex" flexDirection="column" gap={3}>
+      <Box
+        display={'flex'}
+        gap="80px"
+        sx={{
+          overflowX: 'hidden',
+        }}
+      >
+        <Box width={toPerc(7 / 12)} display="flex" flexDirection="column" gap={3}>
           <WorkExperience data={workExperienceData} />
 
           <Divider />
 
           <Projects data={projectsData} />
-        </Grid>
+        </Box>
 
-        <Grid item xs={4} md={4}>
+        <Box width={toPerc(3 / 12)}>
           <Box display="flex" flexDirection="column" gap="16px" sx={{ textAlign: 'end' }}>
             <Box display="flex" flexDirection="column" gap="8px">
               {Object.entries(contactInfoData).map(([name, value]) => (
@@ -51,8 +58,8 @@ export const CvPreview = () => {
 
             <Skills data={skillsData} />
           </Box>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </Box>
   );
 };

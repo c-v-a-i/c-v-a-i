@@ -1,14 +1,59 @@
 directive @connection(filter: [String]!, key: String!) on FIELD
 
+type CV {
+  contactInfo: ContactInfo!
+  createdAt: Date!
+  deletedAt: Date
+  educationEntries: [Education!]!
+  id: ID!
+  projects: [Project!]!
+  skills: [Skill!]!
+  title: String!
+  user: User!
+  workExperienceEntries: [WorkExperience!]!
+}
+
+type ContactInfo {
+  createdAt: Date!
+  deletedAt: Date
+  email: String!
+  id: ID!
+  phone: String!
+}
+
 """Date custom scalar type"""
 scalar Date
 
+type Education {
+  createdAt: Date!
+  degree: String!
+  deletedAt: Date
+  description: String!
+  duration: String!
+  id: ID!
+  location: String!
+  name: String!
+  skills: [String!]!
+  type: String
+}
+
 type Mutation {
+  generateCVFromTemplate(cvTemplateId: String!): CV!
   logout: Boolean!
+}
+
+type Project {
+  createdAt: Date!
+  deletedAt: Date
+  description: String!
+  id: ID!
+  name: String!
+  skills: [String!]!
 }
 
 type Query {
   currentUser: User!
+  getCVs: [CV!]!
   healthCheck: String!
   protectedData: String!
   publicData: String!
@@ -18,12 +63,34 @@ type ScopeObjectType {
   googleId: String!
 }
 
+type Skill {
+  category: String!
+  createdAt: Date!
+  deletedAt: Date
+  id: ID!
+  items: [String!]!
+}
+
 type User {
   createdAt: Date!
+  cvs: [CV!]!
   deletedAt: Date
   email: String!
   firstName: String!
   googleId: String!
   id: ID!
   lastName: String!
+}
+
+type WorkExperience {
+  createdAt: Date!
+  deletedAt: Date
+  description: String!
+  duration: String!
+  id: ID!
+  location: String!
+  name: String!
+  position: String!
+  skills: [String!]!
+  type: String!
 }

@@ -22,7 +22,7 @@ export const Skills: React.FC<SkillsProps> = ({ data }) => (
           //   justifyContent: 'end',
           //   textWrap: "nowrap"
           // }} key={skill}>{skill}</ListItem>
-          <Typography color="grey" key={skill} sx={{ textAlign: 'end' }}>
+          <Typography color="grey" key={skill} sx={{ textAlign: 'end', textWrap: 'revert' }}>
             {skill} -
           </Typography>
         ))}

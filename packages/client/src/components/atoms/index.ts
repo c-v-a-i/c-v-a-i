@@ -6,3 +6,4 @@ export { Skills } from './Skills';
 export { Projects } from './Projects';
 export { Achievements } from './Achievements';
 export { About } from './About';
+export * from './TypographyWithOverflow';

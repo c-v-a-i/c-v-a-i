@@ -1,0 +1,6 @@
+mutation CreateCVFromTemplate($cvTemplateId: String!) {
+  generateCVFromTemplate(cvTemplateId: $cvTemplateId) {
+    id
+    title
+  }
+}

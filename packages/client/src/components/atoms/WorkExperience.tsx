@@ -20,7 +20,7 @@ export const WorkExperience: React.FC<WorkExperienceProps> = ({ data }) => {
             <Grid container justifyContent="space-between">
               <Grid item>
                 <Typography variant="h6">
-                  {job.position}, {job.company}
+                  {job.position}, {job.name}
                 </Typography>
                 <Typography color="grey" variant="body2">
                   <i>{job.type}</i>
@@ -31,7 +31,7 @@ export const WorkExperience: React.FC<WorkExperienceProps> = ({ data }) => {
                 <Typography variant="body2">[{job.duration}]</Typography>
               </Grid>
             </Grid>
-            <Typography variant="body2">{job.responsibilities.join('\n')}</Typography>
+            <Typography variant="body2">{job.description}</Typography>
             <Typography variant="body2" color={grey[600]}>
               Skills: {job.skills.join(', ')}
             </Typography>

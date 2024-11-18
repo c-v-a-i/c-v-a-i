@@ -1,13 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@server/entities';
 import DataLoader from 'dataloader';
 import { groupBy, keyBy } from 'lodash/fp';
 import { FindOptionsWhere, In, ObjectLiteral, Repository } from 'typeorm';
 
-@Injectable()
+// TODO: why scope like that?
+// @Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class DataloaderService {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+
+  public readonly userLoader = new DataLoader<string, User>(async (userIds) => {
+    const users = await this.userRepository.findBy({ id: In([...userIds]) });
+    const userMap = new Map(users.map((user) => [user.id, user]));
+    return userIds.map((id) => userMap.get(id)).flatMap((x) => (x ? [x] : []));
+  });
 
   private generateLoaderByFK = <T extends ObjectLiteral>(
     repository: Repository<T>,

@@ -11,6 +11,7 @@ import { ExampleModule } from './services/example/example.module';
 import { ConfigModule } from '@nestjs/config';
 import { typeormConfig } from '../../../config/typeorm/typeorm.config';
 import { UserModule } from './entity-modules/user/user.module';
+import { CvModule } from './entity-modules/cv/cv/cv.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UserModule } from './entity-modules/user/user.module';
     CoreModule,
     AuthModule,
     UserModule,
+    CvModule,
     ExampleModule,
   ],
   providers: [DateScalar, ExampleService, ExampleResolver],

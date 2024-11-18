@@ -1,0 +1,42 @@
+query GetCVs {
+  getCVs {
+    id
+    title
+    educationEntries {
+      id
+      name
+      degree
+      duration
+      location
+      type
+      description
+      skills
+    }
+    workExperienceEntries {
+      id
+      name
+      position
+      duration
+      location
+      type
+      description
+      skills
+    }
+    projects {
+      id
+      name
+      description
+      skills
+    }
+    skills {
+      id
+      category
+      items
+    }
+    contactInfo {
+      id
+      email
+      phone
+    }
+  }
+}

@@ -1,17 +1,25 @@
-import { ContactInfoData, EducationData, ProjectData, SkillsData, WorkExperienceData } from './types';
-
-export const name: string = 'Aliaksandr Skuratovich';
-
 const withDot = (str: string) => (str.endsWith('.') ? str : str + '.');
 
-export const contactInfoData: ContactInfoData = {
-  LinkedIn: 'https://www.linkedin.com/in/aliaksandr-skuratovich-4a2ab01a0/',
-  GitHub: 'https://github.com/SkuratovichA',
-  Email: 'skuratovich.aliaksandr@gmail.com',
-  Phone: '+420 735 594 008',
-};
+export const exampleEducationEntries = [
+  {
+    name: 'Brno University of Technology',
+    degree: 'Bachelor in Information Technology',
+    duration: '2020 — 2023',
+    description: 'Top 1% student, specialized in AI, data analysis and theoretical computer science',
+    skills: ['Python', 'C/C++', 'Big Data', 'Machine Learning', 'Deep Learning'],
+    location: 'Brno, Czechia',
+  },
+  {
+    name: 'Unicorn University',
+    degree: 'Bachelor in Economics and Management',
+    duration: '2018 — 2020',
+    description: 'Not top 1% student',
+    skills: ['Economics', 'Management', 'Finance'],
+    location: 'Prague, Czechia',
+  },
+];
 
-export const workExperienceData: WorkExperienceData[] = [
+export const exampleWorkExperienceEntries = [
   {
     position: 'Senior Software Engineer',
     name: 'Dishboard',
@@ -83,7 +91,7 @@ export const workExperienceData: WorkExperienceData[] = [
   },
 ];
 
-export const projectsData: ProjectData[] = [
+export const exampleProjectEntries = [
   {
     name: 'GPT-4 Powered CV Builder',
     description: ['Developing a CV builder using LLMs to generate, modify and review CVs'].map(withDot).join('\n'),
@@ -105,54 +113,42 @@ export const projectsData: ProjectData[] = [
   {
     name: 'Machine Learning Projects',
     description: [
+      // FIXME: use markdown for links and some formatting.
       `Got the 2nd place in the Albayzin 2022 ASR challenge <a href="https://www.fit.vut.cz/research/group/speech/public/publi/2022/kocour22_iberspeech.pdf">link to paper</a>`,
       `Got the 3rd place in MTM22 (Machine Translation Marathon) by implementing an ASR model for TED talks using transformer adaptors`,
       "Created a joint model for person identification by speech and image. Implemented a logic for joining outputs from these two modalities <a href='https://github.com/SkuratovichA/SUR'>link to project</a>",
     ]
       .map(withDot)
-      .join('</br>'),
+      .join('\n'),
     skills: ['Pytorch', 'HuggingFace', 'Nvidia NeMo', 'Seaborn', 'Pandas', 'NLP', 'ASR'],
   },
 ];
 
-export const educationData: EducationData[] = [
+export const exampleSkillEntries = [
   {
-    name: 'Brno University of Technology',
-    degree: 'Bachelor in Information Technology',
-    duration: '2020 — 2023',
-    description: 'Top 1% student, specialized in AI, data analysis and theoretical computer science',
-    skills: ['Python', 'C/C++', 'Big Data', 'Machine Learning', 'Deep Learning'],
-    location: 'Brno, Czechia',
+    category: 'Soft Skills',
+    items: ['Management', 'Team Leading', 'Working under tight deadlines', 'Problem Solving'],
   },
   {
-    name: 'Unicorn University',
-    degree: 'Bachelor in Economics and Management',
-    duration: '2018 — 2020',
-    description: 'Not top 1% student',
-    skills: ['Economics', 'Management', 'Finance'],
-    location: 'Prague, Czechia',
+    category: 'Tools',
+    items: [
+      'TypeScript/Python/Kotlin',
+      'ReactJS/RemixJS/NextJS',
+      'NestJS/Express/Django/FastAPI/Spring',
+      'Pytorch/HuggingFace',
+      'REST/GraphQL',
+      'Postgres/MongoDB/Redis',
+      'Docker/Kubernetes',
+      'TeamCity/Jenkins/Github Actions',
+    ],
+  },
+  {
+    category: 'Languages',
+    items: ['Czech', 'English', 'Ukrainian'],
   },
 ];
 
-export const skillsData: SkillsData = {
-  'Soft Skills': ['Management', 'Team Leading', 'Working under tight deadlines', 'Problem Solving'],
-  'Hard Skills': ['Software engineering', 'Database design', 'Prompt engineering', 'System architecture design'],
-  Tools: [
-    'TypeScript/Python/Kotlin',
-    'ReactJS/RemixJS/NextJS',
-    'NestJS/Express/Django/FastAPI/Spring',
-    'Pytorch/HuggingFace',
-    'REST/GraphQL',
-    'Postgres/MongoDB/Redis',
-    'Docker/Kubernetes',
-    'TeamCity/Jenkins/Github Actions',
-  ],
-  Languages: ['Czech', 'English', 'Ukrainian'],
+export const exampleContactInfo = {
+  email: 'skuratovich.aliaksandr@gmail.com',
+  phone: '+420735594008',
 };
-
-export const aboutMeData = [
-  'An engineer with a mix of fullstack development experience and AI',
-  'Proven track record in developing AI-powered solutions',
-  'Skilled in managing project lifecycles from inception to deployment, including CI/CD pipelines',
-  'When not working, I train for triathlons',
-].map(withDot);

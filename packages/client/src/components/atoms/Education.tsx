@@ -1,6 +1,7 @@
 import type { EducationData } from '@c-v-a-i/common';
 import { Typography, Box } from '@mui/material';
 import React from 'react';
+import { grey } from '@mui/material/colors';
 
 type EducationProps = {
   data: EducationData[];
@@ -14,8 +15,8 @@ export const Education: React.FC<EducationProps> = ({ data }) => (
     </Typography>
     {data.map((education, index) => (
       <Box key={index}>
-        <Typography variant="h6" sx={{ textWrap: 'nowrap' }}>
-          {education.institution}
+        <Typography variant="h6" sx={{ textWrap: 'pretty' }}>
+          {education.name}
         </Typography>
         <Typography variant="body2">{education.degree}</Typography>
 
@@ -23,6 +24,9 @@ export const Education: React.FC<EducationProps> = ({ data }) => (
           {/* <Typography variant="body2">{education.location}</Typography>*/}
           <Typography color="grey" variant="body2">
             [{education.duration}]
+          </Typography>
+          <Typography variant="body2" color={grey[600]}>
+            Skills: {education.skills.join(', ')}
           </Typography>
         </Box>
       </Box>

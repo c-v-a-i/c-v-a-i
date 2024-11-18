@@ -5,7 +5,7 @@ import { LogoutDocument } from '../generated/graphql';
 import { useMutation } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 
-interface AuthContextType {
+export interface AuthContextType {
   user: GetCurrentUserQuery['currentUser'] | null;
   loading: boolean;
   error: Error | undefined;

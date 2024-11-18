@@ -3,7 +3,6 @@ import { ConfigModule, ConfigType } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { UserService } from '../entity-modules/user/user.service';
 import { RefreshTokenService } from '../entity-modules/refresh-token/refresh-token.service';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
@@ -20,6 +19,7 @@ import { AuthResolver } from './auth.resolver';
 import { GoogleAuthGuard } from './guards/google-auth/google-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 import { PassportModule } from '@nestjs/passport';
+import { UserModule } from '../entity-modules/user/user.module';
 
 @Module({
   imports: [
@@ -29,6 +29,7 @@ import { PassportModule } from '@nestjs/passport';
     ConfigModule.forFeature(refreshJwtConfig),
     ConfigModule.forFeature(appConfig),
     PassportModule,
+    UserModule,
 
     JwtModule.registerAsync({
       imports: [ConfigModule.forFeature(jwtConfig)],
@@ -42,7 +43,6 @@ import { PassportModule } from '@nestjs/passport';
   providers: [
     AuthService,
     AuthResolver,
-    UserService,
     RefreshTokenService,
     JwtStrategy,
     GoogleStrategy,
