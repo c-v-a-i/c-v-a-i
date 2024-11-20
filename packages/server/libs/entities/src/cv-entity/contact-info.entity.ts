@@ -17,6 +17,6 @@ export class ContactInfo extends BaseEntity {
   @OneToOne(() => CV, (cv) => cv.contactInfo)
   cv!: CV;
 
-  @Column()
+  @Column({ type: 'uuid' })
   cvId!: string;
 }

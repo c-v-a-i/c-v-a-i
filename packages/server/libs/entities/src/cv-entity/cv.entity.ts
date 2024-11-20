@@ -30,14 +30,17 @@ export class CV extends BaseEntity {
   @OneToMany(() => WorkExperience, (workExperience) => workExperience.cv, { cascade: true })
   workExperienceEntries!: WorkExperience[];
 
+  // Cv 1..n <---> Project
   @Field(() => [Project])
   @OneToMany(() => Project, (project) => project.cv, { cascade: true })
-  projects!: Project[];
+  projectEntries!: Project[];
 
+  // Cv 1..n <---> Skill
   @Field(() => [Skill])
   @OneToMany(() => Skill, (skill) => skill.cv, { cascade: true })
-  skills!: Skill[];
+  skillEntries!: Skill[];
 
+  // Cv 1..1 <---> ContactInfo
   @Field(() => ContactInfo)
   @OneToOne(() => ContactInfo, (contactInfo) => contactInfo.cv, { cascade: true })
   @JoinColumn()

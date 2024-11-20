@@ -19,6 +19,6 @@ export class UserResolver {
 
   @Query(() => User)
   public async currentUser(@CurrentUser() { client_id: id }: DecodedUserObjectType) {
-    return this.userService.findOne({ id });
+    return this.userService.findOneBy({ id });
   }
 }

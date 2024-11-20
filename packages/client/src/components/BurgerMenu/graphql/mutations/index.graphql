@@ -1,6 +1,14 @@
-mutation CreateCVFromTemplate($cvTemplateId: String!) {
-  generateCVFromTemplate(cvTemplateId: $cvTemplateId) {
+mutation CreateCVFromTemplate($templateId: ID!) {
+  createNewCv(templateId: $templateId) {
     id
     title
   }
 }
+
+mutation DeleteCv($id: ID!) {
+  deleteCv(id: $id)
+}
+
+#mutation CreateNewCv() {
+#
+#}

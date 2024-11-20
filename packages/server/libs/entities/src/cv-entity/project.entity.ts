@@ -18,9 +18,9 @@ export class Project extends BaseEntity {
   @Column('simple-array')
   skills!: string[];
 
-  @ManyToOne(() => CV, (cv) => cv.projects)
+  @ManyToOne(() => CV, (cv) => cv.projectEntries)
   cv!: CV;
 
-  @Column()
+  @Column({ type: 'uuid' })
   cvId!: string;
 }

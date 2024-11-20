@@ -37,6 +37,6 @@ export class WorkExperience extends BaseEntity {
   @ManyToOne(() => CV, (cv) => cv.workExperienceEntries)
   cv!: CV;
 
-  @Column()
+  @Column({ type: 'uuid' })
   cvId!: string;
 }

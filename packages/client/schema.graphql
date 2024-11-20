@@ -6,8 +6,8 @@ type CV {
   deletedAt: Date
   educationEntries: [Education!]!
   id: ID!
-  projects: [Project!]!
-  skills: [Skill!]!
+  projectEntries: [Project!]!
+  skillEntries: [Skill!]!
   title: String!
   user: User!
   workExperienceEntries: [WorkExperience!]!
@@ -38,8 +38,14 @@ type Education {
 }
 
 type Mutation {
-  generateCVFromTemplate(cvTemplateId: String!): CV!
+  createNewCv(templateId: ID!): CV!
+  deleteCv(id: ID!): Boolean!
   logout: Boolean!
+}
+
+type PaginatedCvObjectType {
+  count: Int!
+  items: [CV!]!
 }
 
 type Project {
@@ -53,7 +59,7 @@ type Project {
 
 type Query {
   currentUser: User!
-  getCVs: [CV!]!
+  getCvs: PaginatedCvObjectType!
   healthCheck: String!
   protectedData: String!
   publicData: String!

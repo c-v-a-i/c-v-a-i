@@ -29,8 +29,8 @@ export type Cv = {
   deletedAt?: Maybe<Scalars['Date']['output']>;
   educationEntries: Array<Education>;
   id: Scalars['ID']['output'];
-  projects: Array<Project>;
-  skills: Array<Skill>;
+  projectEntries: Array<Project>;
+  skillEntries: Array<Skill>;
   title: Scalars['String']['output'];
   user: User;
   workExperienceEntries: Array<WorkExperience>;
@@ -61,13 +61,25 @@ export type Education = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  generateCVFromTemplate: Cv;
+  createNewCv: Cv;
+  deleteCv: Scalars['Boolean']['output'];
   logout: Scalars['Boolean']['output'];
 };
 
 
-export type MutationGenerateCvFromTemplateArgs = {
-  cvTemplateId: Scalars['String']['input'];
+export type MutationCreateNewCvArgs = {
+  templateId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteCvArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type PaginatedCvObjectType = {
+  __typename?: 'PaginatedCvObjectType';
+  count: Scalars['Int']['output'];
+  items: Array<Cv>;
 };
 
 export type Project = {
@@ -83,7 +95,7 @@ export type Project = {
 export type Query = {
   __typename?: 'Query';
   currentUser: User;
-  getCVs: Array<Cv>;
+  getCvs: PaginatedCvObjectType;
   healthCheck: Scalars['String']['output'];
   protectedData: Scalars['String']['output'];
   publicData: Scalars['String']['output'];
@@ -130,16 +142,23 @@ export type WorkExperience = {
 };
 
 export type CreateCvFromTemplateMutationVariables = Exact<{
-  cvTemplateId: Scalars['String']['input'];
+  templateId: Scalars['ID']['input'];
 }>;
 
 
-export type CreateCvFromTemplateMutation = { __typename?: 'Mutation', generateCVFromTemplate: { __typename?: 'CV', id: string, title: string } };
+export type CreateCvFromTemplateMutation = { __typename?: 'Mutation', createNewCv: { __typename?: 'CV', id: string, title: string } };
 
-export type GetCVsQueryVariables = Exact<{ [key: string]: never; }>;
+export type DeleteCvMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
 
 
-export type GetCVsQuery = { __typename?: 'Query', getCVs: Array<{ __typename?: 'CV', id: string, title: string, educationEntries: Array<{ __typename?: 'Education', id: string, name: string, degree: string, duration: string, location: string, type?: string | null, description: string, skills: Array<string> }>, workExperienceEntries: Array<{ __typename?: 'WorkExperience', id: string, name: string, position: string, duration: string, location: string, type: string, description: string, skills: Array<string> }>, projects: Array<{ __typename?: 'Project', id: string, name: string, description: string, skills: Array<string> }>, skills: Array<{ __typename?: 'Skill', id: string, category: string, items: Array<string> }>, contactInfo: { __typename?: 'ContactInfo', id: string, email: string, phone: string } }> };
+export type DeleteCvMutation = { __typename?: 'Mutation', deleteCv: boolean };
+
+export type GetCvsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCvsQuery = { __typename?: 'Query', getCvs: { __typename?: 'PaginatedCvObjectType', count: number, items: Array<{ __typename?: 'CV', id: string, name: string, educationEntries: Array<{ __typename?: 'Education', id: string, name: string, degree: string, duration: string, location: string, type?: string | null, description: string, skills: Array<string> }>, workExperienceEntries: Array<{ __typename?: 'WorkExperience', id: string, name: string, position: string, duration: string, location: string, type: string, description: string, skills: Array<string> }>, projectEntries: Array<{ __typename?: 'Project', id: string, name: string, description: string, skills: Array<string> }>, skillEntries: Array<{ __typename?: 'Skill', id: string, category: string, items: Array<string> }>, contactInfo: { __typename?: 'ContactInfo', id: string, email: string, phone: string } }> } };
 
 export type HealthCheckQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -158,8 +177,8 @@ export type GetCurrentUserQuery = { __typename?: 'Query', currentUser: { __typen
 
 
 export const CreateCvFromTemplateDocument = gql`
-    mutation CreateCVFromTemplate($cvTemplateId: String!) {
-  generateCVFromTemplate(cvTemplateId: $cvTemplateId) {
+    mutation CreateCVFromTemplate($templateId: ID!) {
+  createNewCv(templateId: $templateId) {
     id
     title
   }
@@ -186,7 +205,7 @@ export type CreateCvFromTemplateComponentProps = Omit<ApolloReactComponents.Muta
  * @example
  * const [createCvFromTemplateMutation, { data, loading, error }] = useCreateCvFromTemplateMutation({
  *   variables: {
- *      cvTemplateId: // value for 'cvTemplateId'
+ *      templateId: // value for 'templateId'
  *   },
  * });
  */
@@ -197,90 +216,130 @@ export function useCreateCvFromTemplateMutation(baseOptions?: Apollo.MutationHoo
 export type CreateCvFromTemplateMutationHookResult = ReturnType<typeof useCreateCvFromTemplateMutation>;
 export type CreateCvFromTemplateMutationResult = Apollo.MutationResult<CreateCvFromTemplateMutation>;
 export type CreateCvFromTemplateMutationOptions = Apollo.BaseMutationOptions<CreateCvFromTemplateMutation, CreateCvFromTemplateMutationVariables>;
-export const GetCVsDocument = gql`
-    query GetCVs {
-  getCVs {
-    id
-    title
-    educationEntries {
-      id
-      name
-      degree
-      duration
-      location
-      type
-      description
-      skills
-    }
-    workExperienceEntries {
-      id
-      name
-      position
-      duration
-      location
-      type
-      description
-      skills
-    }
-    projects {
-      id
-      name
-      description
-      skills
-    }
-    skills {
-      id
-      category
-      items
-    }
-    contactInfo {
-      id
-      email
-      phone
-    }
-  }
+export const DeleteCvDocument = gql`
+    mutation DeleteCv($id: ID!) {
+  deleteCv(id: $id)
 }
     `;
-export type GetCVsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetCVsQuery, GetCVsQueryVariables>, 'query'>;
+export type DeleteCvMutationFn = Apollo.MutationFunction<DeleteCvMutation, DeleteCvMutationVariables>;
+export type DeleteCvComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<DeleteCvMutation, DeleteCvMutationVariables>, 'mutation'>;
 
-    export const GetCVsComponent = (props: GetCVsComponentProps) => (
-      <ApolloReactComponents.Query<GetCVsQuery, GetCVsQueryVariables> query={GetCVsDocument} {...props} />
+    export const DeleteCvComponent = (props: DeleteCvComponentProps) => (
+      <ApolloReactComponents.Mutation<DeleteCvMutation, DeleteCvMutationVariables> mutation={DeleteCvDocument} {...props} />
     );
     
 
 /**
- * __useGetCVsQuery__
+ * __useDeleteCvMutation__
  *
- * To run a query within a React component, call `useGetCVsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCVsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a mutation, you first call `useDeleteCvMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCvMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCvMutation, { data, loading, error }] = useDeleteCvMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCvMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCvMutation, DeleteCvMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCvMutation, DeleteCvMutationVariables>(DeleteCvDocument, options);
+      }
+export type DeleteCvMutationHookResult = ReturnType<typeof useDeleteCvMutation>;
+export type DeleteCvMutationResult = Apollo.MutationResult<DeleteCvMutation>;
+export type DeleteCvMutationOptions = Apollo.BaseMutationOptions<DeleteCvMutation, DeleteCvMutationVariables>;
+export const GetCvsDocument = gql`
+    query GetCvs {
+  getCvs {
+    count
+    items {
+      id
+      name: title
+      educationEntries {
+        id
+        name
+        degree
+        duration
+        location
+        type
+        description
+        skills
+      }
+      workExperienceEntries {
+        id
+        name
+        position
+        duration
+        location
+        type
+        description
+        skills
+      }
+      projectEntries {
+        id
+        name
+        description
+        skills
+      }
+      skillEntries {
+        id
+        category
+        items
+      }
+      contactInfo {
+        id
+        email
+        phone
+      }
+    }
+  }
+}
+    `;
+export type GetCvsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetCvsQuery, GetCvsQueryVariables>, 'query'>;
+
+    export const GetCvsComponent = (props: GetCvsComponentProps) => (
+      <ApolloReactComponents.Query<GetCvsQuery, GetCvsQueryVariables> query={GetCvsDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetCvsQuery__
+ *
+ * To run a query within a React component, call `useGetCvsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCvsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCVsQuery({
+ * const { data, loading, error } = useGetCvsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetCVsQuery(baseOptions?: Apollo.QueryHookOptions<GetCVsQuery, GetCVsQueryVariables>) {
+export function useGetCvsQuery(baseOptions?: Apollo.QueryHookOptions<GetCvsQuery, GetCvsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCVsQuery, GetCVsQueryVariables>(GetCVsDocument, options);
+        return Apollo.useQuery<GetCvsQuery, GetCvsQueryVariables>(GetCvsDocument, options);
       }
-export function useGetCVsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCVsQuery, GetCVsQueryVariables>) {
+export function useGetCvsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCvsQuery, GetCvsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCVsQuery, GetCVsQueryVariables>(GetCVsDocument, options);
+          return Apollo.useLazyQuery<GetCvsQuery, GetCvsQueryVariables>(GetCvsDocument, options);
         }
-export function useGetCVsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCVsQuery, GetCVsQueryVariables>) {
+export function useGetCvsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCvsQuery, GetCvsQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetCVsQuery, GetCVsQueryVariables>(GetCVsDocument, options);
+          return Apollo.useSuspenseQuery<GetCvsQuery, GetCvsQueryVariables>(GetCvsDocument, options);
         }
-export type GetCVsQueryHookResult = ReturnType<typeof useGetCVsQuery>;
-export type GetCVsLazyQueryHookResult = ReturnType<typeof useGetCVsLazyQuery>;
-export type GetCVsSuspenseQueryHookResult = ReturnType<typeof useGetCVsSuspenseQuery>;
-export type GetCVsQueryResult = Apollo.QueryResult<GetCVsQuery, GetCVsQueryVariables>;
-export function refetchGetCVsQuery(variables?: GetCVsQueryVariables) {
-      return { query: GetCVsDocument, variables: variables }
+export type GetCvsQueryHookResult = ReturnType<typeof useGetCvsQuery>;
+export type GetCvsLazyQueryHookResult = ReturnType<typeof useGetCvsLazyQuery>;
+export type GetCvsSuspenseQueryHookResult = ReturnType<typeof useGetCvsSuspenseQuery>;
+export type GetCvsQueryResult = Apollo.QueryResult<GetCvsQuery, GetCvsQueryVariables>;
+export function refetchGetCvsQuery(variables?: GetCvsQueryVariables) {
+      return { query: GetCvsDocument, variables: variables }
     }
 export const HealthCheckDocument = gql`
     query HealthCheck {

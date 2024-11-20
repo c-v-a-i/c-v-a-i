@@ -1,42 +1,47 @@
-query GetCVs {
-  getCVs {
-    id
-    title
-    educationEntries {
+query GetCvs {
+  getCvs {
+    count
+    items {
       id
-      name
-      degree
-      duration
-      location
-      type
-      description
-      skills
-    }
-    workExperienceEntries {
-      id
-      name
-      position
-      duration
-      location
-      type
-      description
-      skills
-    }
-    projects {
-      id
-      name
-      description
-      skills
-    }
-    skills {
-      id
-      category
-      items
-    }
-    contactInfo {
-      id
-      email
-      phone
+      name: title
     }
   }
 }
+
+# TODO: CV fragment
+#      educationEntries {
+#        id
+#        name
+#        degree
+#        duration
+#        location
+#        type
+#        description
+#        skills
+#      }
+#      workExperienceEntries {
+#        id
+#        name
+#        position
+#        duration
+#        location
+#        type
+#        description
+#        skills
+#      }
+#      projectEntries {
+#        id
+#        name
+#        description
+#        skills
+#      }
+#      skillEntries {
+#        id
+#        category
+#        items
+#      }
+#      contactInfo {
+#        id
+#        email
+#        phone
+#      }

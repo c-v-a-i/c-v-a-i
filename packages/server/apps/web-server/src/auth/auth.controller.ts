@@ -1,13 +1,13 @@
-import { Controller, Get, Req, Res, UseGuards, ForbiddenException, Inject } from '@nestjs/common';
+import { Controller, Get, Req, Res, ForbiddenException, Inject, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
 import { appConfig } from '../config/app.config';
 import { ConfigType } from '@nestjs/config';
-import { GoogleAuthGuard } from './guards/google-auth/google-auth.guard';
 import { User } from '@server/entities';
 import { Request, Response } from 'express';
 import { UrlResponseDto } from './dto';
+import { GoogleAuthGuard } from './guards/google-auth/google-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')

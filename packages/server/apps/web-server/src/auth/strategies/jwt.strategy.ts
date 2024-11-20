@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
+import { Injectable, UnauthorizedException, Inject, Logger } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-jwt';
 import { AuthService } from '../auth.service';
@@ -13,8 +13,10 @@ import { Request } from 'express';
 //  It's not crucial rn, but ideally we wanna make this beautiful
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  private readonly logger = new Logger(JwtStrategy.name);
+
   constructor(
-    private authService: AuthService,
+    private readonly authService: AuthService,
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>
   ) {
@@ -28,6 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(req: Request, payload: JwtPayload): Promise<DecodedUserObjectType> {
     const user = await this.authService.validateUserById(payload.sub);
     if (!user) {
+      this.logger.error(`AUTH ERR: couldn't find a user with a token: ${payload.sub} and email ${payload.email}`);
       throw new UnauthorizedException('Invalid token');
     }
     return {

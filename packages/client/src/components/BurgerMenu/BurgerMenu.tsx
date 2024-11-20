@@ -1,18 +1,10 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Drawer as DrawerMui, Box, Button, styled } from '@mui/material';
 import { ChevronRight as ChevronRightIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
 import { MenuHeader } from './MenuHeader';
-import { MenuList } from './MenuList';
-import { DeleteConfirmationDialog } from './DeleteConfirmationDialog';
-import type { ListItem } from './MenuList/types';
 import { BadgeButton } from './BadgeButton';
 import { useUser } from '../../contexts/use-user';
-
-type BurgerMenuProps = {
-  items: ListItem[];
-  onAddItem: (itemId: string) => void;
-  onDeleteItem: (itemId: string) => void;
-};
+import { CvMenuList } from './CvMenuList';
 
 const drawerWidth = 300;
 
@@ -27,10 +19,8 @@ const MainContent = styled('div', {
   marginLeft: open ? `${drawerWidth}px` : 0,
 }));
 
-export const BurgerMenu: React.FC<BurgerMenuProps> = ({ items, onAddItem, onDeleteItem }) => {
+export const BurgerMenu = ({ children }: React.PropsWithChildren) => {
   const [open, setOpen] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 
   const { user, logout } = useUser();
 
@@ -42,26 +32,6 @@ export const BurgerMenu: React.FC<BurgerMenuProps> = ({ items, onAddItem, onDele
     setOpen(false);
   }, []);
 
-  const handleDelete = useCallback((id: string) => {
-    setSelectedItemId(id);
-    setDeleteDialogOpen(true);
-  }, []);
-
-  const confirmDelete = useCallback(() => {
-    if (selectedItemId) {
-      onDeleteItem(selectedItemId);
-      setDeleteDialogOpen(false);
-      setSelectedItemId(null);
-    }
-  }, [selectedItemId, onDeleteItem]);
-
-  const cancelDelete = useCallback(() => {
-    setDeleteDialogOpen(false);
-    setSelectedItemId(null);
-  }, []);
-
-  const memoizedItems = useMemo(() => items, [items]);
-
   return (
     <>
       <BadgeButton onClick={open ? handleDrawerClose : handleDrawerOpen} isOpen={open}>
@@ -70,7 +40,9 @@ export const BurgerMenu: React.FC<BurgerMenuProps> = ({ items, onAddItem, onDele
       <Drawer open={open}>
         <DrawerContainer>
           <MenuHeader user={user} onClose={handleDrawerClose} />
-          <MenuList items={memoizedItems} onAddItem={onAddItem} onDeleteItem={handleDelete} />
+
+          <CvMenuList />
+
           <Box sx={{ marginTop: 'auto', padding: 2 }}>
             <Button variant="outlined" color="secondary" fullWidth onClick={logout}>
               Logout
@@ -78,8 +50,7 @@ export const BurgerMenu: React.FC<BurgerMenuProps> = ({ items, onAddItem, onDele
           </Box>
         </DrawerContainer>
       </Drawer>
-      <MainContent open={open}>{/* The rest of your page content goes here */}</MainContent>
-      <DeleteConfirmationDialog open={deleteDialogOpen} onConfirm={confirmDelete} onCancel={cancelDelete} />
+      <MainContent open={open}>{children}</MainContent>
     </>
   );
 };

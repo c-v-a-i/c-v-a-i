@@ -8,15 +8,15 @@ import { CV } from './cv.entity';
 export class Education extends BaseEntity {
   @Field(() => String)
   @Column()
-  name!: string; // Institution name
+  name!: string;
 
   @Field(() => String)
   @Column()
-  degree!: string; // Degree obtained
+  degree!: string;
 
   @Field(() => String)
   @Column()
-  duration!: string; // Duration of study
+  duration!: string;
 
   @Field(() => String)
   @Column()
@@ -37,6 +37,6 @@ export class Education extends BaseEntity {
   @ManyToOne(() => CV, (cv) => cv.educationEntries)
   cv!: CV;
 
-  @Column()
+  @Column({ type: 'uuid' })
   cvId!: string;
 }

@@ -2739,6 +2739,7 @@ __metadata:
     dataloader: "npm:^2.2.2"
     eslint: "npm:^9.14.0"
     graphql: "npm:^16.9.0"
+    lodash: "npm:^4.17.21"
     passport: "npm:^0.7.0"
     passport-google-oauth20: "npm:^2.0.0"
     passport-jwt: "npm:^4.0.1"
