@@ -13,6 +13,7 @@ const cache = new InMemoryCache({
 
 const httpLink = new HttpLink({
   uri: environment.graphqlUrl,
+  credentials: 'include',
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -33,6 +34,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 export const apolloClient = new ApolloClient({
   cache,
   link: from([errorLink, httpLink]),
+  credentials: 'include',
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'cache-and-network',

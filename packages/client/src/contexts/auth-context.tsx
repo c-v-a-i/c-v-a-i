@@ -1,11 +1,11 @@
 import React, { createContext, useEffect, useState } from 'react';
-import type { GetCurrentUserQuery, User } from '../generated/graphql';
+import type { GetCurrentUserQuery } from '../generated/graphql';
 import { GetCurrentUserDocument } from '../generated/graphql';
 import { LogoutDocument } from '../generated/graphql';
 import { useMutation } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 
-interface AuthContextType {
+export interface AuthContextType {
   user: GetCurrentUserQuery['currentUser'] | null;
   loading: boolean;
   error: Error | undefined;
@@ -15,14 +15,14 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthContextType['user'] | null>(null);
 
   const { loading, data, error } = useQuery<GetCurrentUserQuery>(GetCurrentUserDocument, {
     fetchPolicy: 'network-only',
     errorPolicy: 'ignore',
-    context: {
-      credentials: 'include',
-    },
+    // context: {
+    //   credentials: 'include',
+    // },
   });
 
   const [logoutMutation] = useMutation(LogoutDocument, {

@@ -12,13 +12,10 @@ import { GqlAuthGuard } from '../../auth/guards/gql-auth/gql-auth.guard';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
 export class UserResolver {
-  constructor(
-    private readonly userService: UserService,
-    private readonly dataloaderService: DataloaderService
-  ) {}
+  constructor(private readonly userService: UserService, private readonly dataloaderService: DataloaderService) {}
 
   @Query(() => User)
   public async currentUser(@CurrentUser() { client_id: id }: DecodedUserObjectType) {
-    return this.userService.findOne({ id });
+    return this.userService.findOneBy({ id });
   }
 }

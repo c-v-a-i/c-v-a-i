@@ -55,7 +55,7 @@ export class AuthService {
   signRefreshToken(payload: JwtPayload): string {
     return this.jwtService.sign(payload, {
       secret: this.refreshJwtConfiguration.secret,
-      expiresIn: this.refreshJwtConfiguration.signOptions?.expiresIn || '90d',
+      expiresIn: this.refreshJwtConfiguration.signOptions?.expiresIn ?? '90d',
     });
   }
 
@@ -67,10 +67,7 @@ export class AuthService {
   }
 
   async validateUserById(userId: string): Promise<User | null> {
-    const user = await this.userService.findOne({ id: userId });
-
-    this.logger.debug(`validateUserById: found user: ${JSON.stringify(user, null, 2)}`);
-    return user;
+    return this.userService.findOneBy({ id: userId });
   }
 
   async reissueAccessToken(refreshToken: string): Promise<string | null> {

@@ -5,12 +5,11 @@ import { HealthCheckGraphQLModule } from './services/healthcheck-graphql/healthc
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DateScalar } from '@server/common/graphql/scalars';
-import { ExampleService } from './services/example/example.service';
-import { ExampleResolver } from './services/example/example.resolver';
-import { ExampleModule } from './services/example/example.module';
 import { ConfigModule } from '@nestjs/config';
 import { typeormConfig } from '../../../config/typeorm/typeorm.config';
 import { UserModule } from './entity-modules/user/user.module';
+import { CvModule } from './entity-modules/cv/cv/cv.module';
+import { EducationModule } from './entity-modules/education/education.module';
 
 @Module({
   imports: [
@@ -25,8 +24,9 @@ import { UserModule } from './entity-modules/user/user.module';
     CoreModule,
     AuthModule,
     UserModule,
-    ExampleModule,
+    CvModule,
+    EducationModule,
   ],
-  providers: [DateScalar, ExampleService, ExampleResolver],
+  providers: [DateScalar],
 })
 export class WebServerModule {}

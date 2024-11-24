@@ -14,56 +14,64 @@ export const contactInfoData: ContactInfoData = {
 export const workExperienceData: WorkExperienceData[] = [
   {
     position: 'Senior Software Engineer',
-    company: 'Dishboard',
+    name: 'Dishboard',
     type: 'Contract',
     location: 'Prague, Czechia',
     duration: '2024 - Present',
-    responsibilities: [
+    description: [
       'Developing a financial application for restaurant businesses with a focus on data-driven features',
       'Built a data pipeline integrating an LLM with OCR for invoice auto-approval, improving approval rate by 45%',
       'Developed large features completely independently, including a whole new subscription model for the application',
       'Worked with external APIs, including Stripe API, POS integration APIs and CNB API',
-    ].map(withDot),
+    ]
+      .map(withDot)
+      .join('\n'),
     skills: ['NestJS', 'Python', 'TypeORM', 'ReactJS', 'OpenAI API', 'Stripe API', 'GraphQl', 'UX/UI'],
   },
   {
     position: 'Senior Software Engineer',
-    company: 'Gen (ex Avast)',
+    name: 'Gen (ex Avast)',
     type: 'Full-time',
     location: 'Prague, Czechia',
     duration: '2024',
-    responsibilities: [
+    description: [
       'Working on an internal projects for developers, product and project managers',
       'Built ETL pipelines to gather data from multiple sources and provide actionable insights',
       'Came up and developed AI-powered features to enhance the developer/user experience',
       'Handling different aspects of a project lifecycle: CI/CD, process establishment (Jira, Confluence), conflict resolution within the team, communication with end users/customers, and other possible stuff',
-    ].map(withDot),
+    ]
+      .map(withDot)
+      .join('\n'),
     skills: ['ReactJS', 'PSQL', 'TeamCity', 'GCP', 'ReactJS', 'Kubernetes', 'Docker'],
   },
   {
     position: 'Software Engineer',
-    company: 'Salsita Software',
+    name: 'Salsita Software',
     type: 'Full-time',
     location: 'Prague, Czechia',
     duration: '2023 - 2024',
-    responsibilities: [
+    description: [
       'Created a LLM-powered UI for a 3D product configurator, driving the company’s mid-term strategic goal',
       'Enhanced CI/CD pipelines and rescued eBay’s Social Hub platform, extending the contract by two quarters',
-    ].map(withDot),
+    ]
+      .map(withDot)
+      .join('\n'),
     skills: ['OpenAI API', 'Kotlin', 'NodeJS', 'ReactJS', 'GraphQL', 'Jenkins', 'ThreeJS'],
   },
   {
     position: 'AI Researcher',
     type: 'Full-time',
-    company: 'BUT Speech',
+    name: 'BUT Speech',
     location: 'Brno, Czechia',
     duration: '2021 - 2023',
-    responsibilities: [
+    description: [
       'Fine-tuned ASR models, enhancing Czech end-to-end ASR systems for Seznam.cz',
       'Won the 2nd place in Albaizyn challenge and the 3rd place on MTM22 marathon',
       'Specialized on data processing, joint models, efficient inference, and transformer adaptors',
       'Prepared over 20 large text and audio-visual datasets for training deep neural networks',
-    ].map(withDot),
+    ]
+      .map(withDot)
+      .join('\n'),
     skills: [
       'Academic Research in ASR/NLP',
       'Big Data',
@@ -78,7 +86,7 @@ export const workExperienceData: WorkExperienceData[] = [
 export const projectsData: ProjectData[] = [
   {
     name: 'GPT-4 Powered CV Builder',
-    description: ['Developing a CV builder using LLMs to generate, modify and review CVs'].map(withDot).join('</br>'),
+    description: ['Developing a CV builder using LLMs to generate, modify and review CVs'].map(withDot).join('\n'),
     skills: ['TypeScript', 'NestJS', 'React', 'OpenAI API', 'GraphQl', 'UI/UX'],
   },
   {
@@ -91,37 +99,37 @@ export const projectsData: ProjectData[] = [
       'Smaller pet-projects including a packet sniffer, spreadsheet processors, and an IoT system for automatic light control',
     ]
       .map(withDot)
-      .join('</br>'),
+      .join('\n'),
     skills: ['C/C++', 'Python', 'Django', 'Qt', 'Database Design', 'System Architecture'],
   },
   {
     name: 'Machine Learning Projects',
     description: [
-      `Got the 2nd place in the Albayzin 2022 ASR challenge <a href="https://www.fit.vut.cz/research/group/speech/public/publi/2022/kocour22_iberspeech.pdf">link to paper</a>`,
+      `Got the 2nd place in the [Albayzin 2022 ASR challenge](https://www.fit.vut.cz/research/group/speech/public/publi/2022/kocour22_iberspeech.pdf)`,
       `Got the 3rd place in MTM22 (Machine Translation Marathon) by implementing an ASR model for TED talks using transformer adaptors`,
-      "Created a joint model for person identification by speech and image. Implemented a logic for joining outputs from these two modalities <a href='https://github.com/SkuratovichA/SUR'>link to project</a>",
+      'Created a joint model for person identification by speech and image. Implemented a logic for joining outputs from these two modalities: [link to paper](https://github.com/SkuratovichA/SUR)',
     ]
       .map(withDot)
-      .join('</br>'),
+      .join('\n'),
     skills: ['Pytorch', 'HuggingFace', 'Nvidia NeMo', 'Seaborn', 'Pandas', 'NLP', 'ASR'],
   },
 ];
 
 export const educationData: EducationData[] = [
   {
-    institution: 'Brno University of Technology',
+    name: 'Brno University of Technology',
     degree: 'Bachelor in Information Technology',
     duration: '2020 — 2023',
     description: 'Top 1% student, specialized in AI, data analysis and theoretical computer science',
-    keywords: ['Python', 'C/C++', 'Big Data', 'Machine Learning', 'Deep Learning'],
+    skills: ['Python', 'C/C++', 'Big Data', 'Machine Learning', 'Deep Learning'],
     location: 'Brno, Czechia',
   },
   {
-    institution: 'Unicorn University',
+    name: 'Unicorn University',
     degree: 'Bachelor in Economics and Management',
     duration: '2018 — 2020',
     description: 'Not top 1% student',
-    keywords: ['Economics', 'Management', 'Finance'],
+    skills: ['Economics', 'Management', 'Finance'],
     location: 'Prague, Czechia',
   },
 ];

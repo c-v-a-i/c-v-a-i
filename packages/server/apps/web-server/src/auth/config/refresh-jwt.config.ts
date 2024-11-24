@@ -6,7 +6,7 @@ export const refreshJwtConfig = registerAs(
   (): JwtModuleOptions => ({
     secret: process.env.REFRESH_JWT_SECRET,
     signOptions: {
-      expiresIn: process.env.REFRESH_JWT_EXPIRE_IN || '7d',
+      expiresIn: process.env.REFRESH_JWT_EXPIRE_IN ?? '7d',
     },
   })
 );

@@ -17,20 +17,23 @@ export interface ContactInfoData {
 }
 
 export interface WorkExperienceData {
-  position: string;
-  company: string;
-  location: string;
-  type: string;
-  duration: string;
-  responsibilities: string[];
+  name: string; // name
+  position: string; // description
+  duration: string; // same as in EductionData
+  location: string; // same as in EductionData
+  type: string; // full-time / contract
+
+  description: string;
   skills: string[];
 }
 
 export interface EducationData {
-  institution: string;
-  degree: string;
+  name: string; // like company
+  degree: string; // like position
   duration: string;
   location: string;
+  type?: string; // on-site / distance
+
   description: string;
-  keywords: string[];
+  skills: string[];
 }

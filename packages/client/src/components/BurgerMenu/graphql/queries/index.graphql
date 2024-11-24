@@ -1,0 +1,9 @@
+query GetCvs {
+  getCvs {
+    count
+    items {
+      id
+      name: title
+    }
+  }
+}

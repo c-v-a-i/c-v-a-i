@@ -1,40 +1,46 @@
 import React, { useCallback } from 'react';
 import { Box, Button } from '@mui/material';
 import { environment } from '../environment';
-import type { paths } from '../generated/api-types';
-import { useUser } from '../hooks';
+import { BurgerMenu } from './BurgerMenu';
+import { useAuth } from '../contexts/use-auth';
+import { CurrentUserProvider } from '../contexts/use-user';
+import { CurrentCvProvider } from '../contexts/use-current-cv';
+import { CurrentCvPreview } from './CvPreview';
+import { CenteredBox } from './atoms';
 
 export const LoginButton: React.FC = () => {
-  const handleLogin = useCallback(async () => {
-    const backendGoogleOAuthUrl: `${typeof environment.apiUrl}${keyof paths}` = `${environment.apiUrl}/auth/google`;
-
+  const handleLogin = useCallback(() => {
+    const backendGoogleOAuthUrl = `${environment.apiUrl}/auth/google`;
     window.location.href = backendGoogleOAuthUrl;
   }, []);
 
-  return <Button onClick={handleLogin}>Login with Google</Button>;
+  return (
+    <Button variant={'outlined'} onClick={handleLogin}>
+      Login with Google
+    </Button>
+  );
 };
 
 export const IndexPage = () => {
-  // get the user using a graphql request
-  // if no user exists, show the login page.
-  // otherwise, show a <HomePage />
-  // HomePage should be a dummy component for now
-  // return <CvPreview />;
-  const { user, logout, loading } = useUser();
+  const { user, logout } = useAuth();
 
   if (!user) {
-    return <LoginButton />;
+    return (
+      <CenteredBox sx={{ height: '100vh' }}>
+        <LoginButton />
+      </CenteredBox>
+    );
   }
 
   return (
-    <Box
-      sx={{
-        margin: '0 auto',
-        maxWidth: '1400px',
-      }}
-    >
-      {JSON.stringify(user, null, 2)}
-      <Button onClick={logout}>Logout</Button>
-    </Box>
+    <CurrentUserProvider user={user} logout={logout}>
+      <CurrentCvProvider>
+        <Box sx={{ display: 'flex' }}>
+          <BurgerMenu>
+            <CurrentCvPreview />
+          </BurgerMenu>
+        </Box>
+      </CurrentCvProvider>
+    </CurrentUserProvider>
   );
 };

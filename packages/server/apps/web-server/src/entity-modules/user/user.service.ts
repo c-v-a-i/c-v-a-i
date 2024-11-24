@@ -1,14 +1,21 @@
 import { CreateUserDto } from './dto/create-user.dto';
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@server/entities';
 import { FindOptionsWhere, Repository } from 'typeorm';
+import { CvService } from '../cv/cv/cv.service';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+  private readonly logger = new Logger(UserService.name);
 
-  async findOne(where: FindOptionsWhere<User>): Promise<User | null> {
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @Inject(forwardRef(() => CvService))
+    private readonly cvService: CvService
+  ) {}
+
+  async findOneBy(where: FindOptionsWhere<User>): Promise<User | null> {
     return this.userRepository.findOne({ where });
   }
 
@@ -22,7 +29,22 @@ export class UserService {
     });
   }
 
-  async create(user: CreateUserDto): Promise<User> {
-    return this.userRepository.save(user);
+  async create(userDto: CreateUserDto): Promise<User> {
+    const newUser = this.userRepository.create(userDto);
+
+    const savedUser = await this.userRepository.save(newUser);
+
+    try {
+      const exampleCv = await this.cvService.generateExampleCv({
+        userId: savedUser.id,
+      });
+      return await this.userRepository.save({
+        ...savedUser,
+        cvs: [exampleCv],
+      });
+    } catch (error) {
+      this.logger.error(`Cannot generate example CV for a user: ${error}`);
+      throw error;
+    }
   }
 }
