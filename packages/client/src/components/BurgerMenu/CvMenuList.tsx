@@ -1,13 +1,15 @@
-import React, { useCallback, useMemo } from 'react';
-import { MenuList } from '../atoms';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { MenuCvList } from '../atoms';
 import { DeleteConfirmationDialog } from './DeleteConfirmationDialog';
 import { useGetCvsQuery, useDeleteCvMutation, refetchGetCvsQuery } from '../../generated/graphql';
+import { useCurrentCv } from '../../contexts/use-current-cv';
 
 export const CvMenuList = () => {
   const { data: cvQueryData, loading: cvQueryLoading, error: cvsQueryError } = useGetCvsQuery();
   const [deleteCv] = useDeleteCvMutation({
     refetchQueries: [refetchGetCvsQuery()],
   });
+  const { setCurrentCvId } = useCurrentCv();
 
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [selectedItemId, setSelectedItemId] = React.useState<string | null>(null);
@@ -16,6 +18,12 @@ export const CvMenuList = () => {
     () => (cvQueryLoading || !cvQueryData?.getCvs?.items ? [] : cvQueryData.getCvs.items),
     [cvQueryData, cvQueryLoading]
   );
+
+  useEffect(() => {
+    setCurrentCvId((currentCvId) =>
+      !memoizedItems.length || memoizedItems.find((it) => it.id === currentCvId) ? currentCvId : null
+    );
+  }, [setCurrentCvId, memoizedItems]);
 
   const toggleDeleteDialog = useCallback((id: string) => {
     setSelectedItemId(id);
@@ -47,7 +55,7 @@ export const CvMenuList = () => {
 
   return (
     <>
-      <MenuList
+      <MenuCvList
         items={memoizedItems}
         onDeleteItem={(id) => toggleDeleteDialog(id)}
         // onAddNewItem={handleGenerateNewCv}

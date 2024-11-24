@@ -1,0 +1,13 @@
+query GetEducationEntries (
+  $cvId: ID!
+) {
+  getEducationEntriesByCv(cvId: $cvId) {
+    id
+    name
+    description
+    degree
+    location
+    duration
+    skills
+  }
+}

@@ -38,7 +38,7 @@ export class UserService {
       const exampleCv = await this.cvService.generateExampleCv({
         userId: savedUser.id,
       });
-      return this.userRepository.save({
+      return await this.userRepository.save({
         ...savedUser,
         cvs: [exampleCv],
       });

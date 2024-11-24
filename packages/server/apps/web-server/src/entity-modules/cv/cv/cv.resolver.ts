@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { CvService } from './cv.service';
-import { UseGuards } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../../../auth/guards/gql-auth/gql-auth.guard';
 import { CV } from '@server/entities/cv-entity/cv.entity';
 import { CurrentUser } from '../../../common/decorators';
@@ -10,19 +10,31 @@ import { PaginatedCvObjectType } from './dto/paginated-cv.object-type';
 import { GenerateCvFromTemplateArgsType } from './dto/generate-cv-from-template.args-type';
 import { DeleteCvArgsType } from './dto/hui.args-type';
 import { ContactInfo, Education, Project, Skill, WorkExperience } from '@server/entities';
+import { GetCvArgsType } from './dto';
+import { AboutMe } from '@server/entities/cv-entity/about-me.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => CV)
 export class CvResolver {
-  constructor(
-    private readonly cvService: CvService,
-    private readonly dataloaderService: DataloaderService
-  ) {}
+  private readonly logger = new Logger(CvResolver.name);
+  constructor(private readonly cvService: CvService, private readonly dataloaderService: DataloaderService) {}
 
   @Query(() => PaginatedCvObjectType)
   async getCvs(@CurrentUser() user: DecodedUserObjectType): Promise<PaginatedCvObjectType> {
     const [items, count] = await this.cvService.findAllByUserAndCount(user.client_id);
     return { items, count };
+  }
+
+  @Query(() => CV)
+  async getCv(
+    @CurrentUser() { client_id }: DecodedUserObjectType,
+    @Args()
+    { id }: GetCvArgsType
+  ): Promise<CV> {
+    const foundCv = await this.cvService.findOne({ id }, client_id);
+    this.logger.debug(`Found cv: ${foundCv?.title}`);
+
+    return foundCv;
   }
 
   @Mutation(() => CV)
@@ -42,12 +54,28 @@ export class CvResolver {
 
   @Mutation(() => Boolean)
   async deleteCv(
-    @CurrentUser() user: DecodedUserObjectType,
+    @CurrentUser() { client_id }: DecodedUserObjectType,
     @Args()
     { id }: DeleteCvArgsType
   ): Promise<boolean> {
-    return this.cvService.removeOne({ id });
+    return this.cvService.removeOne({ id }, client_id);
   }
+
+  // we wanna make it more granular introducing different resolvers for each entity CV consists of
+  // @Mutation(() => Boolean)
+  // async updateCv(
+  //   @CurrentUser() { client_id }: DecodedUserObjectType,
+  //   @Args()
+  //   data: UpdateCvArgsType
+  // ): Promise<boolean> {
+  //   await this.cvService.update(
+  //     {
+  //       data,
+  //     },
+  //     client_id
+  //   );
+  //   return true;
+  // }
 
   // TODO: I don't wanna create services for each of these entities, because
   //  in the future, I'll probably gonna get rid for all of this
@@ -76,6 +104,11 @@ export class CvResolver {
   @ResolveField(() => ContactInfo)
   async contactInfo(@Parent() { id }: CV): Promise<ContactInfo> {
     return this.dataloaderService.contactInfoLoader.load(id);
+  }
+
+  @ResolveField(() => AboutMe)
+  async aboutMe(@Parent() { id }: CV): Promise<AboutMe> {
+    return this.dataloaderService.aboutMeLoader.load(id);
   }
 
   // @Mutation(() => CV)

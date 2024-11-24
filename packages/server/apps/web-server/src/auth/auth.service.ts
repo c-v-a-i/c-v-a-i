@@ -55,7 +55,7 @@ export class AuthService {
   signRefreshToken(payload: JwtPayload): string {
     return this.jwtService.sign(payload, {
       secret: this.refreshJwtConfiguration.secret,
-      expiresIn: this.refreshJwtConfiguration.signOptions?.expiresIn || '90d',
+      expiresIn: this.refreshJwtConfiguration.signOptions?.expiresIn ?? '90d',
     });
   }
 

@@ -4,6 +4,7 @@ import { ContactInfo, Education, Project, Skill, User, WorkExperience } from '@s
 import DataLoader from 'dataloader';
 import { groupBy, keyBy } from 'lodash/fp';
 import { FindOptionsWhere, In, ObjectLiteral, Repository } from 'typeorm';
+import { AboutMe } from '@server/entities/cv-entity/about-me.entity';
 
 type NotIdField<T> = {
   [K in keyof T]: K extends `${string}Id` ? never : K;
@@ -19,7 +20,8 @@ export class DataloaderService {
     @InjectRepository(WorkExperience) private readonly workExperienceRepository: Repository<WorkExperience>,
     @InjectRepository(Project) private readonly projectRepository: Repository<Project>,
     @InjectRepository(Skill) private readonly skillRepository: Repository<Skill>,
-    @InjectRepository(ContactInfo) private readonly contactInfoRepository: Repository<ContactInfo>
+    @InjectRepository(ContactInfo) private readonly contactInfoRepository: Repository<ContactInfo>,
+    @InjectRepository(AboutMe) private readonly aboutMeRepository: Repository<AboutMe>
   ) {}
 
   private generateLoaderByFK = <T extends ObjectLiteral>(
@@ -86,4 +88,5 @@ export class DataloaderService {
   public readonly projectLoader = this.generateLoaderByFK<Project>(this.projectRepository, 'cv');
   public readonly skillLoader = this.generateLoaderByFK<Skill>(this.skillRepository, 'cv');
   public readonly contactInfoLoader = this.generateOneToOneLoader<ContactInfo>(this.contactInfoRepository, 'cv');
+  public readonly aboutMeLoader = this.generateOneToOneLoader<AboutMe>(this.aboutMeRepository, 'cv');
 }

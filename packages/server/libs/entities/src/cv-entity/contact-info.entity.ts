@@ -1,5 +1,5 @@
-import { Entity, Column, OneToOne } from 'typeorm';
-import { ObjectType, Field } from '@nestjs/graphql';
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { CV } from './cv.entity';
 import { BaseEntity } from '../base-entity';
 
@@ -15,8 +15,10 @@ export class ContactInfo extends BaseEntity {
   phone!: string;
 
   @OneToOne(() => CV, (cv) => cv.contactInfo)
+  @JoinColumn({ name: 'cvId' })
   cv!: CV;
 
+  @Field(() => ID)
   @Column({ type: 'uuid' })
   cvId!: string;
 }

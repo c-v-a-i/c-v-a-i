@@ -12,6 +12,7 @@ const MainContent = styled('div', {
   shouldForwardProp: (prop) => prop !== 'open',
 })<{ open: boolean }>(({ theme, open }) => ({
   flexGrow: 1,
+  height: '100vh',
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,

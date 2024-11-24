@@ -1,6 +1,14 @@
 directive @connection(filter: [String]!, key: String!) on FIELD
 
+type AboutMe {
+  aboutMe: String!
+  createdAt: Date!
+  deletedAt: Date
+  id: ID!
+}
+
 type CV {
+  aboutMe: AboutMe!
   contactInfo: ContactInfo!
   createdAt: Date!
   deletedAt: Date
@@ -26,6 +34,7 @@ scalar Date
 
 type Education {
   createdAt: Date!
+  cvId: ID!
   degree: String!
   deletedAt: Date
   description: String!
@@ -38,9 +47,10 @@ type Education {
 }
 
 type Mutation {
-  createNewCv(templateId: ID!): CV!
+  createNewCv(templateId: ID): CV!
   deleteCv(id: ID!): Boolean!
   logout: Boolean!
+  updateEducation(cvId: ID!, degree: String, description: String, duration: String, id: ID!, location: String, name: String, skills: [String!], type: String): Boolean!
 }
 
 type PaginatedCvObjectType {
@@ -59,10 +69,10 @@ type Project {
 
 type Query {
   currentUser: User!
+  getCv(id: ID!): CV!
   getCvs: PaginatedCvObjectType!
+  getEducationEntriesByCv(cvId: ID!): [Education!]!
   healthCheck: String!
-  protectedData: String!
-  publicData: String!
 }
 
 type ScopeObjectType {

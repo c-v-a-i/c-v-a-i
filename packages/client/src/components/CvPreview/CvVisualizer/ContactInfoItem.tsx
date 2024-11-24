@@ -1,6 +1,6 @@
 import { Box, Link, Typography } from '@mui/material';
 import React from 'react';
-import { TypographyWithOverflow } from './TypographyWithOverflow';
+import { TypographyWithOverflow } from '../../atoms';
 
 type ContactInfoItemProps = {
   name: string;

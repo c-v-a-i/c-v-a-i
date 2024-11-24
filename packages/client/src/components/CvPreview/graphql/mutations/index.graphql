@@ -1,0 +1,7 @@
+#mutation UpdateCv (
+#  $id: ID!
+#) {
+#  updateCv (
+#    id: $id
+#  )
+#}

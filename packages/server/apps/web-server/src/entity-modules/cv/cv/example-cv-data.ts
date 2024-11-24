@@ -152,3 +152,12 @@ export const exampleContactInfo = {
   email: 'skuratovich.aliaksandr@gmail.com',
   phone: '+420735594008',
 };
+
+export const exampleAboutMe = {
+  aboutMe: [
+    'An engineer with a mix of fullstack development experience and AI',
+    'Proven track record in developing AI-powered solutions',
+    'Skilled in managing project lifecycles from inception to deployment, including CI/CD pipelines',
+    'When not working, I train for triathlons',
+  ].join('\n'),
+};

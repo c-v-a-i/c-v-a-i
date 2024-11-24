@@ -3,14 +3,18 @@ import { List } from '@mui/material';
 import { MenuItem } from './MenuItem';
 import type { ListItem } from './types';
 import { useCurrentCv } from '../../../contexts/use-current-cv';
+import { refetchGetCvsQuery, useCreateCvMutation } from '../../../generated/graphql';
 
 type MenuListProps = {
   items: ListItem[];
   onDeleteItem: (itemId: string) => void;
 };
 
-export const MenuList: React.FC<MenuListProps> = React.memo(({ items, onDeleteItem }) => {
+export const MenuCvList = React.memo(({ items, onDeleteItem }: MenuListProps) => {
   const { setCurrentCvId } = useCurrentCv();
+  const [createNewCv] = useCreateCvMutation({
+    refetchQueries: [refetchGetCvsQuery()],
+  });
 
   const handleSelectCv = useCallback(
     (id: string) => {
@@ -19,7 +23,10 @@ export const MenuList: React.FC<MenuListProps> = React.memo(({ items, onDeleteIt
     [setCurrentCvId]
   );
   const onDelete = (id: string) => onDeleteItem(id);
-  const onCreateFromThis = () => alert('new hui created');
+  const onCreateFromThis = (id: string) =>
+    createNewCv({
+      variables: { templateId: id },
+    });
 
   return (
     <List>
@@ -29,7 +36,7 @@ export const MenuList: React.FC<MenuListProps> = React.memo(({ items, onDeleteIt
           item={item}
           onSelect={handleSelectCv}
           menuOptions={[
-            { label: 'Create New from This', action: onCreateFromThis },
+            { label: 'Use as template', action: onCreateFromThis },
             { label: 'Delete', action: onDelete },
           ]}
         />

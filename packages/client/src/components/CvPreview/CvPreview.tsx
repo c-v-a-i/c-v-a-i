@@ -1,37 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useCurrentCv } from '../../contexts/use-current-cv';
+import { useGetCvInformationLazyQuery } from '../../generated/graphql';
+import { CvVisualizer } from './CvVisualizer';
+import { CenteredBox } from '../atoms';
 
 export const CurrentCvPreview: React.FC = () => {
   const { currentCvId } = useCurrentCv();
-  const [currentCv, setCurrentCv] = useState<string | null>(null);
+
+  const [fetchCvFunction, { loading, error, data }] = useGetCvInformationLazyQuery();
 
   useEffect(() => {
-    if (currentCvId) {
-      // Simulate fetching logic (e.g., GraphQL query with ID)
-      setCurrentCv(`Fetched CV Details for ID: ${currentCvId}`);
-    } else {
-      setCurrentCv(null);
+    if (!currentCvId) {
+      return;
     }
-  }, [currentCvId]);
+    fetchCvFunction({
+      variables: {
+        id: currentCvId,
+      },
+    })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch(() => {
+        /* ignore */
+      });
+  }, [fetchCvFunction, currentCvId]);
 
+  if (loading) {
+    return <CenteredBox>Loading...</CenteredBox>;
+  }
+  if (error) {
+    return (
+      <CenteredBox>
+        <Typography variant="h6" color="error">
+          {error.message}
+        </Typography>
+      </CenteredBox>
+    );
+  }
+  if (!data) {
+    return <CenteredBox>No CV selected</CenteredBox>;
+  }
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
+        padding: 2,
       }}
     >
-      {currentCvId ? (
-        <Typography variant="h6">{currentCv}</Typography>
-      ) : (
-        <Typography variant="h6" color="text.secondary">
-          No CV is selected
-        </Typography>
-      )}
+      <CvVisualizer cvData={data.getCv} />
     </Box>
   );
 };

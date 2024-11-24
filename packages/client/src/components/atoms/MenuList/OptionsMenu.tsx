@@ -19,7 +19,7 @@ export const OptionsMenu: React.FC<OptionsMenuProps> = ({ options, for: item }) 
     setAnchorEl(null);
   };
 
-  const handleOptionClick = (action: (id: string) => void) => {
+  const handleOptionClick = (action: () => void) => {
     handleMenuClose();
     action();
   };

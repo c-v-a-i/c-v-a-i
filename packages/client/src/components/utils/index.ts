@@ -1,6 +1,6 @@
-export function toPerc(fraction: number): `${number}%` {
+export function widthToPerc(fraction: number): `${number}%` {
   if (fraction > 1) {
-    throw Error(toPerc.name);
+    throw Error(widthToPerc.name);
   }
   return `${fraction * 100}%`;
 }

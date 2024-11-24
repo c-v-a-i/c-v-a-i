@@ -1,0 +1,23 @@
+mutation UpdateEducation (
+  $id: ID!
+  $cvId: ID!
+  $name: String
+  $degree: String
+  $duration: String
+  $location: String
+  $type: String
+  $skills: [String!]
+  $description: String
+) {
+  updateEducation(
+    name: $name
+    degree: $degree
+    duration: $duration
+    location: $location
+    type: $type
+    description: $description
+    skills: $skills
+    id: $id
+    cvId: $cvId
+  )
+}

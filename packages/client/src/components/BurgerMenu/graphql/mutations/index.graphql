@@ -1,4 +1,4 @@
-mutation CreateCVFromTemplate($templateId: ID!) {
+mutation CreateCv($templateId: ID) {
   createNewCv(templateId: $templateId) {
     id
     title
@@ -8,7 +8,3 @@ mutation CreateCVFromTemplate($templateId: ID!) {
 mutation DeleteCv($id: ID!) {
   deleteCv(id: $id)
 }
-
-#mutation CreateNewCv() {
-#
-#}

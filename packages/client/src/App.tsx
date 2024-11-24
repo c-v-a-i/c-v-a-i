@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
-import { CssBaseline, ThemeProvider, useTheme } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { IndexPage } from './components/IndexPage';
@@ -7,10 +7,9 @@ import { apolloClient } from './clients';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './contexts/auth-context';
+import { theme } from './theme';
 
 const App: React.FC = () => {
-  const theme = useTheme();
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

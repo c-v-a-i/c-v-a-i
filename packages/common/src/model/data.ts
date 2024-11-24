@@ -105,12 +105,12 @@ export const projectsData: ProjectData[] = [
   {
     name: 'Machine Learning Projects',
     description: [
-      `Got the 2nd place in the Albayzin 2022 ASR challenge <a href="https://www.fit.vut.cz/research/group/speech/public/publi/2022/kocour22_iberspeech.pdf">link to paper</a>`,
+      `Got the 2nd place in the [Albayzin 2022 ASR challenge](https://www.fit.vut.cz/research/group/speech/public/publi/2022/kocour22_iberspeech.pdf)`,
       `Got the 3rd place in MTM22 (Machine Translation Marathon) by implementing an ASR model for TED talks using transformer adaptors`,
-      "Created a joint model for person identification by speech and image. Implemented a logic for joining outputs from these two modalities <a href='https://github.com/SkuratovichA/SUR'>link to project</a>",
+      'Created a joint model for person identification by speech and image. Implemented a logic for joining outputs from these two modalities: [link to paper](https://github.com/SkuratovichA/SUR)',
     ]
       .map(withDot)
-      .join('</br>'),
+      .join('\n'),
     skills: ['Pytorch', 'HuggingFace', 'Nvidia NeMo', 'Seaborn', 'Pandas', 'NLP', 'ASR'],
   },
 ];

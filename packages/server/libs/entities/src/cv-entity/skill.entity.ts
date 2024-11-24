@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { BaseEntity } from '../base-entity';
 import { CV } from './cv.entity';
 
@@ -17,6 +17,7 @@ export class Skill extends BaseEntity {
   @ManyToOne(() => CV, (cv) => cv.skillEntries)
   cv!: CV;
 
+  @Field(() => ID)
   @Column({ type: 'uuid' })
   cvId!: string;
 }

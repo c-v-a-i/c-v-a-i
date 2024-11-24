@@ -2,6 +2,6 @@ import { ArgsType, Field, ID } from '@nestjs/graphql';
 
 @ArgsType()
 export class GenerateCvFromTemplateArgsType {
-  @Field(() => ID)
-  templateId!: string;
+  @Field(() => ID, { nullable: true })
+  templateId?: string;
 }
