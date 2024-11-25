@@ -15,7 +15,6 @@ type MenuItemProps = {
 
 export const MenuItem = React.memo(({ item, menuOptions, onSelect }: MenuItemProps) => {
   const { isEditing, startEditing, tempValue, setTempValue, handleSave, handleCancel } = useEditableTypographyBase({
-    id: `menu-item-${item.id}`,
     value: item.name,
     onSave: async () => {
       alert('Document renamed');

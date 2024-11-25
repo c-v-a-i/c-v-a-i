@@ -1,14 +1,14 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import type { TypographyProps } from '@mui/material';
-import { alpha } from '@mui/material';
 import { useEditableTypographyBase } from '../../../hooks';
 import { useTypographyActionsPortal } from '../../../hooks';
 import { EditableTypographyBase } from '../../atoms/EditableTypographyBase';
-import { grey, pink } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 
 type EditableTypographyProps = Omit<TypographyProps, 'ref'> & {
   id: string;
   value: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSave: (newValue: string) => Promise<any>;
   onAiEdit?: (prompt: string) => void;
   multiline?: boolean;
@@ -25,7 +25,6 @@ export const EditableTypography = ({
 }: EditableTypographyProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const { isEditing, startEditing, tempValue, setTempValue, handleSave, handleCancel } = useEditableTypographyBase({
-    id,
     value,
     onSave,
   });
@@ -77,7 +76,7 @@ export const EditableTypography = ({
         return false;
       }
     });
-  }, [triggerPortal]);
+  }, [getIsAnyTextSelected, isEditing, triggerPortal]);
 
   return (
     <EditableTypographyBase
@@ -92,7 +91,7 @@ export const EditableTypography = ({
           width: 'fit-content',
 
           // for debug
-          background: alpha(pink[300], 0.1),
+          // background: alpha(pink[300], 0.1),
 
           ...(typographyProps.sx ?? {}),
         },

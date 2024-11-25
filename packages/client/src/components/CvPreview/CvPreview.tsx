@@ -18,13 +18,9 @@ export const CurrentCvPreview: React.FC = () => {
       variables: {
         id: currentCvId,
       },
-    })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch(() => {
-        /* ignore */
-      });
+    }).catch(() => {
+      /* ignore */
+    });
   }, [fetchCvFunction, currentCvId]);
 
   if (loading) {

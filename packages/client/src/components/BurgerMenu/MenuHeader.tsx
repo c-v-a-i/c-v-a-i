@@ -5,7 +5,7 @@ import type { User } from '../../generated/graphql';
 import { TypographyWithOverflow } from '../atoms';
 
 type MenuHeaderProps = {
-  user: Omit<User, 'cvs'>;
+  user: Pick<User, 'firstName' | 'lastName' | 'email'>;
   onClose: () => void;
 };
 

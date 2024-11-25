@@ -1,10 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
 
 type UseEditableTypographyBaseProps = {
-  id: string;
   value: string;
   onSave: (newValue: string) => Promise<void>;
-  isEditing?: boolean;
 };
 
 type UseEditableTypographyBaseReturn = {
@@ -17,10 +15,8 @@ type UseEditableTypographyBaseReturn = {
 };
 
 export const useEditableTypographyBase = ({
-  id,
   value,
   onSave,
-  isEditing: defaultIsEditing, // for some reason, it doesn't work
 }: UseEditableTypographyBaseProps): UseEditableTypographyBaseReturn => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value);
