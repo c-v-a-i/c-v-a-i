@@ -1,42 +1,70 @@
 import React from 'react';
-import { Box } from '@mui/material';
-import type { GetCvInformationQuery } from '../../../generated/graphql';
+import type { UpdateContactInfoMutationVariables } from '../../../generated/graphql';
+import {
+  GetContactInfoComponent,
+  refetchGetContactInfoQuery,
+  useUpdateContactInfoMutation,
+} from '../../../generated/graphql';
+import { Box, Typography } from '@mui/material';
 import { EditableTypography } from '../EditableTypography';
+import type { CvEntryComponentProps } from './types';
 
-type ContactInfoProps = {
-  cvId: string;
-  title: string;
-  contactInfo: GetCvInformationQuery['getCv']['contactInfo'];
-};
+export const ContactInfo = ({ cvId }: CvEntryComponentProps) => {
+  const [updateContactInfo] = useUpdateContactInfoMutation({
+    refetchQueries: [
+      refetchGetContactInfoQuery({
+        cvId,
+      }),
+    ],
+  });
 
-export const ContactInfo: React.FC<ContactInfoProps> = ({ cvId, title, contactInfo }) => {
-  // const [updateCvTitle] = useUpdateCvTitleMutation();
-  // const [updateContactInfo] = useUpdateContactInfoMutation();
-
-  const handleTitleUpdate = async (value: string) => {
-    // await updateCvTitle({ variables: { id: cvId, title: value } });
-  };
-
-  const handleContactInfoUpdate = async (field: 'email' | 'phone', value: string) => {
-    // const input = { id: contactInfo.id, [field]: value };
-    // await updateContactInfo({ variables: { input } });
+  const updateField = async (id: string, fieldName: keyof UpdateContactInfoMutationVariables, value: string) => {
+    await updateContactInfo({
+      variables: {
+        cvId,
+        id,
+        [fieldName]: value,
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        updateContactInfo: true,
+      },
+    });
   };
 
   return (
-    <Box>
-      <EditableTypography id={`cv-title-${cvId}`} value={title} onSave={handleTitleUpdate} variant="h3" />
-      <EditableTypography
-        id={`contact-info-email-${contactInfo.id}`}
-        value={contactInfo.email}
-        onSave={(value) => handleContactInfoUpdate('email', value)}
-        variant="body1"
-      />
-      <EditableTypography
-        id={`contact-info-phone-${contactInfo.id}`}
-        value={contactInfo.phone}
-        onSave={(value) => handleContactInfoUpdate('phone', value)}
-        variant="body1"
-      />
-    </Box>
+    <GetContactInfoComponent
+      fetchPolicy={'cache-first'}
+      variables={{
+        cvId,
+      }}
+    >
+      {({ data: { getContactInfo: contactInfo } = {}, loading }) =>
+        loading || !contactInfo ? (
+          <Typography>Loading...</Typography>
+        ) : (
+          <Box>
+            <EditableTypography
+              id={`contact-info-name-${contactInfo.id}`}
+              value={contactInfo.name}
+              onSave={(name) => updateField(contactInfo.id, 'name', name)}
+              variant="h3"
+            />
+            <EditableTypography
+              id={`contact-info-email-${contactInfo.id}`}
+              value={contactInfo.email}
+              onSave={(email) => updateField(contactInfo.id, 'email', email)}
+              variant="body1"
+            />
+            <EditableTypography
+              id={`contact-info-phone-${contactInfo.id}`}
+              value={contactInfo.phone}
+              onSave={(phone) => updateField(contactInfo.id, 'phone', phone)}
+              variant="body1"
+            />
+          </Box>
+        )
+      }
+    </GetContactInfoComponent>
   );
 };

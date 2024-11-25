@@ -1,31 +1,81 @@
 import React from 'react';
-import { Typography, Box } from '@mui/material';
-import type { GetCvInformationQuery } from '../../../generated/graphql';
+import { Box, Typography } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import { EditableTypography } from '../EditableTypography';
+import type { CvEntryComponentProps } from './types';
+import type { UpdateSkillEntryMutationVariables } from '../../../generated/graphql';
+import {
+  GetSkillEntriesComponent,
+  refetchGetSkillEntriesQuery,
+  useUpdateSkillEntryMutation,
+} from '../../../generated/graphql';
 
-type SkillsProps = {
-  data: GetCvInformationQuery['getCv']['skillEntries'];
-};
+export const Skills = ({ cvId }: CvEntryComponentProps) => {
+  const [updateSkillEntry] = useUpdateSkillEntryMutation({
+    refetchQueries: [
+      refetchGetSkillEntriesQuery({
+        cvId,
+      }),
+    ],
+  });
 
-export const Skills: React.FC<SkillsProps> = ({ data }) => {
-  if (!data || data.length === 0) {
-    return null;
-  }
+  const updateField = async (
+    id: string,
+    fieldName: keyof UpdateSkillEntryMutationVariables,
+    value: string | string[]
+  ) => {
+    await updateSkillEntry({
+      variables: {
+        cvId,
+        id,
+        [fieldName]: value,
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        updateSkill: true,
+      },
+    });
+  };
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
-        Skills
-      </Typography>
-      {data.map((skillSection) => (
-        <Box key={skillSection.id} mb={2}>
-          <Typography variant="h5">{skillSection.category}</Typography>
-          {skillSection.items.map((skill) => (
-            <Typography key={skill} color="grey" sx={{ textAlign: 'end', textWrap: 'revert' }}>
-              {skill}
+    <GetSkillEntriesComponent fetchPolicy={'cache-first'} variables={{ cvId }}>
+      {({ data: { getSkillEntries: skillEntries } = {}, loading }) =>
+        loading || !skillEntries ? (
+          <Typography>Loading...</Typography>
+        ) : (
+          <Box width={'100%'}>
+            <Typography variant="h4" gutterBottom>
+              Skills
             </Typography>
-          ))}
-        </Box>
-      ))}
-    </Box>
+
+            <Box display="flex" flexDirection="column" gap={2}>
+              {skillEntries.map((skill) => (
+                <Box
+                  key={skill.id}
+                  mb={2}
+                  display={'flex'}
+                  flexDirection={'column'}
+                  alignItems={'end'}
+                  textAlign={'right'}
+                >
+                  <EditableTypography
+                    id={`skill-category-${skill.id}`}
+                    value={skill.category}
+                    onSave={(value) => updateField(skill.id, 'category', value)}
+                    variant="h6"
+                  />
+                  {/* TODO: implement editing for items array */}
+                  {skill.items && skill.items.length > 0 && (
+                    <Typography variant="body2" color={grey[600]}>
+                      Items: {skill.items.join(', ')}
+                    </Typography>
+                  )}
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )
+      }
+    </GetSkillEntriesComponent>
   );
 };

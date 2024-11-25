@@ -11,3 +11,66 @@ query GetEducationEntries (
     skills
   }
 }
+
+query GetContactInfo (
+  $cvId: ID!
+) {
+  getContactInfo(
+    cvId: $cvId
+  ) {
+    id
+    name
+    email
+    phone
+  }
+}
+
+query GetAboutMe (
+  $cvId: ID!
+) {
+  getAboutMe(
+    cvId: $cvId
+  ) {
+    id
+    fieldName
+    description
+  }
+}
+
+query GetWorkExperienceEntries (
+  $cvId: ID!
+) {
+  getWorkExperienceEntries(cvId: $cvId) {
+    id
+    name
+    position
+    duration
+    location
+    type
+    description
+    skills
+  }
+}
+
+query GetProjectEntries (
+  $cvId: ID!
+) {
+  getProjectEntries(cvId: $cvId) {
+    id
+    name
+    description
+    skills
+  }
+}
+
+query GetSkillEntries (
+  $cvId: ID!
+) {
+  getSkillEntries(
+    cvId: $cvId
+  ) {
+    id
+    category
+    items
+  }
+}

@@ -16,7 +16,7 @@ export class EducationService extends CrudService<Education> {
         updatedAt: 'DESC',
       },
       educationRepository,
-      'cvId'
+      'userId'
     );
   }
 }

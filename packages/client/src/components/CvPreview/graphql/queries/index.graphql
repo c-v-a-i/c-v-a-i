@@ -4,35 +4,5 @@ query GetCvInformation($id: ID!) {
   ) {
     id
     title
-    workExperienceEntries {
-      id
-      name
-      position
-      duration
-      location
-      type
-      description
-      skills
-    }
-    projectEntries {
-      id
-      name
-      description
-      skills
-    }
-    skillEntries {
-      id
-      category
-      items
-    }
-    contactInfo {
-      id
-      email
-      phone
-    }
-    aboutMe {
-      id
-      aboutMe
-    }
   }
 }

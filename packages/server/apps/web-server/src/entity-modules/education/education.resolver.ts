@@ -15,23 +15,23 @@ export class EducationResolver {
 
   @Query(() => [Education])
   async getEducationEntriesByCv(
-    @CurrentUser() {}: DecodedUserObjectType,
+    @CurrentUser() { client_id }: DecodedUserObjectType,
     @Args() { cvId }: GetEducationEntriesByCvArgsType
   ): Promise<Education[]> {
     return this.educationService.findAll(
       {
         searchParams: { cvId },
       },
-      cvId
+      client_id
     );
   }
 
   @Mutation(() => Boolean)
   async updateEducation(
-    @CurrentUser() {}: DecodedUserObjectType,
+    @CurrentUser() { client_id }: DecodedUserObjectType,
     @Args() data: UpdateEducationEntryArgsType
   ): Promise<boolean> {
-    await this.educationService.update({ data }, data.cvId);
+    await this.educationService.update({ data }, client_id);
     return true;
   }
 }

@@ -45,7 +45,6 @@ export const CvMenuList = () => {
   }, [deleteCv, selectedItemId, cleanupDeleteDialog]);
 
   if (cvsQueryError) {
-    console.log('error: ', cvsQueryError);
     return <div>cv menu list error</div>;
   }
 

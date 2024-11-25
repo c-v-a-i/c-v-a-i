@@ -1,13 +1,8 @@
-// useEditableTypographyBase.tsx
 import { useState, useCallback, useEffect } from 'react';
-import type { TypographyProps } from '@mui/material';
 
 type UseEditableTypographyBaseProps = {
-  id: string;
   value: string;
   onSave: (newValue: string) => Promise<void>;
-  multiline?: boolean;
-  variant?: TypographyProps['variant'];
 };
 
 type UseEditableTypographyBaseReturn = {
@@ -20,7 +15,6 @@ type UseEditableTypographyBaseReturn = {
 };
 
 export const useEditableTypographyBase = ({
-  id,
   value,
   onSave,
 }: UseEditableTypographyBaseProps): UseEditableTypographyBaseReturn => {

@@ -15,6 +15,10 @@ import { ContactInfo, Education, Project, Skill, User, WorkExperience } from '@s
 import { UserService } from '../../user/user.service';
 import { AboutMe } from '@server/entities/cv-entity/about-me.entity';
 
+// TODO: use data from user google account:
+//  name
+//  email
+//  phoneNumber if exists
 @Injectable()
 export class CvService extends CrudService<CV> {
   private readonly logger = new Logger(CvService.name);
@@ -41,7 +45,7 @@ export class CvService extends CrudService<CV> {
 
     return this.dataSource.transaction(async (manager) => {
       const templateCv = await manager.findOne(CV, {
-        where: { id: templateId },
+        where: { id: templateId, userId },
         relations: {
           educationEntries: true,
           workExperienceEntries: true,
@@ -134,7 +138,6 @@ export class CvService extends CrudService<CV> {
         manager.create(CV, {
           title: 'Example CV',
           user,
-          userId: user.id,
         })
       );
 
@@ -143,15 +146,13 @@ export class CvService extends CrudService<CV> {
           manager.create(Education, {
             ...x,
             cv: exampleCv,
-            cvId: exampleCv.id,
+            user,
           })
         )
       );
 
       const workExperienceEntries = await manager.save(
-        exampleWorkExperienceEntries.map((x) =>
-          manager.create(WorkExperience, { ...x, cv: exampleCv, cvId: exampleCv.id })
-        )
+        exampleWorkExperienceEntries.map((x) => manager.create(WorkExperience, { ...x, cv: exampleCv, user }))
       );
 
       const projects = await manager.save(
@@ -159,7 +160,7 @@ export class CvService extends CrudService<CV> {
           manager.create(Project, {
             ...x,
             cv: exampleCv,
-            cvId: exampleCv.id,
+            user,
           })
         )
       );
@@ -168,7 +169,7 @@ export class CvService extends CrudService<CV> {
         manager.create(ContactInfo, {
           ...exampleContactInfo,
           cv: exampleCv,
-          cvId: exampleCv.id,
+          user,
         })
       );
 
@@ -176,12 +177,18 @@ export class CvService extends CrudService<CV> {
         manager.create(AboutMe, {
           ...exampleAboutMe,
           cv: exampleCv,
-          cvId: exampleCv.id,
+          user,
         })
       );
 
       const skills = await manager.save(
-        exampleSkillEntries.map((x) => manager.create(Skill, { ...x, cv: exampleCv, cvId: exampleCv.id }))
+        exampleSkillEntries.map((x) =>
+          manager.create(Skill, {
+            ...x,
+            cv: exampleCv,
+            user,
+          })
+        )
       );
 
       return { ...exampleCv, educationEntries, workExperienceEntries, projects, contactInfo, skills, aboutMe };

@@ -1,28 +1,32 @@
-// EditableTypography.tsx
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import type { TypographyProps } from '@mui/material';
 import { useEditableTypographyBase } from '../../../hooks';
 import { useTypographyActionsPortal } from '../../../hooks';
 import { EditableTypographyBase } from '../../atoms/EditableTypographyBase';
+import { grey } from '@mui/material/colors';
 
 type EditableTypographyProps = Omit<TypographyProps, 'ref'> & {
   id: string;
   value: string;
-  onSave: (newValue: string) => Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSave: (newValue: string) => Promise<any>;
   onAiEdit?: (prompt: string) => void;
   multiline?: boolean;
+  isEditing?: boolean;
 };
 
-export const EditableTypography: React.FC<EditableTypographyProps> = (props) => {
-  const { id, value, onSave, onAiEdit, multiline, variant } = props;
-
+export const EditableTypography = ({
+  id,
+  value,
+  onSave,
+  onAiEdit,
+  multiline,
+  ...typographyProps
+}: EditableTypographyProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const { isEditing, startEditing, tempValue, setTempValue, handleSave, handleCancel } = useEditableTypographyBase({
-    id,
     value,
     onSave,
-    multiline,
-    variant,
   });
 
   const { triggerPortal } = useTypographyActionsPortal({
@@ -37,46 +41,70 @@ export const EditableTypography: React.FC<EditableTypographyProps> = (props) => 
     triggerPortal(false);
   }, [triggerPortal, isEditing]);
 
+  const [isPortalVisible, setIsPortalVisible] = useState(false);
+
+  const getIsAnyTextSelected = useCallback(() => {
+    return window.getSelection()?.getRangeAt(0).toString()?.length;
+  }, []);
+
+  const onMouseDown = useCallback(() => {
+    const isAnyTextSelected = getIsAnyTextSelected();
+    if (isAnyTextSelected) {
+      triggerPortal(false);
+      setIsPortalVisible(false);
+    }
+  }, [triggerPortal, getIsAnyTextSelected]);
+
   const onMouseUp = useCallback(() => {
     if (!textRef.current) {
       return;
     }
 
-    const selection = window.getSelection();
-    if (!selection) {
-      triggerPortal(false);
-      return;
-    }
+    setIsPortalVisible((prevVisible) => {
+      const noTextSelected = !getIsAnyTextSelected();
 
-    const selectedRange = selection.getRangeAt(0);
-    const selectedRangeString = selectedRange.toString();
-    const isSelected = selectedRangeString && textRef.current.textContent?.includes(selectedRangeString);
-
-    if (isSelected) {
-      const rect = selectedRange.getBoundingClientRect();
-      const coords = {
-        x: rect.left + window.scrollX,
-        y: rect.top + window.scrollY - 50,
-      };
-      triggerPortal(true, coords);
-    } else {
-      triggerPortal(false);
-    }
-  }, [triggerPortal]);
+      if (!prevVisible && !isEditing && noTextSelected) {
+        const rect = textRef.current!.getBoundingClientRect();
+        const coords = {
+          x: rect.left + window.scrollX - 40,
+          y: rect.top + window.scrollY - 5,
+        };
+        triggerPortal(true, coords);
+        return true;
+      } else {
+        triggerPortal(false);
+        return false;
+      }
+    });
+  }, [getIsAnyTextSelected, isEditing, triggerPortal]);
 
   return (
-    <div ref={textRef} onMouseUp={onMouseUp}>
-      <EditableTypographyBase
-        id={id}
-        isEditing={isEditing}
-        tempValue={tempValue}
-        setTempValue={setTempValue}
-        handleSave={handleSave}
-        handleCancel={handleCancel}
-        multiline={multiline}
-        variant={variant}
-        value={value}
-      />
-    </div>
+    <EditableTypographyBase
+      ref={textRef}
+      onMouseUp={onMouseUp}
+      onMouseDown={onMouseDown}
+      typographyProps={{
+        ...typographyProps,
+        sx: {
+          border: `1px dashed ${isPortalVisible ? grey[300] : 'transparent'}`,
+          borderRadius: '10px',
+          width: 'fit-content',
+
+          // for debug
+          // background: alpha(pink[300], 0.1),
+
+          ...(typographyProps.sx ?? {}),
+        },
+      }}
+      id={id}
+      isEditing={isEditing}
+      tempValue={tempValue}
+      setTempValue={setTempValue}
+      handleSave={handleSave}
+      handleCancel={handleCancel}
+      multiline={multiline}
+      value={value}
+      variant={typographyProps.variant}
+    />
   );
 };

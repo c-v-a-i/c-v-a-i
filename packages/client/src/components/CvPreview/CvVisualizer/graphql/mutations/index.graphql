@@ -1,4 +1,4 @@
-mutation UpdateEducation (
+mutation UpdateEducationEntry (
   $id: ID!
   $cvId: ID!
   $name: String
@@ -19,5 +19,90 @@ mutation UpdateEducation (
     skills: $skills
     id: $id
     cvId: $cvId
+  )
+}
+
+mutation UpdateContactInfo (
+    $id: ID!
+    $cvId: ID!
+    $email: String
+    $phone: String
+    $name: String
+) {
+  updateContactInfo(
+    id: $id
+    cvId: $cvId
+    email: $email
+    phone: $phone
+    name: $name
+  )
+}
+
+mutation UpdateAboutMe (
+  $cvId: ID!
+  $id: ID!
+  $fieldName: String
+  $description: String
+) {
+  updateAboutMe(
+    id: $id
+    cvId: $cvId
+    fieldName: $fieldName
+    description: $description
+  )
+}
+
+mutation UpdateWorkExperienceEntry (
+  $cvId: ID!
+  $id: ID!
+  $name: String
+  $position: String
+  $duration: String
+  $location: String
+  $type: String
+  $description: String
+  $skills: [String!]
+) {
+  updateWorkExperience (
+     cvId: $cvId
+     id: $id
+     name: $name
+     position: $position
+     duration: $duration
+     location: $location
+     type: $type
+     description: $description
+     skills: $skills
+  )
+}
+
+mutation UpdateProjectEntry (
+  $cvId: ID!
+  $id: ID!
+  $name: String
+  $description: String
+  $skills: [String!]
+) {
+  updateProject(
+    cvId: $cvId
+    id: $id
+    name: $name
+    description: $description
+    skills: $skills
+  )
+}
+
+mutation UpdateSkillEntry (
+  $cvId: ID!
+  $id: ID!
+  $category: String
+#  entries: [String!]
+) {
+  updateSkill(
+    cvId: $cvId
+    id: $id
+    category: $category
+#    TODO: make it possible to update skill entries
+#    entries: $entries
   )
 }
