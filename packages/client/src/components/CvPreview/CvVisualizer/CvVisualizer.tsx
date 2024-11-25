@@ -13,9 +13,7 @@ type CvVisualizerProps = {
   cvData: GetCvInformationQuery['getCv'];
 };
 
-export const CvVisualizer = ({
-  cvData: { id, title, workExperienceEntries, projectEntries, skillEntries, contactInfo, aboutMe },
-}: CvVisualizerProps) => {
+export const CvVisualizer = ({ cvData: { id } }: CvVisualizerProps) => {
   return (
     <Box
       sx={{
@@ -29,26 +27,26 @@ export const CvVisualizer = ({
       }}
     >
       <Box display="flex" flexDirection="column" sx={{ width: '100%', gap: '20px' }}>
-        <ContactInfo cvId={id} title={title} contactInfo={contactInfo} />
-        <AboutMe data={aboutMe} />
+        <ContactInfo cvId={id} />
+        <AboutMe cvId={id} />
       </Box>
 
       <Divider flexItem />
 
       <Box display="flex" gap="80px" sx={{ overflowX: 'hidden' }}>
         <Box width={widthToPerc(8 / 12)} display="flex" flexDirection="column" gap={3}>
-          <WorkExperience data={workExperienceEntries} />
+          <WorkExperience cvId={id} />
 
           <Divider />
 
-          <Projects data={projectEntries} />
+          <Projects cvId={id} />
         </Box>
 
         <Box width={widthToPerc(4 / 12)}>
           <Box display="flex" flexDirection="column" gap="16px" sx={{ textAlign: 'end' }}>
             <Education cvId={id} />
 
-            <Skills data={skillEntries} />
+            <Skills cvId={id} />
           </Box>
         </Box>
       </Box>

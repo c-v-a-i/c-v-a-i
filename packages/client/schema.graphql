@@ -1,9 +1,11 @@
 directive @connection(filter: [String]!, key: String!) on FIELD
 
 type AboutMe {
-  aboutMe: String!
   createdAt: Date!
+  cvId: ID!
   deletedAt: Date
+  description: String!
+  fieldName: String!
   id: ID!
 }
 
@@ -17,15 +19,16 @@ type CV {
   projectEntries: [Project!]!
   skillEntries: [Skill!]!
   title: String!
-  user: User!
   workExperienceEntries: [WorkExperience!]!
 }
 
 type ContactInfo {
   createdAt: Date!
+  cvId: ID!
   deletedAt: Date
   email: String!
   id: ID!
+  name: String!
   phone: String!
 }
 
@@ -50,7 +53,12 @@ type Mutation {
   createNewCv(templateId: ID): CV!
   deleteCv(id: ID!): Boolean!
   logout: Boolean!
+  updateAboutMe(cvId: ID!, description: String, fieldName: String, id: ID!): Boolean!
+  updateContactInfo(cvId: ID!, email: String, id: ID!, name: String, phone: String): Boolean!
   updateEducation(cvId: ID!, degree: String, description: String, duration: String, id: ID!, location: String, name: String, skills: [String!], type: String): Boolean!
+  updateProject(cvId: ID!, description: String, id: ID!, name: String, skills: [String!]): Boolean!
+  updateSkill(category: String, cvId: ID!, id: ID!, items: [String!]): Boolean!
+  updateWorkExperience(cvId: ID!, description: String, duration: String, id: ID!, location: String, name: String, position: String, skills: [String!], type: String): Boolean!
 }
 
 type PaginatedCvObjectType {
@@ -60,6 +68,7 @@ type PaginatedCvObjectType {
 
 type Project {
   createdAt: Date!
+  cvId: ID!
   deletedAt: Date
   description: String!
   id: ID!
@@ -69,9 +78,14 @@ type Project {
 
 type Query {
   currentUser: User!
+  getAboutMe(cvId: ID!): AboutMe!
+  getContactInfo(cvId: ID!): ContactInfo!
   getCv(id: ID!): CV!
   getCvs: PaginatedCvObjectType!
   getEducationEntriesByCv(cvId: ID!): [Education!]!
+  getProjectEntries(cvId: ID!): [Project!]!
+  getSkillEntries(cvId: ID!): [Skill!]!
+  getWorkExperienceEntries(cvId: ID!): [WorkExperience!]!
   healthCheck: String!
 }
 
@@ -82,24 +96,32 @@ type ScopeObjectType {
 type Skill {
   category: String!
   createdAt: Date!
+  cvId: ID!
   deletedAt: Date
   id: ID!
   items: [String!]!
 }
 
 type User {
+  aboutMeEntries: [AboutMe!]!
+  contactInfoEntries: [ContactInfo!]!
   createdAt: Date!
   cvs: [CV!]!
   deletedAt: Date
+  educationEntries: [Education!]!
   email: String!
   firstName: String!
   googleId: String!
   id: ID!
   lastName: String!
+  projectEntries: [Project!]!
+  skillEntries: [Skill!]!
+  workExperienceEntries: [WorkExperience!]!
 }
 
 type WorkExperience {
   createdAt: Date!
+  cvId: ID!
   deletedAt: Date
   description: String!
   duration: String!

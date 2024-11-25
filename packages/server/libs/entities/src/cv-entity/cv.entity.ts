@@ -16,7 +16,6 @@ export class CV extends BaseEntity {
   @Column()
   title!: string;
 
-  @Field(() => User)
   @ManyToOne(() => User, (user) => user.cvs)
   user!: User;
 

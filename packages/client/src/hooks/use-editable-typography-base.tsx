@@ -1,13 +1,10 @@
-// useEditableTypographyBase.tsx
 import { useState, useCallback, useEffect } from 'react';
-import type { TypographyProps } from '@mui/material';
 
 type UseEditableTypographyBaseProps = {
   id: string;
   value: string;
   onSave: (newValue: string) => Promise<void>;
-  multiline?: boolean;
-  variant?: TypographyProps['variant'];
+  isEditing?: boolean;
 };
 
 type UseEditableTypographyBaseReturn = {
@@ -23,6 +20,7 @@ export const useEditableTypographyBase = ({
   id,
   value,
   onSave,
+  isEditing: defaultIsEditing, // for some reason, it doesn't work
 }: UseEditableTypographyBaseProps): UseEditableTypographyBaseReturn => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value);
