@@ -57,6 +57,14 @@ export type ContactInfo = {
   phone: Scalars['String']['output'];
 };
 
+export enum CvEntryType {
+  Education = 'EDUCATION',
+  Project = 'PROJECT',
+  WorkExperience = 'WORK_EXPERIENCE'
+}
+
+export type CvEntryUnion = Education | Project | WorkExperience;
+
 export type Education = {
   __typename?: 'Education';
   createdAt: Scalars['Date']['output'];
@@ -74,8 +82,14 @@ export type Education = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createMultipleWorkExperiences: Array<WorkExperience>;
   createNewCv: Cv;
+  createSkill: Skill;
+  createWorkExperience: WorkExperience;
   deleteCv: Scalars['Boolean']['output'];
+  deleteSkill: Scalars['Boolean']['output'];
+  deleteWorkExperience: Scalars['Boolean']['output'];
+  generateNewEntryItem: CvEntryUnion;
   logout: Scalars['Boolean']['output'];
   updateAboutMe: Scalars['Boolean']['output'];
   updateContactInfo: Scalars['Boolean']['output'];
@@ -86,13 +100,56 @@ export type Mutation = {
 };
 
 
+export type MutationCreateMultipleWorkExperiencesArgs = {
+  cvId: Scalars['ID']['input'];
+  entries: Array<WorkExperienceInputType>;
+};
+
+
 export type MutationCreateNewCvArgs = {
   templateId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+export type MutationCreateSkillArgs = {
+  category: Scalars['String']['input'];
+  cvId: Scalars['ID']['input'];
+  items: Array<Scalars['String']['input']>;
+};
+
+
+export type MutationCreateWorkExperienceArgs = {
+  cvId: Scalars['ID']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  duration?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  position: Scalars['String']['input'];
+  skills?: InputMaybe<Array<Scalars['String']['input']>>;
+  type?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationDeleteCvArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteSkillArgs = {
+  cvId: Scalars['ID']['input'];
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteWorkExperienceArgs = {
+  cvId: Scalars['ID']['input'];
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationGenerateNewEntryItemArgs = {
+  cvId: Scalars['ID']['input'];
+  type: CvEntryType;
 };
 
 
@@ -259,14 +316,24 @@ export type WorkExperience = {
   createdAt: Scalars['Date']['output'];
   cvId: Scalars['ID']['output'];
   deletedAt?: Maybe<Scalars['Date']['output']>;
-  description: Scalars['String']['output'];
-  duration: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  duration?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  location: Scalars['String']['output'];
+  location?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   position: Scalars['String']['output'];
-  skills: Array<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
+  skills?: Maybe<Array<Scalars['String']['output']>>;
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+export type WorkExperienceInputType = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  duration?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  position: Scalars['String']['input'];
+  skills?: InputMaybe<Array<Scalars['String']['input']>>;
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateCvMutationVariables = Exact<{
@@ -287,6 +354,8 @@ export type GetCvsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCvsQuery = { __typename?: 'Query', getCvs: { __typename?: 'PaginatedCvObjectType', count: number, items: Array<{ __typename?: 'CV', id: string, name: string }> } };
+
+export type WorkExperienceFragment = { __typename?: 'WorkExperience', id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null };
 
 export type UpdateEducationEntryMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -359,6 +428,36 @@ export type UpdateSkillEntryMutationVariables = Exact<{
 
 export type UpdateSkillEntryMutation = { __typename?: 'Mutation', updateSkill: boolean };
 
+export type CreateWorkExperienceEntryMutationVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  position: Scalars['String']['input'];
+  duration?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  skills?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+}>;
+
+
+export type CreateWorkExperienceEntryMutation = { __typename?: 'Mutation', createWorkExperience: { __typename?: 'WorkExperience', id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null } };
+
+export type DeleteWorkExperienceEntryMutationVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteWorkExperienceEntryMutation = { __typename?: 'Mutation', deleteWorkExperience: boolean };
+
+export type GenerateNewEntryItemMutationVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+  type: CvEntryType;
+}>;
+
+
+export type GenerateNewEntryItemMutation = { __typename?: 'Mutation', generateNewEntryItem: { __typename: 'Education' } | { __typename: 'Project' } | { __typename: 'WorkExperience', id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null } };
+
 export type GetEducationEntriesQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
 }>;
@@ -385,7 +484,7 @@ export type GetWorkExperienceEntriesQueryVariables = Exact<{
 }>;
 
 
-export type GetWorkExperienceEntriesQuery = { __typename?: 'Query', getWorkExperienceEntries: Array<{ __typename?: 'WorkExperience', id: string, name: string, position: string, duration: string, location: string, type: string, description: string, skills: Array<string> }> };
+export type GetWorkExperienceEntriesQuery = { __typename?: 'Query', getWorkExperienceEntries: Array<{ __typename?: 'WorkExperience', id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null }> };
 
 export type GetProjectEntriesQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -423,7 +522,18 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, googleId: string, createdAt: any, deletedAt?: any | null } };
 
-
+export const WorkExperienceFragmentDoc = gql`
+    fragment WorkExperienceFragment on WorkExperience {
+  id
+  name
+  position
+  duration
+  location
+  type
+  description
+  skills
+}
+    `;
 export const CreateCvDocument = gql`
     mutation CreateCv($templateId: ID) {
   createNewCv(templateId: $templateId) {
@@ -841,6 +951,149 @@ export function useUpdateSkillEntryMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateSkillEntryMutationHookResult = ReturnType<typeof useUpdateSkillEntryMutation>;
 export type UpdateSkillEntryMutationResult = Apollo.MutationResult<UpdateSkillEntryMutation>;
 export type UpdateSkillEntryMutationOptions = Apollo.BaseMutationOptions<UpdateSkillEntryMutation, UpdateSkillEntryMutationVariables>;
+export const CreateWorkExperienceEntryDocument = gql`
+    mutation CreateWorkExperienceEntry($cvId: ID!, $name: String!, $position: String!, $duration: String, $location: String, $type: String, $description: String, $skills: [String!]) {
+  createWorkExperience(
+    cvId: $cvId
+    name: $name
+    position: $position
+    duration: $duration
+    location: $location
+    type: $type
+    description: $description
+    skills: $skills
+  ) {
+    id
+    name
+    position
+    duration
+    location
+    type
+    description
+    skills
+  }
+}
+    `;
+export type CreateWorkExperienceEntryMutationFn = Apollo.MutationFunction<CreateWorkExperienceEntryMutation, CreateWorkExperienceEntryMutationVariables>;
+export type CreateWorkExperienceEntryComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<CreateWorkExperienceEntryMutation, CreateWorkExperienceEntryMutationVariables>, 'mutation'>;
+
+    export const CreateWorkExperienceEntryComponent = (props: CreateWorkExperienceEntryComponentProps) => (
+      <ApolloReactComponents.Mutation<CreateWorkExperienceEntryMutation, CreateWorkExperienceEntryMutationVariables> mutation={CreateWorkExperienceEntryDocument} {...props} />
+    );
+    
+
+/**
+ * __useCreateWorkExperienceEntryMutation__
+ *
+ * To run a mutation, you first call `useCreateWorkExperienceEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateWorkExperienceEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createWorkExperienceEntryMutation, { data, loading, error }] = useCreateWorkExperienceEntryMutation({
+ *   variables: {
+ *      cvId: // value for 'cvId'
+ *      name: // value for 'name'
+ *      position: // value for 'position'
+ *      duration: // value for 'duration'
+ *      location: // value for 'location'
+ *      type: // value for 'type'
+ *      description: // value for 'description'
+ *      skills: // value for 'skills'
+ *   },
+ * });
+ */
+export function useCreateWorkExperienceEntryMutation(baseOptions?: Apollo.MutationHookOptions<CreateWorkExperienceEntryMutation, CreateWorkExperienceEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateWorkExperienceEntryMutation, CreateWorkExperienceEntryMutationVariables>(CreateWorkExperienceEntryDocument, options);
+      }
+export type CreateWorkExperienceEntryMutationHookResult = ReturnType<typeof useCreateWorkExperienceEntryMutation>;
+export type CreateWorkExperienceEntryMutationResult = Apollo.MutationResult<CreateWorkExperienceEntryMutation>;
+export type CreateWorkExperienceEntryMutationOptions = Apollo.BaseMutationOptions<CreateWorkExperienceEntryMutation, CreateWorkExperienceEntryMutationVariables>;
+export const DeleteWorkExperienceEntryDocument = gql`
+    mutation DeleteWorkExperienceEntry($cvId: ID!, $id: ID!) {
+  deleteWorkExperience(cvId: $cvId, id: $id)
+}
+    `;
+export type DeleteWorkExperienceEntryMutationFn = Apollo.MutationFunction<DeleteWorkExperienceEntryMutation, DeleteWorkExperienceEntryMutationVariables>;
+export type DeleteWorkExperienceEntryComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<DeleteWorkExperienceEntryMutation, DeleteWorkExperienceEntryMutationVariables>, 'mutation'>;
+
+    export const DeleteWorkExperienceEntryComponent = (props: DeleteWorkExperienceEntryComponentProps) => (
+      <ApolloReactComponents.Mutation<DeleteWorkExperienceEntryMutation, DeleteWorkExperienceEntryMutationVariables> mutation={DeleteWorkExperienceEntryDocument} {...props} />
+    );
+    
+
+/**
+ * __useDeleteWorkExperienceEntryMutation__
+ *
+ * To run a mutation, you first call `useDeleteWorkExperienceEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteWorkExperienceEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteWorkExperienceEntryMutation, { data, loading, error }] = useDeleteWorkExperienceEntryMutation({
+ *   variables: {
+ *      cvId: // value for 'cvId'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteWorkExperienceEntryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteWorkExperienceEntryMutation, DeleteWorkExperienceEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteWorkExperienceEntryMutation, DeleteWorkExperienceEntryMutationVariables>(DeleteWorkExperienceEntryDocument, options);
+      }
+export type DeleteWorkExperienceEntryMutationHookResult = ReturnType<typeof useDeleteWorkExperienceEntryMutation>;
+export type DeleteWorkExperienceEntryMutationResult = Apollo.MutationResult<DeleteWorkExperienceEntryMutation>;
+export type DeleteWorkExperienceEntryMutationOptions = Apollo.BaseMutationOptions<DeleteWorkExperienceEntryMutation, DeleteWorkExperienceEntryMutationVariables>;
+export const GenerateNewEntryItemDocument = gql`
+    mutation GenerateNewEntryItem($cvId: ID!, $type: CvEntryType!) {
+  generateNewEntryItem(cvId: $cvId, type: $type) {
+    __typename
+    ... on WorkExperience {
+      ...WorkExperienceFragment
+    }
+  }
+}
+    ${WorkExperienceFragmentDoc}`;
+export type GenerateNewEntryItemMutationFn = Apollo.MutationFunction<GenerateNewEntryItemMutation, GenerateNewEntryItemMutationVariables>;
+export type GenerateNewEntryItemComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<GenerateNewEntryItemMutation, GenerateNewEntryItemMutationVariables>, 'mutation'>;
+
+    export const GenerateNewEntryItemComponent = (props: GenerateNewEntryItemComponentProps) => (
+      <ApolloReactComponents.Mutation<GenerateNewEntryItemMutation, GenerateNewEntryItemMutationVariables> mutation={GenerateNewEntryItemDocument} {...props} />
+    );
+    
+
+/**
+ * __useGenerateNewEntryItemMutation__
+ *
+ * To run a mutation, you first call `useGenerateNewEntryItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGenerateNewEntryItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [generateNewEntryItemMutation, { data, loading, error }] = useGenerateNewEntryItemMutation({
+ *   variables: {
+ *      cvId: // value for 'cvId'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useGenerateNewEntryItemMutation(baseOptions?: Apollo.MutationHookOptions<GenerateNewEntryItemMutation, GenerateNewEntryItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GenerateNewEntryItemMutation, GenerateNewEntryItemMutationVariables>(GenerateNewEntryItemDocument, options);
+      }
+export type GenerateNewEntryItemMutationHookResult = ReturnType<typeof useGenerateNewEntryItemMutation>;
+export type GenerateNewEntryItemMutationResult = Apollo.MutationResult<GenerateNewEntryItemMutation>;
+export type GenerateNewEntryItemMutationOptions = Apollo.BaseMutationOptions<GenerateNewEntryItemMutation, GenerateNewEntryItemMutationVariables>;
 export const GetEducationEntriesDocument = gql`
     query GetEducationEntries($cvId: ID!) {
   getEducationEntriesByCv(cvId: $cvId) {
@@ -1002,17 +1255,10 @@ export function refetchGetAboutMeQuery(variables: GetAboutMeQueryVariables) {
 export const GetWorkExperienceEntriesDocument = gql`
     query GetWorkExperienceEntries($cvId: ID!) {
   getWorkExperienceEntries(cvId: $cvId) {
-    id
-    name
-    position
-    duration
-    location
-    type
-    description
-    skills
+    ...WorkExperienceFragment
   }
 }
-    `;
+    ${WorkExperienceFragmentDoc}`;
 export type GetWorkExperienceEntriesComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetWorkExperienceEntriesQuery, GetWorkExperienceEntriesQueryVariables>, 'query'> & ({ variables: GetWorkExperienceEntriesQueryVariables; skip?: boolean; } | { skip: boolean; });
 
     export const GetWorkExperienceEntriesComponent = (props: GetWorkExperienceEntriesComponentProps) => (

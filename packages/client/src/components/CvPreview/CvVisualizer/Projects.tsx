@@ -31,10 +31,6 @@ export const Projects: React.FC<CvEntryComponentProps> = ({ cvId }) => {
           id,
           [fieldName]: value,
         },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateProject: true,
-        },
       });
     } catch (error) {
       console.error('Error updating project entry:', error);

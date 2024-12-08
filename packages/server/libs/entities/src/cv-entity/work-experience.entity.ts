@@ -15,25 +15,25 @@ export class WorkExperience extends BaseEntity {
   @Column()
   position!: string;
 
-  @Field(() => String)
-  @Column()
-  duration!: string;
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  duration?: string;
 
-  @Field(() => String)
-  @Column()
-  location!: string;
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  location?: string;
 
-  @Field(() => String)
-  @Column()
-  type!: string; // Full-time / Contract
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  type?: string; // Full-time / Contract
 
-  @Field(() => String)
-  @Column({ type: 'text' })
-  description!: string;
+  @Field(() => String, { nullable: true })
+  @Column({ type: 'text', nullable: true })
+  description?: string;
 
-  @Field(() => [String])
-  @Column('simple-array')
-  skills!: string[];
+  @Field(() => [String], { nullable: true })
+  @Column('simple-array', { nullable: true })
+  skills?: string[];
 
   @ManyToOne(() => CV, (cv) => cv.workExperienceEntries)
   cv!: CV;

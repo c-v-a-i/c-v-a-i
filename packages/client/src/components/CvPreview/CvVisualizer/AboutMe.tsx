@@ -21,10 +21,6 @@ export const AboutMe = ({ cvId }: CvEntryComponentProps) => {
         id,
         [fieldName]: value,
       },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        updateAboutMe: true,
-      },
     });
   };
 

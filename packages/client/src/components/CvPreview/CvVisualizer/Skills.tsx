@@ -30,10 +30,6 @@ export const Skills = ({ cvId }: CvEntryComponentProps) => {
         id,
         [fieldName]: value,
       },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        updateSkill: true,
-      },
     });
   };
 

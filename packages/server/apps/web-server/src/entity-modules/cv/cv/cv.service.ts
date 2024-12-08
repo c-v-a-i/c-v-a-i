@@ -14,11 +14,28 @@ import {
 import { ContactInfo, Education, Project, Skill, User, WorkExperience } from '@server/entities';
 import { UserService } from '../../user/user.service';
 import { AboutMe } from '@server/entities/cv-entity/about-me.entity';
+import CvEntryType from '../../../../../../libs/common/src/enums/cv-entry-type.enum';
+import { match } from 'ts-pattern';
 
-// TODO: use data from user google account:
-//  name
-//  email
-//  phoneNumber if exists
+// TODO:
+//  1. use data from user google account, when creating an example cv
+//    name
+//    email
+//    phoneNumber if exists
+//  2. Use mongoDB so there's no need to have this much of relations, because it's a complete shit :(
+
+type CvEntryTypeToEntryMap = {
+  [CvEntryType.WORK_EXPERIENCE]: WorkExperience;
+  [CvEntryType.EDUCATION]: Education;
+  [CvEntryType.PROJECT]: Project;
+};
+
+type GenerateNewEntryItemProps = {
+  type: CvEntryType;
+  cvId: string;
+  userId: string;
+};
+
 @Injectable()
 export class CvService extends CrudService<CV> {
   private readonly logger = new Logger(CvService.name);
@@ -31,6 +48,65 @@ export class CvService extends CrudService<CV> {
   ) {
     super(CV.name, { updatedAt: 'DESC' }, cvRepository, 'userId');
   }
+
+  generateNewEntryItem = async ({
+    type,
+    cvId,
+    userId,
+  }: GenerateNewEntryItemProps): Promise<CvEntryTypeToEntryMap[CvEntryType]> => {
+    const cv = await this.cvRepository.findOne({
+      where: { id: cvId, userId },
+      relations: ['workExperienceEntries'],
+    });
+    if (!cv) {
+      throw new BadRequestException('No CV found');
+    }
+
+    return match(type)
+      .with(CvEntryType.WORK_EXPERIENCE, async () => {
+        const repo = this.dataSource.getRepository(WorkExperience);
+        const newEntry = await repo.save(
+          repo.create({
+            cvId,
+            userId,
+            position: 'New Position',
+            name: 'New Co',
+            duration: '2020',
+          })
+        );
+
+        cv.workExperienceEntries.push(newEntry);
+        await this.cvRepository.save(cv);
+
+        return newEntry;
+      })
+      .with(CvEntryType.PROJECT, async () => {
+        // Create a new Project entry
+        const repo = this.dataSource.getRepository(Project);
+        return repo.save(
+          repo.create({
+            cvId,
+            userId,
+            name: 'New Project',
+            description: 'A new project',
+          })
+        );
+      })
+      .with(CvEntryType.EDUCATION, async () => {
+        // Create a new Education entry
+        const repo = this.dataSource.getRepository(Education);
+        return repo.save(
+          repo.create({
+            cvId,
+            userId,
+            name: 'Brno University of Technology',
+            degree: 'B.Sc',
+            duration: '2020',
+          })
+        );
+      })
+      .exhaustive();
+  };
 
   async findAllByUserAndCount(userId: string): Promise<[CV[], number]> {
     return this.cvRepository.findAndCount({ where: { userId } });

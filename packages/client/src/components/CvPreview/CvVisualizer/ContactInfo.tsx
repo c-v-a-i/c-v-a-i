@@ -25,16 +25,12 @@ export const ContactInfo = ({ cvId }: CvEntryComponentProps) => {
         id,
         [fieldName]: value,
       },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        updateContactInfo: true,
-      },
     });
   };
 
   return (
     <GetContactInfoComponent
-      fetchPolicy={'cache-first'}
+      // fetchPolicy={'cache-first'}
       variables={{
         cvId,
       }}

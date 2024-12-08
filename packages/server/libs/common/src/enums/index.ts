@@ -1,1 +1,1 @@
-export { default as ExampleType } from './example.enum';
+export { default as CvEntryType } from './cv-entry-type.enum';

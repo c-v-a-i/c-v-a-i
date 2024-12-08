@@ -5,7 +5,12 @@ import { GqlAuthGuard } from '../../auth/guards/gql-auth/gql-auth.guard';
 import { Skill } from '@server/entities';
 import { DecodedUserObjectType } from '../../auth/dto';
 import { CurrentUser } from '../../common/decorators';
-import { GetSkillEntriesArgsType, UpdateSkillEntryArgsType } from './dto';
+import {
+  CreateSkillEntryArgsType,
+  DeleteSkillEntryArgsType,
+  GetSkillEntriesArgsType,
+  UpdateSkillEntryArgsType,
+} from './dto';
 
 @UseGuards(GqlAuthGuard)
 @Resolver()
@@ -32,6 +37,21 @@ export class SkillResolver {
     @Args() data: UpdateSkillEntryArgsType
   ): Promise<boolean> {
     await this.skillService.update({ data }, client_id);
+    return true;
+  }
+
+  @Mutation(() => Skill)
+  async createSkill(@CurrentUser() {}: DecodedUserObjectType, @Args() data: CreateSkillEntryArgsType): Promise<Skill> {
+    return this.skillService.createDto(data);
+  }
+
+  @Mutation(() => Boolean)
+  async deleteSkill(
+    @CurrentUser() { client_id }: DecodedUserObjectType,
+    @Args() { id }: DeleteSkillEntryArgsType
+  ): Promise<boolean> {
+    // await this.skillService.remove({ id, cvId }, client_id);
+    await this.skillService.removeOne({ id }, client_id);
     return true;
   }
 }
