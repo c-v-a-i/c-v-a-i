@@ -1,0 +1,10 @@
+fragment WorkExperienceFragment on WorkExperience {
+  id
+  name
+  position
+  duration
+  location
+  type
+  description
+  skills
+}

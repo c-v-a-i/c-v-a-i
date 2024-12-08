@@ -2,10 +2,10 @@ import React from 'react';
 import { ListItemText, ListItemSecondaryAction, Box, ListItem } from '@mui/material';
 import type { ListItem as ListItemType } from './types';
 import { TypographyWithOverflow } from '../index';
-import type { OptionsMenuProps } from './OptionsMenu';
-import { OptionsMenu } from './OptionsMenu';
+import type { OptionsMenuProps } from '../PopupMenu';
+import { PopupMenu } from '../PopupMenu';
 import { useEditableTypographyBase } from '../../../hooks';
-import { EditableTypographyBase } from '../EditableTypographyBase';
+import { EditableTypographyBase } from '../Typography/EditableTypographyBase';
 
 type MenuItemProps = {
   item: ListItemType;
@@ -53,8 +53,8 @@ export const MenuItem = React.memo(({ item, menuOptions, onSelect }: MenuItemPro
         <TypographyWithOverflow sx={{ width: '90%' }}>{item.name}</TypographyWithOverflow>
       </ListItemText>
       <ListItemSecondaryAction>
-        <OptionsMenu
-          for={item}
+        <PopupMenu
+          id={item.id}
           options={[
             {
               label: 'Rename',

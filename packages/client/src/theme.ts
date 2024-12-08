@@ -10,9 +10,9 @@ const customPalette = {
   },
   secondary: {
     light: alpha('#f0ebf2', 0.6),
-    main: '#7c7380',
-    dark: '#19171a',
-    contrastText: '#302933',
+    main: '#b468d5',
+    dark: '#9254ad',
+    contrastText: '#603772',
   },
   error: {
     light: '#c47686',

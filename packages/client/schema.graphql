@@ -32,6 +32,14 @@ type ContactInfo {
   phone: String!
 }
 
+enum CvEntryType {
+  EDUCATION
+  PROJECT
+  WORK_EXPERIENCE
+}
+
+union CvEntryUnion = Education | Project | WorkExperience
+
 """Date custom scalar type"""
 scalar Date
 
@@ -50,8 +58,14 @@ type Education {
 }
 
 type Mutation {
+  createMultipleWorkExperiences(cvId: ID!, entries: [WorkExperienceInputType!]!): [WorkExperience!]!
   createNewCv(templateId: ID): CV!
+  createSkill(category: String!, cvId: ID!, items: [String!]!): Skill!
+  createWorkExperience(cvId: ID!, description: String, duration: String, location: String, name: String!, position: String!, skills: [String!], type: String): WorkExperience!
   deleteCv(id: ID!): Boolean!
+  deleteSkill(cvId: ID!, id: ID!): Boolean!
+  deleteWorkExperience(cvId: ID!, id: ID!): Boolean!
+  generateNewEntryItem(cvId: ID!, type: CvEntryType!): CvEntryUnion!
   logout: Boolean!
   updateAboutMe(cvId: ID!, description: String, fieldName: String, id: ID!): Boolean!
   updateContactInfo(cvId: ID!, email: String, id: ID!, name: String, phone: String): Boolean!
@@ -123,12 +137,22 @@ type WorkExperience {
   createdAt: Date!
   cvId: ID!
   deletedAt: Date
-  description: String!
-  duration: String!
+  description: String
+  duration: String
   id: ID!
-  location: String!
+  location: String
   name: String!
   position: String!
-  skills: [String!]!
-  type: String!
+  skills: [String!]
+  type: String
+}
+
+input WorkExperienceInputType {
+  description: String
+  duration: String
+  location: String
+  name: String!
+  position: String!
+  skills: [String!]
+  type: String
 }

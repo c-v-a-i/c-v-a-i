@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import type { TypographyProps } from '@mui/material';
 import { useEditableTypographyBase } from '../../../hooks';
 import { useTypographyActionsPortal } from '../../../hooks';
-import { EditableTypographyBase } from '../../atoms/EditableTypographyBase';
+import { EditableTypographyBase } from '../../atoms/Typography/EditableTypographyBase';
 import { grey } from '@mui/material/colors';
 
 type EditableTypographyProps = Omit<TypographyProps, 'ref'> & {
@@ -15,12 +15,59 @@ type EditableTypographyProps = Omit<TypographyProps, 'ref'> & {
   isEditing?: boolean;
 };
 
+export const EditableTypographyLight = ({
+  id,
+  value,
+  onSave,
+  onAiEdit,
+  multiline,
+  isEditing: defaultIsEditing,
+  ...typographyProps
+}: EditableTypographyProps) => {
+  const { isEditing, startEditing, tempValue, setTempValue, handleSave, handleCancel } = useEditableTypographyBase({
+    value,
+    onSave,
+  });
+
+  useEffect(() => {
+    if (defaultIsEditing) {
+      startEditing();
+    }
+  }, [startEditing, defaultIsEditing]);
+
+  return (
+    <EditableTypographyBase
+      typographyProps={{
+        ...typographyProps,
+        sx: {
+          borderRadius: '10px',
+          width: 'fit-content',
+
+          // background: alpha(pink[300], 0.1),
+
+          ...(typographyProps.sx ?? {}),
+        },
+      }}
+      id={id}
+      isEditing={isEditing}
+      tempValue={tempValue}
+      setTempValue={setTempValue}
+      handleSave={handleSave}
+      handleCancel={handleCancel}
+      multiline={multiline}
+      value={value}
+      variant={typographyProps.variant}
+    />
+  );
+};
+
 export const EditableTypography = ({
   id,
   value,
   onSave,
   onAiEdit,
   multiline,
+  isEditing: defaultIsEditing,
   ...typographyProps
 }: EditableTypographyProps) => {
   const textRef = useRef<HTMLDivElement>(null);
@@ -28,6 +75,12 @@ export const EditableTypography = ({
     value,
     onSave,
   });
+
+  useEffect(() => {
+    if (defaultIsEditing) {
+      startEditing();
+    }
+  }, [startEditing, defaultIsEditing]);
 
   const { triggerPortal } = useTypographyActionsPortal({
     onEdit: startEditing,

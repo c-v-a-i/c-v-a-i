@@ -106,3 +106,60 @@ mutation UpdateSkillEntry (
 #    entries: $entries
   )
 }
+
+mutation CreateWorkExperienceEntry(
+  $cvId: ID!
+  $name: String!
+  $position: String!
+  $duration: String
+  $location: String
+  $type: String
+  $description: String
+  $skills: [String!]
+) {
+  createWorkExperience(
+    cvId: $cvId
+    name: $name
+    position: $position
+    duration: $duration
+    location: $location
+    type: $type
+    description: $description
+    skills: $skills
+  ) {
+    id
+    name
+    position
+    duration
+    location
+    type
+    description
+    skills
+  }
+}
+
+mutation DeleteWorkExperienceEntry(
+  $cvId: ID!
+  $id: ID!
+) {
+  deleteWorkExperience(
+    cvId: $cvId
+    id: $id
+  )
+}
+
+
+mutation GenerateNewEntryItem(
+  $cvId: ID!
+  $type: CvEntryType!
+) {
+  generateNewEntryItem(
+    cvId: $cvId
+    type: $type
+  ) {
+    __typename
+      ... on WorkExperience {
+        ...WorkExperienceFragment
+      }
+  }
+}
