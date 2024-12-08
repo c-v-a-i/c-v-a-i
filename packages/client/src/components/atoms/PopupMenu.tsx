@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
+import type { IconButtonProps } from '@mui/material';
 import { Menu, MenuItem, IconButton } from '@mui/material';
 import { MoreVert as MoreVertIcon } from '@mui/icons-material';
-import type { ListItem as ListItemType } from './types';
 
-export type OptionsMenuProps = {
-  for: ListItemType;
-  options: { label: string; action: (id: ListItemType['id']) => void }[];
+export type OptionsMenuProps = IconButtonProps & {
+  id: string;
+  options: { label: string; action: (id: string) => void }[];
 };
 
-export const OptionsMenu: React.FC<OptionsMenuProps> = ({ options, for: item }) => {
+export const PopupMenu: React.FC<OptionsMenuProps> = ({ options, id, ...props }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -26,20 +26,20 @@ export const OptionsMenu: React.FC<OptionsMenuProps> = ({ options, for: item }) 
 
   return (
     <>
-      <IconButton edge="end" aria-label="options" onClick={handleMenuOpen}>
+      <IconButton edge="end" aria-label="options" onClick={handleMenuOpen} {...props}>
         <MoreVertIcon />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
-        PaperProps={{
-          elevation: 2,
-          sx: { minWidth: 150 },
-        }}
+        // PaperProps={{
+        //   elevation: 2,
+        //   sx: { minWidth: 150 },
+        // }}
       >
         {options.map((option, index) => (
-          <MenuItem key={index} onClick={() => handleOptionClick(() => option.action(item.id))}>
+          <MenuItem key={index} onClick={() => handleOptionClick(() => option.action(id))}>
             {option.label}
           </MenuItem>
         ))}

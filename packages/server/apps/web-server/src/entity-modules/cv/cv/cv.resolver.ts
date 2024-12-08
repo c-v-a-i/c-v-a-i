@@ -8,16 +8,20 @@ import { DecodedUserObjectType } from '../../../auth/dto';
 import { DataloaderService } from '../../../core/dataloader/dataloader.service';
 import { PaginatedCvObjectType } from './dto/paginated-cv.object-type';
 import { GenerateCvFromTemplateArgsType } from './dto/generate-cv-from-template.args-type';
-import { DeleteCvArgsType } from './dto/hui.args-type';
+import { DeleteCvArgsType } from './dto/delete-cv.args-type';
 import { ContactInfo, Education, Project, Skill, WorkExperience } from '@server/entities';
-import { GetCvArgsType } from './dto';
+import { CvEntryUnion, GetCvArgsType } from './dto';
 import { AboutMe } from '@server/entities/cv-entity/about-me.entity';
+import { GenerateNewEntryItemArgsType } from './dto/generate-new-entry-item.args-type';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => CV)
 export class CvResolver {
   private readonly logger = new Logger(CvResolver.name);
-  constructor(private readonly cvService: CvService, private readonly dataloaderService: DataloaderService) {}
+  constructor(
+    private readonly cvService: CvService,
+    private readonly dataloaderService: DataloaderService
+  ) {}
 
   @Query(() => PaginatedCvObjectType)
   async getCvs(@CurrentUser() user: DecodedUserObjectType): Promise<PaginatedCvObjectType> {
@@ -31,10 +35,7 @@ export class CvResolver {
     @Args()
     { id }: GetCvArgsType
   ): Promise<CV> {
-    const foundCv = await this.cvService.findOne({ id }, client_id);
-    this.logger.debug(`Found cv: ${foundCv?.title}`);
-
-    return foundCv;
+    return this.cvService.findOne({ id }, client_id);
   }
 
   @Mutation(() => CV)
@@ -59,6 +60,20 @@ export class CvResolver {
     { id }: DeleteCvArgsType
   ): Promise<boolean> {
     return this.cvService.removeOne({ id }, client_id);
+  }
+
+  // TODO: add checks ensuring cvID belongs to the authenticated user
+  @Mutation(() => CvEntryUnion)
+  async generateNewEntryItem(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args()
+    { cvId, type }: GenerateNewEntryItemArgsType
+  ): Promise<typeof CvEntryUnion> {
+    return this.cvService.generateNewEntryItem({
+      type,
+      cvId,
+      userId,
+    });
   }
 
   // we wanna make it more granular introducing different resolvers for each entity CV consists of

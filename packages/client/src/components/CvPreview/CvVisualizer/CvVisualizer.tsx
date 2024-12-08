@@ -5,7 +5,7 @@ import { AboutMe } from './AboutMe';
 import { widthToPerc } from '../../utils';
 import { Education } from './Education';
 import { ContactInfo } from './ContactInfo';
-import { WorkExperience } from './WorkExperience';
+import { WorkExperience } from './WorkExperience/WorkExperience';
 import { Projects } from './Projects';
 import { Skills } from './Skills';
 

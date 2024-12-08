@@ -2,6 +2,7 @@ import React from 'react';
 import { TextField, Box } from '@mui/material';
 import type { TypographyProps, TextFieldProps, BoxProps } from '@mui/material';
 import { TypographyWithMarkdown } from './TypographyWithMarkdown';
+import { useMeasureTextWidth } from './utils';
 
 type EditableTypographyBaseProps = Pick<BoxProps, 'onMouseUp' | 'onMouseDown'> & {
   id: string;
@@ -43,13 +44,26 @@ export const EditableTypographyBase = React.memo(
         padding: '0 2px',
       };
 
+      const typographyWidth = useMeasureTextWidth({
+        text: value,
+        variant,
+      });
+
       return (
-        <Box id={id} sx={{ width: 'fit-content' }} onMouseUp={onMouseUp} onMouseDown={onMouseDown} ref={ref}>
+        <Box
+          id={id}
+          sx={{
+            width: `min(${typographyWidth}, 100%)`,
+          }}
+          onMouseUp={onMouseUp}
+          onMouseDown={onMouseDown}
+          ref={ref}
+        >
           {isEditing ? (
             <TextField
               value={tempValue}
               onChange={(e) => setTempValue(e.target.value)}
-              onBlur={handleCancel}
+              // onBlur={handleCancel}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   handleSave();

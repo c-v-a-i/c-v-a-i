@@ -26,10 +26,6 @@ export const Education = ({ cvId }: CvEntryComponentProps) => {
         id,
         [fieldName]: value,
       },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        updateEducation: true,
-      },
     });
   };
 

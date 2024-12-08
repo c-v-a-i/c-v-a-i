@@ -41,14 +41,7 @@ query GetWorkExperienceEntries (
   $cvId: ID!
 ) {
   getWorkExperienceEntries(cvId: $cvId) {
-    id
-    name
-    position
-    duration
-    location
-    type
-    description
-    skills
+    ...WorkExperienceFragment
   }
 }
 
