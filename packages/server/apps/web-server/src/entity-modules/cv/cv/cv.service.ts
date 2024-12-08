@@ -2,7 +2,6 @@ import { BadRequestException, forwardRef, Inject, Injectable, Logger, NotFoundEx
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { CV } from '@server/entities/cv-entity/cv.entity';
-import { CrudService } from '@server/common/services/crud-service';
 import {
   exampleAboutMe,
   exampleContactInfo,
@@ -37,7 +36,7 @@ type GenerateNewEntryItemProps = {
 };
 
 @Injectable()
-export class CvService extends CrudService<CV> {
+export class CvService {
   private readonly logger = new Logger(CvService.name);
   constructor(
     private readonly dataSource: DataSource,
@@ -45,8 +44,19 @@ export class CvService extends CrudService<CV> {
     private readonly cvRepository: Repository<CV>,
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService
-  ) {
-    super(CV.name, { updatedAt: 'DESC' }, cvRepository, 'userId');
+  ) {}
+
+  async findOne(where: Pick<CV, 'id' | 'userId'>): Promise<CV> {
+    return this.cvRepository.findOneOrFail({ where: where });
+  }
+
+  async removeOne(where: Pick<CV, 'id' | 'userId'>) {
+    const entityToRemove = await this.findOne(where);
+    if (!entityToRemove) {
+      return false;
+    }
+    await this.cvRepository.remove([entityToRemove]);
+    return true;
   }
 
   generateNewEntryItem = async ({

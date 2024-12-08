@@ -31,11 +31,11 @@ export class CvResolver {
 
   @Query(() => CV)
   async getCv(
-    @CurrentUser() { client_id }: DecodedUserObjectType,
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
     @Args()
     { id }: GetCvArgsType
   ): Promise<CV> {
-    return this.cvService.findOne({ id }, client_id);
+    return this.cvService.findOne({ id, userId });
   }
 
   @Mutation(() => CV)
@@ -55,11 +55,11 @@ export class CvResolver {
 
   @Mutation(() => Boolean)
   async deleteCv(
-    @CurrentUser() { client_id }: DecodedUserObjectType,
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
     @Args()
     { id }: DeleteCvArgsType
   ): Promise<boolean> {
-    return this.cvService.removeOne({ id }, client_id);
+    return this.cvService.removeOne({ id, userId });
   }
 
   // TODO: add checks ensuring cvID belongs to the authenticated user
