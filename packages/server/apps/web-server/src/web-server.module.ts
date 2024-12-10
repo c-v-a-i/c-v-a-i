@@ -5,22 +5,23 @@ import { HealthCheckGraphQLModule } from './services/healthcheck-graphql/healthc
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DateScalar } from '@server/common/graphql/scalars';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { typeormConfig } from '../../../config/typeorm/typeorm.config';
 import { UserModule } from './entity-modules/user/user.module';
-import { CvModule } from './entity-modules/cv/cv/cv.module';
-import { EducationModule } from './entity-modules/education/education.module';
-import { AboutMeModule } from './entity-modules/about-me/about-me.module';
-import { ContactInfoModule } from './entity-modules/contact-info/contact-info.module';
-import { ProjectModule } from './entity-modules/project/project.module';
-import { SkillModule } from './entity-modules/skill/skill.module';
-import { WorkExperienceModule } from './entity-modules/work-experience/work-experience.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { CvModule } from './services/cv/cv.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeormConfig],
+    }),
+    MongooseModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+      }),
+      inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeormConfigService,
@@ -30,12 +31,6 @@ import { WorkExperienceModule } from './entity-modules/work-experience/work-expe
     AuthModule,
     UserModule,
     CvModule,
-    AboutMeModule,
-    ContactInfoModule,
-    ProjectModule,
-    SkillModule,
-    WorkExperienceModule,
-    EducationModule,
   ],
   providers: [DateScalar],
 })

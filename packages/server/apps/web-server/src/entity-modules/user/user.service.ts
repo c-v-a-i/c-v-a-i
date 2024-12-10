@@ -3,7 +3,7 @@ import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@server/entities';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { CvService } from '../cv/cv/cv.service';
+import { CvService } from '../../services/cv/cv.service';
 
 @Injectable()
 export class UserService {

@@ -1,7 +1,7 @@
-import type { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class InitialMigration1731862934482 implements MigrationInterface {
-    name = 'InitialMigration1731862934482'
+export class InitialMigration1733843160819 implements MigrationInterface {
+    name = 'InitialMigration1733843160819'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "refresh_token" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "version" integer NOT NULL, "token" character varying(255) NOT NULL, "validSince" TIMESTAMP WITH TIME ZONE NOT NULL, "validUntil" TIMESTAMP WITH TIME ZONE NOT NULL, "lastUsed" TIMESTAMP WITH TIME ZONE, "blackListed" boolean NOT NULL DEFAULT false, "userId" uuid NOT NULL, CONSTRAINT "PK_c9a872c82fab8452b185c132cae" PRIMARY KEY ("id", "token"))`);

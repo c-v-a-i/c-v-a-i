@@ -4,6 +4,7 @@ enum CvEntryType {
   WORK_EXPERIENCE = 'WORK_EXPERIENCE',
   PROJECT = 'PROJECT',
   EDUCATION = 'EDUCATION',
+  SKILL = 'SKILL',
 }
 
 registerEnumType(CvEntryType, {

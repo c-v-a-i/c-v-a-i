@@ -113,7 +113,6 @@ export const exampleProjectEntries = [
   {
     name: 'Machine Learning Projects',
     description: [
-      // FIXME: use markdown for links and some formatting.
       `Got the 2nd place in the [Albayzin 2022 ASR challenge](https://www.fit.vut.cz/research/group/speech/public/publi/2022/kocour22_iberspeech.pdf)`,
       `Got the 3rd place in MTM22 (Machine Translation Marathon) by implementing an ASR model for TED talks using transformer adaptors`,
       'Created a [joint model](https://github.com/SkuratovichA/SUR) for person identification by speech and image. Implemented a logic for joining outputs from these two modalities',
