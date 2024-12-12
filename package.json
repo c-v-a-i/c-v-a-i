@@ -35,7 +35,6 @@
     "webpack-dev-server": "^4.2.1"
   },
   "scripts": {
-    "watch": "tsc -b -w packages/common/tsconfig.json packages/api/tsconfig.json",
     "client": "yarn workspace @c-v-a-i/client",
     "server": "yarn workspace @c-v-a-i/server",
     "common": "yarn workspace @c-v-a-i/common",

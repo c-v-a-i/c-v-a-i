@@ -1,10 +1,13 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { Cv } from '../cv.schema';
+import pick from 'lodash/pick';
+import { Document } from 'mongoose';
+import { AreTypesEqual } from '@server/common/types';
 
 @ObjectType()
 export class AboutMeObjectType {
   @Field(() => ID)
-  id!: string;
+  _id!: string;
 
   @Field(() => String)
   fieldName!: string;
@@ -16,7 +19,7 @@ export class AboutMeObjectType {
 @ObjectType()
 export class ContactInfoObjectType {
   @Field(() => ID)
-  id!: string;
+  _id!: string;
 
   @Field(() => String)
   name!: string;
@@ -31,7 +34,7 @@ export class ContactInfoObjectType {
 @ObjectType()
 export class EducationObjectType {
   @Field(() => ID)
-  id!: string;
+  _id!: string;
 
   @Field(() => String)
   name!: string;
@@ -53,12 +56,15 @@ export class EducationObjectType {
 
   @Field(() => [String], { nullable: true })
   skills?: string[];
+
+  @Field(() => Int)
+  positionIndex!: number;
 }
 
 @ObjectType()
 export class WorkExperienceObjectType {
   @Field(() => ID)
-  id!: string;
+  _id!: string;
 
   @Field(() => String)
   name!: string;
@@ -80,12 +86,15 @@ export class WorkExperienceObjectType {
 
   @Field(() => [String], { nullable: true })
   skills?: string[];
+
+  @Field(() => Int)
+  positionIndex!: number;
 }
 
 @ObjectType()
 export class ProjectObjectType {
   @Field(() => ID)
-  id!: string;
+  _id!: string;
 
   @Field(() => String)
   name!: string;
@@ -95,24 +104,30 @@ export class ProjectObjectType {
 
   @Field(() => [String])
   skills!: string[];
+
+  @Field(() => Int)
+  positionIndex!: number;
 }
 
 @ObjectType()
 export class SkillObjectType {
   @Field(() => ID)
-  id!: string;
+  _id!: string;
 
   @Field(() => String)
   category!: string;
 
   @Field(() => [String])
   items!: string[];
+
+  @Field(() => Int)
+  positionIndex!: number;
 }
 
 @ObjectType()
 export class CvObjectType {
   @Field(() => ID)
-  id!: string;
+  _id!: string;
 
   @Field(() => String)
   title!: string;
@@ -139,27 +154,13 @@ export class CvObjectType {
   skillEntries?: SkillObjectType[];
 }
 
-export function convertToObjectType<T extends { _id: string }>(item: T): Omit<T, '_id'> & { id: T['_id'] } {
-  const { _id: id, ...rest } = item;
-  return { id, ...rest };
+// convert for getCv-like resolvers, all other fields are fetched on-demand
+export function convertCvToObjectType(cv: Cv): CvObjectType {
+  return pick(cv, ['_id', 'title', 'userId']);
 }
 
-export function convertCvToObjectType(cv: Cv): CvObjectType {
-  return {
-    id: cv._id,
-    title: cv.title,
-    userId: cv.userId,
-    aboutMe: cv.aboutMe ? convertToObjectType(cv.aboutMe) : undefined,
-    contactInfo: cv.contactInfo ? convertToObjectType(cv.contactInfo) : undefined,
-    educationEntries: cv.educationEntries
-      ? Array.from(cv.educationEntries.values()).map((e) => convertToObjectType(e))
-      : undefined,
-    workExperienceEntries: cv.workExperienceEntries
-      ? Array.from(cv.workExperienceEntries.values()).map((e) => convertToObjectType(e))
-      : undefined,
-    projectEntries: cv.projectEntries
-      ? Array.from(cv.projectEntries.values()).map((e) => convertToObjectType(e))
-      : undefined,
-    skillEntries: cv.skillEntries ? Array.from(cv.skillEntries.values()).map((e) => convertToObjectType(e)) : undefined,
-  };
-}
+type AllCvKeys = keyof Omit<Cv, keyof Document>;
+type AllCvObjectTypeKeys = keyof Omit<CvObjectType, '_id'>;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _cvCompatibleWithCvObjectType: AreTypesEqual<AllCvKeys, AllCvObjectTypeKeys> = true;

@@ -2760,7 +2760,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@c-v-a-i/common@npm:*, @c-v-a-i/common@workspace:packages/common":
+"@c-v-a-i/common@npm:*, @c-v-a-i/common@workspace:*, @c-v-a-i/common@workspace:packages/common":
   version: 0.0.0-use.local
   resolution: "@c-v-a-i/common@workspace:packages/common"
   dependencies:
@@ -2776,7 +2776,7 @@ __metadata:
   resolution: "@c-v-a-i/server@workspace:packages/server"
   dependencies:
     "@apollo/server": "npm:^4.11.2"
-    "@c-v-a-i/common": "npm:*"
+    "@c-v-a-i/common": "workspace:*"
     "@c-v-a-i/tools": "npm:*"
     "@nestjs/apollo": "npm:^12.2.1"
     "@nestjs/cli": "npm:^10.4.5"

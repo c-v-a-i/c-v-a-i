@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Cv } from './cv.schema';
@@ -13,10 +17,18 @@ import {
   exampleWorkExperienceEntries,
 } from './example-cv-data';
 import { arrayToMap } from './utils';
-import { UpdateCvInput } from './dto/update-cv.input-type';
-
-export const entries = <T extends object>(obj: T): [keyof T, T[keyof T]][] =>
-  Object.entries(obj) as [keyof T, T[keyof T]][];
+import {
+  isCvObjectTypeKeyForItemizedEntries,
+  isCvObjectTypeKeyForObjectEntries,
+  isCvObjectTypeKeyForPrimitiveValue,
+  UpdateCvInput,
+  UpdateEducationInput,
+  UpdateProjectInput,
+  UpdateSkillInput,
+  UpdateWorkExperienceInput,
+} from './dto/update-cv.input-type';
+import { entries } from '@server/common/utils';
+import { ConvertOrTypeToAndType, Values } from '@server/common/types';
 
 type CvManagerProps = {
   cvId: string;
@@ -49,7 +61,30 @@ export class CvService {
     return res.deletedCount === 1;
   }
 
-  async deleteEntryItem({ cvId, userId, entryItemId, entryType }: CvEntryItemManagerProps): Promise<boolean> {
+  async getTopLevelProperty(
+    cvId: string,
+    propertyName: keyof Cv
+  ): Promise<Cv[typeof propertyName]> {
+    const cv = await this.cvModel.findById(cvId).select(propertyName).exec();
+    const property = cv?.[propertyName];
+
+    if (!property) {
+      return undefined;
+    }
+
+    if (isCvObjectTypeKeyForItemizedEntries(propertyName)) {
+      return Array.from(property.values());
+    }
+
+    return property;
+  }
+
+  async deleteEntryItem({
+    cvId,
+    userId,
+    entryItemId,
+    entryType,
+  }: CvEntryItemManagerProps): Promise<boolean> {
     const cv = await this.getCv({ cvId, userId });
 
     const entryMap = match(entryType)
@@ -68,7 +103,13 @@ export class CvService {
     return true;
   }
 
-  async generateCvFromTemplate({ userId, cvId }: { userId: string; cvId: string }): Promise<Cv> {
+  async generateCvFromTemplate({
+    userId,
+    cvId,
+  }: {
+    userId: string;
+    cvId: string;
+  }): Promise<Cv> {
     const templateCv = await this.getCv({ cvId, userId });
 
     const newCv = new this.cvModel({
@@ -82,7 +123,9 @@ export class CvService {
     return newCv.save();
   }
 
-  async generateExampleCv({ userId }: Pick<CvManagerProps, 'userId'>): Promise<Cv> {
+  async generateExampleCv({
+    userId,
+  }: Pick<CvManagerProps, 'userId'>): Promise<Cv> {
     const example = new this.cvModel({
       title: 'Example CV',
       userId,
@@ -97,33 +140,74 @@ export class CvService {
     return example.save();
   }
 
-  async updateCv({ cvId, userId, data }: CvManagerProps & { data: UpdateCvInput }): Promise<Cv> {
+  async updateCv({
+    cvId,
+    userId,
+    data,
+  }: CvManagerProps & { data: UpdateCvInput }): Promise<Cv> {
     const cv = await this.getCv({ cvId, userId });
 
-    // move this outside
-    const cvEntryKeys: (keyof Cv)[] = ['educationEntries', 'workExperienceEntries', 'projectEntries', 'skillEntries'];
-
     for (const [key, value] of entries(data)) {
-      // TODO: use ts-pattern
-      // match()
+      if (!cv[key]) {
+        throw new BadRequestException(`Cv[${key}] is undefined`);
+      }
 
-      if (cvEntryKeys.includes(key)) {
-        const updates = value as { id: string }[]; // Type narrowed to Update*Input[]
-        const map = cv[key as keyof Cv];
+      if (isCvObjectTypeKeyForItemizedEntries(key)) {
+        const partialItemsForCvEntry = value as Values<
+          Pick<UpdateCvInput, typeof key>
+        >;
+        const cvEntryItemsMap = cv[key];
 
-        if (!map) {
-          throw new BadRequestException(`Field '${key}' does not exist in the CV.`);
+        if (!partialItemsForCvEntry) {
+          throw new BadRequestException(`UpdateInput[${key}] is empty`);
         }
 
-        updates.forEach(({ id, ...fieldsToUpdate }) => {
-          const existingEntry = map.get(id);
-          if (!existingEntry) {
-            throw new NotFoundException(`Entry with ID '${id}' not found in '${key}'.`);
+        partialItemsForCvEntry.forEach(
+          (
+            newFields:
+              | UpdateEducationInput
+              | UpdateWorkExperienceInput
+              | UpdateProjectInput
+              | UpdateSkillInput
+          ) => {
+            const { id, ...fieldsToUpdate } = newFields;
+
+            const existingEntry = cvEntryItemsMap.get(id);
+            if (!existingEntry) {
+              throw new NotFoundException(
+                `Entry with ID '${id}' not found in '${key}'.`
+              );
+            }
+
+            cvEntryItemsMap.set(id, {
+              ...(existingEntry as ConvertOrTypeToAndType<
+                typeof existingEntry
+              >),
+              ...(fieldsToUpdate as ConvertOrTypeToAndType<
+                typeof fieldsToUpdate
+              >),
+            });
           }
-          map.set(id, { ...existingEntry, ...fieldsToUpdate });
-        });
-      } else {
-        cv[key] = value;
+        );
+      } else if (isCvObjectTypeKeyForPrimitiveValue(key)) {
+        cv[key] = value as ConvertOrTypeToAndType<
+          Values<Pick<UpdateCvInput, typeof key>>
+        >;
+      } else if (isCvObjectTypeKeyForObjectEntries(key)) {
+        const existingObject = cv[key];
+
+        const partialValue = value as NonNullable<
+          Partial<UpdateCvInput[typeof key]>
+        >;
+
+        for (const [subKey, subValue] of entries(partialValue)) {
+          existingObject[subKey] = subValue ?? existingObject[subKey];
+        }
+
+        // store back. not sure we need that here implicitly
+        cv[key] = existingObject as ConvertOrTypeToAndType<
+          typeof existingObject
+        >;
       }
     }
 
@@ -131,7 +215,11 @@ export class CvService {
     return cv;
   }
 
-  async generateNewEntryItem({ entryType, cvId, userId }: Omit<CvEntryItemManagerProps, 'entryItemId'>): Promise<Cv> {
+  async generateNewEntryItem({
+    entryType,
+    cvId,
+    userId,
+  }: Omit<CvEntryItemManagerProps, 'entryItemId'>): Promise<Cv> {
     const cv = await this.getCv({ cvId, userId });
 
     match(entryType)
