@@ -1,19 +1,18 @@
 import React from 'react';
 import { Box, Divider } from '@mui/material';
-import type { GetCvInformationQuery } from '../../../generated/graphql';
-import { AboutMe } from './AboutMe';
 import { widthToPerc } from '../../utils';
-import { Education } from './Education';
-import { ContactInfo } from './ContactInfo';
-import { WorkExperience } from './WorkExperience/WorkExperience';
-import { Projects } from './Projects';
-import { Skills } from './Skills';
+import { ContactInfo } from './CvFields';
+import { AboutMe } from './CvFields/AboutMe';
+import { WorkExperience } from './CvFields/WorkExperience';
+import { Projects } from './CvFields/Projects';
+import { Education } from './CvFields/Education';
+import { Skills } from './CvFields/Skills';
 
 type CvVisualizerProps = {
-  cvData: GetCvInformationQuery['getCv'];
+  cvId: string;
 };
 
-export const CvVisualizer = ({ cvData: { id } }: CvVisualizerProps) => {
+export const CvVisualizer = ({ cvId }: CvVisualizerProps) => {
   return (
     <Box
       sx={{
@@ -26,27 +25,38 @@ export const CvVisualizer = ({ cvData: { id } }: CvVisualizerProps) => {
         justifyContent: 'center',
       }}
     >
-      <Box display="flex" flexDirection="column" sx={{ width: '100%', gap: '20px' }}>
-        <ContactInfo cvId={id} />
-        <AboutMe cvId={id} />
+      <Box
+        display="flex"
+        flexDirection="column"
+        sx={{ width: '100%', gap: '20px' }}
+      >
+        <ContactInfo cvId={cvId} />
+        <AboutMe cvId={cvId} />
       </Box>
 
       <Divider flexItem />
 
       <Box display="flex" gap="80px" sx={{ overflowX: 'hidden' }}>
-        <Box width={widthToPerc(8 / 12)} display="flex" flexDirection="column" gap={3}>
-          <WorkExperience cvId={id} />
-
+        <Box
+          width={widthToPerc(8 / 12)}
+          display="flex"
+          flexDirection="column"
+          gap={3}
+        >
+          <WorkExperience cvId={cvId} />
           <Divider />
-
-          <Projects cvId={id} />
+          <Projects cvId={cvId} />
         </Box>
 
         <Box width={widthToPerc(4 / 12)}>
-          <Box display="flex" flexDirection="column" gap="16px" sx={{ textAlign: 'end' }}>
-            <Education cvId={id} />
-
-            <Skills cvId={id} />
+          <Box
+            display="flex"
+            flexDirection="column"
+            gap="16px"
+            sx={{ textAlign: 'end' }}
+          >
+            <Education cvId={cvId} />
+            <Skills cvId={cvId} />
           </Box>
         </Box>
       </Box>

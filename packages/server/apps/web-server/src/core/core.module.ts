@@ -4,11 +4,9 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { HealthcheckController } from './healthcheck.controller';
-import { DataloaderModule } from './dataloader/dataloader.module';
 
 @Module({
   imports: [
-    DataloaderModule,
     ConfigModule.forRoot({ isGlobal: true, cache: true }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,

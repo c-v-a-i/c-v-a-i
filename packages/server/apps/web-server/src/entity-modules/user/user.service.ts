@@ -3,7 +3,7 @@ import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@server/entities';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { CvService } from '../cv/cv/cv.service';
+import { CvService } from '../../services/cv/cv.service';
 
 @Injectable()
 export class UserService {
@@ -19,10 +19,6 @@ export class UserService {
     return this.userRepository.findOne({ where });
   }
 
-  async getAllUsers() {
-    return this.userRepository.findAndCount();
-  }
-
   async findByEmail(email: User['email']): Promise<User | null> {
     return this.userRepository.findOne({
       where: { email },
@@ -35,12 +31,12 @@ export class UserService {
     const savedUser = await this.userRepository.save(newUser);
 
     try {
-      const exampleCv = await this.cvService.generateExampleCv({
+      const generatedCv = await this.cvService.generateExampleCv({
         userId: savedUser.id,
       });
+      this.logger.log(`Generated a new CV for a user: ${generatedCv?._id}`);
       return await this.userRepository.save({
         ...savedUser,
-        cvs: [exampleCv],
       });
     } catch (error) {
       this.logger.error(`Cannot generate example CV for a user: ${error}`);

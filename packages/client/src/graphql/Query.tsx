@@ -44,6 +44,7 @@ const Query = <TData, TVariables extends OperationVariables = OperationVariables
 
   if (error) {
     const graphqlException = error.graphQLErrors[0]?.extensions?.response;
+    console.error(error);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authError = (graphqlException as any)?.statusCode === 401;

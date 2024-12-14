@@ -1,0 +1,37 @@
+fragment WorkExperienceFragment on WorkExperience {
+  _id
+  name
+  position
+  duration
+  location
+  type
+  description
+  skills
+  positionIndex
+}
+
+fragment ProjectFragment on Project {
+  _id
+  name
+  description
+  skills
+  positionIndex
+}
+
+fragment EducationFragment on Education {
+  _id
+  name
+  description
+  degree
+  location
+  duration
+  skills
+  positionIndex
+}
+
+fragment SkillFragment on Skill {
+  _id
+  category
+  items
+  positionIndex
+}

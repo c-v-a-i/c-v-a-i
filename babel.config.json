@@ -7,7 +7,7 @@
       {
         "root": ["./packages"],
         "alias": {
-          "@c-v-a-i/server": "./packages/api",
+          "@c-v-a-i/server": "./packages/server",
           "@c-v-a-i/client": "./packages/client",
           "@c-v-a-i/common": "./packages/common",
           "@c-v-a-i/tools": "./packages/tools"

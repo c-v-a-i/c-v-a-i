@@ -1,4 +1,3 @@
-
 export default {
   roots: ['<rootDir>/apps/', '<rootDir>/libs/'],
   moduleNameMapper: {
@@ -7,4 +6,8 @@ export default {
     '^@server/services(|/.*)$': '<rootDir>/libs/services/src/$1',
     '^@server/core(|/.*)$': '<rootDir>/libs/core/src/$1',
   },
+  transform: {
+    '^.+\\.(ts|tsx)$': 'ts-jest',
+  },
+  testEnvironment: 'node',
 };

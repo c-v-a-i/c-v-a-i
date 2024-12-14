@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useCurrentCv } from '../../contexts/use-current-cv';
-import { useGetCvInformationLazyQuery } from '../../generated/graphql';
 import { CvVisualizer } from './CvVisualizer';
 import { CenteredBox } from '../atoms';
+import { useCheckCvLazyQuery } from '../../generated/graphql';
 
 export const CurrentCvPreview: React.FC = () => {
   const { currentCvId } = useCurrentCv();
 
-  const [fetchCvFunction, { loading, error, data }] = useGetCvInformationLazyQuery();
+  const [fetchCvFunction, { loading, error, data }] = useCheckCvLazyQuery();
 
   useEffect(() => {
     if (!currentCvId) {
@@ -16,7 +16,7 @@ export const CurrentCvPreview: React.FC = () => {
     }
     fetchCvFunction({
       variables: {
-        id: currentCvId,
+        cvId: currentCvId,
       },
     }).catch(() => {
       /* ignore */
@@ -44,7 +44,7 @@ export const CurrentCvPreview: React.FC = () => {
         padding: 2,
       }}
     >
-      <CvVisualizer cvData={data.getCv} />
+      <CvVisualizer cvId={data.getCv._id} />
     </Box>
   );
 };

@@ -22,6 +22,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
       // @ts-expect-error - better types later
       if (extensions?.originalError?.statusCode !== 401) {
         toast(message, { type: 'error', theme: 'colored' });
+        console.error('Encountered error: ', graphQLErrors);
       }
     });
   if (networkError) {

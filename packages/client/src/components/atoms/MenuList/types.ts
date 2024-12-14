@@ -1,4 +1,4 @@
 export type ListItem = {
-  id: string;
+  _id: string;
   name: string;
 };

@@ -1,6 +1,5 @@
 import { Query, Resolver } from '@nestjs/graphql';
 import { User } from '@server/entities';
-import { DataloaderService } from '../../core/dataloader/dataloader.service';
 import { UserService } from './user.service';
 import { DecodedUserObjectType } from '../../auth/dto';
 import { CurrentUser } from '../../common/decorators';
@@ -12,7 +11,7 @@ import { GqlAuthGuard } from '../../auth/guards/gql-auth/gql-auth.guard';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly userService: UserService, private readonly dataloaderService: DataloaderService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Query(() => User)
   public async currentUser(@CurrentUser() { client_id: id }: DecodedUserObjectType) {

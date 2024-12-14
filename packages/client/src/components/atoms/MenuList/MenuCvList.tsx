@@ -32,7 +32,7 @@ export const MenuCvList = React.memo(({ items, onDeleteItem }: MenuListProps) =>
     <List>
       {items.map((item) => (
         <MenuItem
-          key={item.id}
+          key={item._id}
           item={item}
           onSelect={handleSelectCv}
           menuOptions={[
