@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { Root } from 'react-dom/client';
 import { createRoot } from 'react-dom/client';
-import { Box, IconButton, Tooltip, TextField } from '@mui/material';
+import { Box, IconButton, TextField, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 
@@ -10,7 +10,9 @@ interface UseTypographyActionsPortalOptions {
   onAiEdit?: (prompt: string) => void;
 }
 
-export const useTypographyActionsPortal = (options: UseTypographyActionsPortalOptions) => {
+export const useTypographyActionsPortal = (
+  options: UseTypographyActionsPortalOptions
+) => {
   const { onEdit, onAiEdit } = options;
 
   const portalRootRef = useRef<HTMLDivElement | null>(null);
@@ -45,6 +47,7 @@ export const useTypographyActionsPortal = (options: UseTypographyActionsPortalOp
   const renderPortal = () => {
     if (!portalRootInstanceRef.current || !visibleRef.current) return;
 
+    // TODO: move it into a separate component
     const portalContent = (
       <Box
         sx={{
@@ -114,16 +117,21 @@ export const useTypographyActionsPortal = (options: UseTypographyActionsPortalOp
     portalRootInstanceRef.current.render(portalContent);
   };
 
-  const triggerPortal = (shouldShow: boolean, coords?: { x: number; y: number }) => {
+  const triggerPortal = (
+    shouldShow: boolean,
+    coords?: { x: number; y: number }
+  ) => {
     visibleRef.current = shouldShow;
     if (coords) {
       positionRef.current = coords;
     }
     if (!shouldShow) {
       // Unmount the portal
-      if (portalRootInstanceRef.current) {
-        portalRootInstanceRef.current.render(null);
-      }
+      setTimeout(() => {
+        if (portalRootInstanceRef.current) {
+          portalRootInstanceRef.current.render(null);
+        }
+      }, 0);
     } else {
       renderPortal();
     }

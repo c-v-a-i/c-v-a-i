@@ -1,65 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import type { TypographyProps } from '@mui/material';
 import { useEditableTypographyBase } from '../../../hooks';
 import { useTypographyActionsPortal } from '../../../hooks';
-import { EditableTypographyBase } from '../../atoms/Typography/EditableTypographyBase';
+import { EditableTypographyBase } from './EditableTypographyBase';
 import { grey } from '@mui/material/colors';
-
-type EditableTypographyProps = Omit<TypographyProps, 'ref'> & {
-  id: string;
-  value: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSave: (newValue: string) => Promise<any>;
-  onAiEdit?: (prompt: string) => void;
-  multiline?: boolean;
-  isEditing?: boolean;
-};
-
-export const EditableTypographyLight = ({
-  id,
-  value,
-  onSave,
-  onAiEdit,
-  multiline,
-  isEditing: defaultIsEditing,
-  ...typographyProps
-}: EditableTypographyProps) => {
-  const { isEditing, startEditing, tempValue, setTempValue, handleSave, handleCancel } = useEditableTypographyBase({
-    value,
-    onSave,
-  });
-
-  useEffect(() => {
-    if (defaultIsEditing) {
-      startEditing();
-    }
-  }, [startEditing, defaultIsEditing]);
-
-  return (
-    <EditableTypographyBase
-      typographyProps={{
-        ...typographyProps,
-        sx: {
-          borderRadius: '10px',
-          width: 'fit-content',
-
-          // background: alpha(pink[300], 0.1),
-
-          ...(typographyProps.sx ?? {}),
-        },
-      }}
-      id={id}
-      isEditing={isEditing}
-      tempValue={tempValue}
-      setTempValue={setTempValue}
-      handleSave={handleSave}
-      handleCancel={handleCancel}
-      multiline={multiline}
-      value={value}
-      variant={typographyProps.variant}
-    />
-  );
-};
+import type { EditableTypographyProps } from './types';
 
 export const EditableTypography = ({
   id,
@@ -71,7 +15,14 @@ export const EditableTypography = ({
   ...typographyProps
 }: EditableTypographyProps) => {
   const textRef = useRef<HTMLDivElement>(null);
-  const { isEditing, startEditing, tempValue, setTempValue, handleSave, handleCancel } = useEditableTypographyBase({
+  const {
+    isEditing,
+    startEditing,
+    tempValue,
+    setTempValue,
+    handleSave,
+    handleCancel,
+  } = useEditableTypographyBase({
     value,
     onSave,
   });
@@ -97,7 +48,7 @@ export const EditableTypography = ({
   const [isPortalVisible, setIsPortalVisible] = useState(false);
 
   const getIsAnyTextSelected = useCallback(() => {
-    return window.getSelection()?.getRangeAt(0).toString()?.length;
+    return window.getSelection()?.getRangeAt(0)?.toString()?.length ?? 0;
   }, []);
 
   const onMouseDown = useCallback(() => {

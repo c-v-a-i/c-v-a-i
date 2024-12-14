@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { AddButton } from '../../../atoms';
+import { AddButton } from '../../../../atoms';
 
 type NewWorkExperienceManagerProps = {
   onAddEntry: () => Promise<void>;

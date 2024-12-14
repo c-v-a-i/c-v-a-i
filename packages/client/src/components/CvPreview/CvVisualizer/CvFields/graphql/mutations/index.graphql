@@ -1,0 +1,182 @@
+mutation UpdateEducationEntry (
+  $cvId: ID!
+  $_id: ID!
+  $name: String
+  $degree: String
+  $duration: String
+  $location: String
+  $type: String
+  $skills: [String!]
+  $description: String
+) {
+  updateCv (
+    cvId: $cvId
+    data: {
+      educationEntries: {
+        _id: $_id
+        name: $name
+        degree: $degree
+        duration: $duration
+        location: $location
+        type: $type
+        skills: $skills
+        description: $description
+      }
+    }
+  ) {
+    educationEntries {
+      ...EducationFragment
+    }
+  }
+}
+
+mutation UpdateContactInfo (
+    $cvId: ID!
+    $email: String
+    $phone: String
+    $name: String
+) {
+  updateCv (
+    cvId: $cvId
+    data: {
+      contactInfo: {
+        email: $email
+        phone: $phone
+        name: $name
+      }
+    }
+  ) {
+    contactInfo {
+      email
+      phone
+      name
+    }
+  }
+}
+
+mutation UpdateSkillEntry (
+  $cvId: ID!
+  $_id: ID!
+  $category: String
+  $items: [String!]
+) {
+  updateCv (
+    cvId: $cvId
+    data: {
+      skillEntries: {
+        _id: $_id
+        category: $category
+        items: $items
+      }
+    }
+  ) {
+    skillEntries {
+      ...SkillFragment
+    }
+  }
+}
+
+mutation UpdateAboutMe (
+  $cvId: ID!
+  $fieldName: String
+  $description: String
+) {
+  updateCv (
+    cvId: $cvId
+    data: {
+      aboutMe: {
+        fieldName: $fieldName
+        description: $description
+      }
+    }
+  ) {
+    aboutMe {
+      fieldName
+      description
+      _id
+    }
+  }
+}
+
+mutation UpdateWorkExperienceEntry (
+  $cvId: ID!
+  $_id: ID! # id of work experience entry we are updating
+  $name: String
+  $position: String
+  $duration: String
+  $location: String
+  $type: String
+  $description: String
+  $skills: [String!]
+) {
+  updateCv (
+    cvId: $cvId
+    data: {
+      workExperienceEntries: {
+        _id: $_id
+        name: $name
+        description: $description
+        position: $position
+        duration: $duration
+        location: $location
+        type: $type
+        skills: $skills
+      }
+    }
+  ) {
+    workExperienceEntries {
+      ... WorkExperienceFragment
+    }
+  }
+}
+
+mutation UpdateProjectEntry (
+  $cvId: ID!
+  $_id: ID! # id of work experience entry we are updating
+  $name: String
+  $description: String
+  $skills: [String!]
+) {
+  updateCv (
+    cvId: $cvId
+    data: {
+      projectEntries: {
+        _id: $_id
+        name: $name
+        description: $description
+        skills: $skills
+      }
+    }
+  ) {
+    projectEntries {
+      ... ProjectFragment
+    }
+  }
+}
+
+mutation GenerateNewEntryItem(
+  $cvId: ID!
+  $entryType: CvEntryType!
+) {
+  generateNewEntryItem(
+    cvId: $cvId
+    entryType: $entryType
+  ) {
+    ... on WorkExperience { ...WorkExperienceFragment }
+    ... on Project { ...ProjectFragment }
+    ... on Education { ...EducationFragment }
+  }
+}
+
+
+mutation DeleteEntryItem (
+  $cvId: ID!
+  $entryType: CvEntryType!
+  $entryItemId: ID!
+) {
+  deleteEntryItem(
+    cvId: $cvId
+    entryType: $entryType
+    entryItemId: $entryItemId
+  )
+}

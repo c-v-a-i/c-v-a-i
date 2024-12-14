@@ -5,8 +5,18 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Cv } from './cv.schema';
-import { CvEntryType } from './dto';
+import {
+  CvEntryType,
+  cvEntryTypeToCvEntryNameMap,
+  isCvKeyForPrimitiveValue,
+  isCvObjectTypeKeyForItemizedEntries,
+  isCvObjectTypeKeyForObjectEntries,
+  UpdateCvInput,
+  UpdateEducationInput,
+  UpdateProjectInput,
+  UpdateSkillInput,
+  UpdateWorkExperienceInput,
+} from './dto';
 import { match } from 'ts-pattern';
 import {
   exampleAboutMe,
@@ -17,34 +27,36 @@ import {
   exampleWorkExperienceEntries,
 } from './example-cv-data';
 import { arrayToMap } from './utils';
-import {
-  isCvObjectTypeKeyForItemizedEntries,
-  isCvObjectTypeKeyForObjectEntries,
-  isCvObjectTypeKeyForPrimitiveValue,
-  UpdateCvInput,
-  UpdateEducationInput,
-  UpdateProjectInput,
-  UpdateSkillInput,
-  UpdateWorkExperienceInput,
-} from './dto/update-cv.input-type';
 import { entries } from '@server/common/utils';
 import { ConvertOrTypeToAndType, Values } from '@server/common/types';
+import {
+  Cv,
+  CvDocument,
+  Education,
+  Project,
+  Skill,
+  WorkExperience,
+} from '../../../../../libs/schemas';
+import { Document } from 'mongoose';
 
 type CvManagerProps = {
   cvId: string;
   userId: string;
 };
 
-type CvEntryItemManagerProps = CvManagerProps & {
+type EntryItemSelectorProps = {
   entryItemId: string;
   entryType: CvEntryType;
 };
+type CvEntryItemManagerProps = CvManagerProps & EntryItemSelectorProps;
+
+type CreateEntryItemProps = { entryType: CvEntryType; positionIndex: number };
 
 @Injectable()
 export class CvService {
   constructor(@InjectModel(Cv.name) private readonly cvModel: Model<Cv>) {}
 
-  async getCv({ cvId, userId }: CvManagerProps): Promise<Cv> {
+  async getCv({ cvId, userId }: CvManagerProps): Promise<CvDocument> {
     const cv = await this.cvModel.findOne({ _id: cvId, userId }).exec();
     if (!cv) {
       throw new NotFoundException(`CV not found or not owned by user`);
@@ -61,22 +73,15 @@ export class CvService {
     return res.deletedCount === 1;
   }
 
-  async getTopLevelProperty(
-    cvId: string,
-    propertyName: keyof Cv
-  ): Promise<Cv[typeof propertyName]> {
+  async getTopLevelProperty<T extends keyof Cv>(cvId: string, propertyName: T) {
     const cv = await this.cvModel.findById(cvId).select(propertyName).exec();
-    const property = cv?.[propertyName];
+    const property = cv?.get(propertyName);
 
     if (!property) {
       return undefined;
     }
 
-    if (isCvObjectTypeKeyForItemizedEntries(propertyName)) {
-      return Array.from(property.values());
-    }
-
-    return property;
+    return property as Cv[typeof propertyName];
   }
 
   async deleteEntryItem({
@@ -144,7 +149,7 @@ export class CvService {
     cvId,
     userId,
     data,
-  }: CvManagerProps & { data: UpdateCvInput }): Promise<Cv> {
+  }: CvManagerProps & { data: UpdateCvInput }) {
     const cv = await this.getCv({ cvId, userId });
 
     for (const [key, value] of entries(data)) {
@@ -170,26 +175,19 @@ export class CvService {
               | UpdateProjectInput
               | UpdateSkillInput
           ) => {
-            const { id, ...fieldsToUpdate } = newFields;
+            const { _id, ...fieldsToUpdate } = newFields;
 
-            const existingEntry = cvEntryItemsMap.get(id);
+            const existingEntry = cvEntryItemsMap.get(_id);
             if (!existingEntry) {
               throw new NotFoundException(
-                `Entry with ID '${id}' not found in '${key}'.`
+                `Entry with ID '${_id}' not found in '${key}'.`
               );
             }
 
-            cvEntryItemsMap.set(id, {
-              ...(existingEntry as ConvertOrTypeToAndType<
-                typeof existingEntry
-              >),
-              ...(fieldsToUpdate as ConvertOrTypeToAndType<
-                typeof fieldsToUpdate
-              >),
-            });
+            existingEntry.set(fieldsToUpdate);
           }
         );
-      } else if (isCvObjectTypeKeyForPrimitiveValue(key)) {
+      } else if (isCvKeyForPrimitiveValue(key)) {
         cv[key] = value as ConvertOrTypeToAndType<
           Values<Pick<UpdateCvInput, typeof key>>
         >;
@@ -215,73 +213,94 @@ export class CvService {
     return cv;
   }
 
-  async generateNewEntryItem({
-    entryType,
-    cvId,
-    userId,
-  }: Omit<CvEntryItemManagerProps, 'entryItemId'>): Promise<Cv> {
-    const cv = await this.getCv({ cvId, userId });
+  private createEntryItem({ entryType, positionIndex }: CreateEntryItemProps) {
+    const _id = new Types.ObjectId().toString();
 
-    match(entryType)
+    return match(entryType)
+      .returnType<Education | Project | Skill | WorkExperience>()
       .with(CvEntryType.EDUCATION, () => {
-        if (!cv.educationEntries) {
-          cv.educationEntries = new Map();
-        }
-        const newId = new Types.ObjectId().toString();
-        const positionIndex = cv.educationEntries.size;
-        cv.educationEntries.set(newId, {
-          _id: newId,
-          name: 'New Institution',
-          degree: 'B.Sc',
+        const item: Education = {
+          _id,
+          name: 'Brno University of Technology',
+          degree: 'Bc',
           duration: '2020',
           location: 'Prague',
           description: 'Description',
           skills: [],
           positionIndex,
-        });
-      })
-      .with(CvEntryType.WORK_EXPERIENCE, () => {
-        if (!cv.workExperienceEntries) {
-          cv.workExperienceEntries = new Map();
-        }
-        const newId = new Types.ObjectId().toString();
-        const positionIndex = cv.workExperienceEntries.size;
-        cv.workExperienceEntries.set(newId, {
-          _id: newId,
-          name: 'New Company',
-          position: 'Developer',
-          positionIndex,
-        });
+        };
+        return item;
       })
       .with(CvEntryType.PROJECT, () => {
-        if (!cv.projectEntries) {
-          cv.projectEntries = new Map();
-        }
-        const newId = new Types.ObjectId().toString();
-        const positionIndex = cv.projectEntries.size;
-        cv.projectEntries.set(newId, {
-          _id: newId,
+        const item: Project = {
+          _id,
           name: 'New Project',
           description: 'A new project description',
-          skills: [],
+          skills: ['Programming', 'Cheating'],
           positionIndex,
-        });
+        };
+        return item;
       })
       .with(CvEntryType.SKILL, () => {
-        if (!cv.skillEntries) {
-          cv.skillEntries = new Map();
-        }
-        const newId = new Types.ObjectId().toString();
-        const positionIndex = cv.skillEntries.size;
-        cv.skillEntries.set(newId, {
-          _id: newId,
+        const item: Skill = {
+          _id,
           category: 'Soft Skills',
           items: ['Adaptability'],
           positionIndex,
-        });
+        };
+        return item;
+      })
+      .with(CvEntryType.WORK_EXPERIENCE, () => {
+        const item: WorkExperience = {
+          _id,
+          name: 'New Company',
+          position: 'Developer',
+          positionIndex,
+        };
+        return item;
       })
       .exhaustive();
+  }
 
-    return cv.save();
+  async generateNewEntryItem({
+    entryType,
+    cvId,
+    userId,
+  }: Omit<CvEntryItemManagerProps, 'entryItemId'>) {
+    const cv = await this.getCv({ cvId, userId });
+
+    const cvEntryName = cvEntryTypeToCvEntryNameMap[entryType];
+    const cvEntryMap = cv[cvEntryName];
+
+    const positionIndex = cvEntryMap.size;
+
+    const newEntryItem = this.createEntryItem({ entryType, positionIndex });
+
+    cvEntryMap.set(
+      newEntryItem._id,
+      newEntryItem as ConvertOrTypeToAndType<typeof newEntryItem> & Document
+    );
+
+    await cv.save();
+
+    const updatedDoc = cv[cvEntryName].get(newEntryItem._id);
+
+    if (!updatedDoc) {
+      throw new NotFoundException(
+        `Unable to fetch the newly saved item with ID '${newEntryItem._id}'. Probably didn't save it correctly.`
+      );
+    }
+
+    const classInstance = match(entryType)
+      .with(CvEntryType.PROJECT, () => new Project())
+      .with(CvEntryType.WORK_EXPERIENCE, () => new WorkExperience())
+      .with(CvEntryType.EDUCATION, () => new Education())
+      .with(CvEntryType.SKILL, () => new Skill())
+      .exhaustive();
+
+    return Object.assign(
+      classInstance,
+      updatedDoc.toObject()
+    ) as typeof classInstance;
   }
 }

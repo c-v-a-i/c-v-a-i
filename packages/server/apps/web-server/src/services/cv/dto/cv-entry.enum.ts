@@ -1,3 +1,4 @@
+// TODO: delete this. Unused
 import { registerEnumType } from '@nestjs/graphql';
 
 enum CvEntryType {

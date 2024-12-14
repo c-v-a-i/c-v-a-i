@@ -1,0 +1,72 @@
+query GetSkillEntries (
+  $cvId: ID!
+) {
+  getCv(cvId: $cvId) {
+    skillEntries {
+    ...SkillFragment
+    }
+  }
+}
+
+query GetEducationEntries (
+  $cvId: ID!
+) {
+  getCv(cvId: $cvId) {
+    educationEntries {
+      ...EducationFragment
+    }
+  }
+}
+
+query GetContactInfo (
+  $cvId: ID!
+) {
+  getCv (
+    cvId: $cvId
+  ) {
+    contactInfo {
+      _id
+      name
+      email
+      phone
+    }
+  }
+}
+
+query GetAboutMe (
+  $cvId: ID!
+) {
+  getCv (
+    cvId: $cvId
+  ) {
+    aboutMe {
+      _id
+      fieldName
+      description
+    }
+  }
+}
+
+query GetWorkExperienceEntries (
+  $cvId: ID!
+) {
+  getCv (
+    cvId: $cvId
+  ) {
+    workExperienceEntries {
+      ... WorkExperienceFragment
+    }
+  }
+}
+
+query GetProjectEntries (
+  $cvId: ID!
+) {
+  getCv (
+    cvId: $cvId
+  ) {
+    projectEntries {
+      ... ProjectFragment
+    }
+  }
+}

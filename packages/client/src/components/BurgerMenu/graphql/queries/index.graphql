@@ -1,9 +1,6 @@
 query GetCvs {
   getCvs {
-    count
-    items {
-      id
-      name: title
-    }
+    _id
+    name: title
   }
 }

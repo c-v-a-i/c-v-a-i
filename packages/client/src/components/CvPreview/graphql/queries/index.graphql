@@ -1,8 +1,5 @@
-query GetCvInformation($id: ID!) {
-  getCv(
-    id: $id
-  ) {
-    id
-    title
+query CheckCv ($cvId: ID!) {
+  getCv ( cvId: $cvId) {
+    _id
   }
 }

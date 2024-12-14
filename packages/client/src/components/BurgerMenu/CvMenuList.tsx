@@ -15,13 +15,13 @@ export const CvMenuList = () => {
   const [selectedItemId, setSelectedItemId] = React.useState<string | null>(null);
 
   const memoizedItems = useMemo(
-    () => (cvQueryLoading || !cvQueryData?.getCvs?.items ? [] : cvQueryData.getCvs.items),
+    () => (cvQueryLoading ? [] : (cvQueryData?.getCvs ?? [])),
     [cvQueryData, cvQueryLoading]
   );
 
   useEffect(() => {
     setCurrentCvId((currentCvId) =>
-      !memoizedItems.length || memoizedItems.find((it) => it.id === currentCvId) ? currentCvId : null
+      !memoizedItems.length || memoizedItems.find((it) => it._id === currentCvId) ? currentCvId : null
     );
   }, [setCurrentCvId, memoizedItems]);
 
@@ -39,7 +39,7 @@ export const CvMenuList = () => {
     if (!selectedItemId) return;
 
     void deleteCv({
-      variables: { id: selectedItemId },
+      variables: { cvId: selectedItemId },
     });
     cleanupDeleteDialog();
   }, [deleteCv, selectedItemId, cleanupDeleteDialog]);

@@ -5,7 +5,7 @@ import { TypographyWithOverflow } from '../index';
 import type { OptionsMenuProps } from '../PopupMenu';
 import { PopupMenu } from '../PopupMenu';
 import { useEditableTypographyBase } from '../../../hooks';
-import { EditableTypographyBase } from '../Typography/EditableTypographyBase';
+import { EditableTypographyBase } from '../Typography';
 
 type MenuItemProps = {
   item: ListItemType;
@@ -26,7 +26,7 @@ export const MenuItem = React.memo(({ item, menuOptions, onSelect }: MenuItemPro
       <ListItem component={Box}>
         <ListItemText>
           <EditableTypographyBase
-            id={`menu-item-${item.id}`}
+            id={`menu-item-${item._id}`}
             isEditing={isEditing}
             tempValue={tempValue}
             setTempValue={setTempValue}
@@ -42,7 +42,7 @@ export const MenuItem = React.memo(({ item, menuOptions, onSelect }: MenuItemPro
     <ListItem
       button={!isEditing}
       component={Box}
-      onClick={isEditing ? undefined : () => onSelect(item.id)}
+      onClick={isEditing ? undefined : () => onSelect(item._id)}
       sx={{
         display: 'flex',
         flexDirection: 'row',
@@ -54,7 +54,7 @@ export const MenuItem = React.memo(({ item, menuOptions, onSelect }: MenuItemPro
       </ListItemText>
       <ListItemSecondaryAction>
         <PopupMenu
-          id={item.id}
+          id={item._id}
           options={[
             {
               label: 'Rename',

@@ -1,10 +1,10 @@
-mutation CreateCv($templateId: ID) {
+mutation CreateCv($templateId: ID!) {
   createNewCv(templateId: $templateId) {
-    id
+    _id
     title
   }
 }
 
-mutation DeleteCv($id: ID!) {
-  deleteCv(id: $id)
+mutation DeleteCv($cvId: ID!) {
+  deleteCv(cvId: $cvId)
 }
