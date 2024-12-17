@@ -12,6 +12,7 @@ export const EditableTypography = ({
   onAiEdit,
   multiline,
   isEditing: defaultIsEditing,
+  component,
   ...typographyProps
 }: EditableTypographyProps) => {
   const textRef = useRef<HTMLDivElement>(null);

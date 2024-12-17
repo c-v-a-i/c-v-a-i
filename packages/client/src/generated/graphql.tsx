@@ -44,8 +44,6 @@ export enum CvEntryType {
   WorkExperience = 'WORK_EXPERIENCE'
 }
 
-export type CvEntryUnion = Education | Project | Skill | WorkExperience;
-
 export type CvObjectType = {
   __typename?: 'CvObjectType';
   _id: Scalars['ID']['output'];
@@ -78,7 +76,7 @@ export type Mutation = {
   deleteCv: Scalars['Boolean']['output'];
   deleteCvEntryItem: Scalars['Boolean']['output'];
   deleteEntryItem: Scalars['Boolean']['output'];
-  generateNewEntryItem: CvEntryUnion;
+  generateNewEntryItem: CvObjectType;
   logout: Scalars['Boolean']['output'];
   updateCv: CvObjectType;
 };
@@ -256,6 +254,12 @@ export type GetCvsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCvsQuery = { __typename?: 'Query', getCvs: Array<{ __typename?: 'CvObjectType', _id: string, name: string }> };
 
+export type CvFragment = { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, fieldName: string, description: string } | null, contactInfo?: { __typename?: 'ContactInfo', _id: string, name: string, email: string, phone: string } | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null };
+
+export type AboutMeFragment = { __typename?: 'AboutMe', _id: string, fieldName: string, description: string };
+
+export type ContactInfoFragment = { __typename?: 'ContactInfo', _id: string, name: string, email: string, phone: string };
+
 export type WorkExperienceFragment = { __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number };
 
 export type ProjectFragment = { __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number };
@@ -264,75 +268,13 @@ export type EducationFragment = { __typename?: 'Education', _id: string, name: s
 
 export type SkillFragment = { __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number };
 
-export type UpdateEducationEntryMutationVariables = Exact<{
+export type UpdateCvMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
-  _id: Scalars['ID']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
-  degree?: InputMaybe<Scalars['String']['input']>;
-  duration?: InputMaybe<Scalars['String']['input']>;
-  location?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
-  skills?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
+  data: UpdateCvInput;
 }>;
 
 
-export type UpdateEducationEntryMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null } };
-
-export type UpdateContactInfoMutationVariables = Exact<{
-  cvId: Scalars['ID']['input'];
-  email?: InputMaybe<Scalars['String']['input']>;
-  phone?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-
-export type UpdateContactInfoMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', contactInfo?: { __typename?: 'ContactInfo', email: string, phone: string, name: string } | null } };
-
-export type UpdateSkillEntryMutationVariables = Exact<{
-  cvId: Scalars['ID']['input'];
-  _id: Scalars['ID']['input'];
-  category?: InputMaybe<Scalars['String']['input']>;
-  items?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
-}>;
-
-
-export type UpdateSkillEntryMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
-
-export type UpdateAboutMeMutationVariables = Exact<{
-  cvId: Scalars['ID']['input'];
-  fieldName?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-
-export type UpdateAboutMeMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', aboutMe?: { __typename?: 'AboutMe', fieldName: string, description: string, _id: string } | null } };
-
-export type UpdateWorkExperienceEntryMutationVariables = Exact<{
-  cvId: Scalars['ID']['input'];
-  _id: Scalars['ID']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
-  position?: InputMaybe<Scalars['String']['input']>;
-  duration?: InputMaybe<Scalars['String']['input']>;
-  location?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  skills?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
-}>;
-
-
-export type UpdateWorkExperienceEntryMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null } };
-
-export type UpdateProjectEntryMutationVariables = Exact<{
-  cvId: Scalars['ID']['input'];
-  _id: Scalars['ID']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  skills?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
-}>;
-
-
-export type UpdateProjectEntryMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null } };
+export type UpdateCvMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, fieldName: string, description: string } | null, contactInfo?: { __typename?: 'ContactInfo', _id: string, name: string, email: string, phone: string } | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
 
 export type GenerateNewEntryItemMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -340,7 +282,7 @@ export type GenerateNewEntryItemMutationVariables = Exact<{
 }>;
 
 
-export type GenerateNewEntryItemMutation = { __typename?: 'Mutation', generateNewEntryItem: { __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number } | { __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number } | { __typename?: 'Skill' } | { __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number } };
+export type GenerateNewEntryItemMutation = { __typename?: 'Mutation', generateNewEntryItem: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, fieldName: string, description: string } | null, contactInfo?: { __typename?: 'ContactInfo', _id: string, name: string, email: string, phone: string } | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
 
 export type DeleteEntryItemMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -393,6 +335,13 @@ export type GetProjectEntriesQueryVariables = Exact<{
 
 export type GetProjectEntriesQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null } };
 
+export type GetCvQueryVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+}>;
+
+
+export type GetCvQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, fieldName: string, description: string } | null, contactInfo?: { __typename?: 'ContactInfo', _id: string, name: string, email: string, phone: string } | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
+
 export type CheckCvQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
 }>;
@@ -415,6 +364,21 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, googleId: string, createdAt: any, deletedAt?: any | null } };
 
+export const AboutMeFragmentDoc = gql`
+    fragment AboutMeFragment on AboutMe {
+  _id
+  fieldName
+  description
+}
+    `;
+export const ContactInfoFragmentDoc = gql`
+    fragment ContactInfoFragment on ContactInfo {
+  _id
+  name
+  email
+  phone
+}
+    `;
 export const WorkExperienceFragmentDoc = gql`
     fragment WorkExperienceFragment on WorkExperience {
   _id
@@ -457,6 +421,35 @@ export const SkillFragmentDoc = gql`
   positionIndex
 }
     `;
+export const CvFragmentDoc = gql`
+    fragment CvFragment on CvObjectType {
+  _id
+  title
+  aboutMe {
+    ...AboutMeFragment
+  }
+  contactInfo {
+    ...ContactInfoFragment
+  }
+  workExperienceEntries {
+    ...WorkExperienceFragment
+  }
+  projectEntries {
+    ...ProjectFragment
+  }
+  educationEntries {
+    ...EducationFragment
+  }
+  skillEntries {
+    ...SkillFragment
+  }
+}
+    ${AboutMeFragmentDoc}
+${ContactInfoFragmentDoc}
+${WorkExperienceFragmentDoc}
+${ProjectFragmentDoc}
+${EducationFragmentDoc}
+${SkillFragmentDoc}`;
 export const CreateCvDocument = gql`
     mutation CreateCv($templateId: ID!) {
   createNewCv(templateId: $templateId) {
@@ -583,319 +576,53 @@ export type GetCvsQueryResult = Apollo.QueryResult<GetCvsQuery, GetCvsQueryVaria
 export function refetchGetCvsQuery(variables?: GetCvsQueryVariables) {
       return { query: GetCvsDocument, variables: variables }
     }
-export const UpdateEducationEntryDocument = gql`
-    mutation UpdateEducationEntry($cvId: ID!, $_id: ID!, $name: String, $degree: String, $duration: String, $location: String, $type: String, $skills: [String!], $description: String) {
-  updateCv(
-    cvId: $cvId
-    data: {educationEntries: {_id: $_id, name: $name, degree: $degree, duration: $duration, location: $location, type: $type, skills: $skills, description: $description}}
-  ) {
-    educationEntries {
-      ...EducationFragment
-    }
+export const UpdateCvDocument = gql`
+    mutation UpdateCv($cvId: ID!, $data: UpdateCvInput!) {
+  updateCv(cvId: $cvId, data: $data) {
+    ...CvFragment
   }
 }
-    ${EducationFragmentDoc}`;
-export type UpdateEducationEntryMutationFn = Apollo.MutationFunction<UpdateEducationEntryMutation, UpdateEducationEntryMutationVariables>;
-export type UpdateEducationEntryComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UpdateEducationEntryMutation, UpdateEducationEntryMutationVariables>, 'mutation'>;
+    ${CvFragmentDoc}`;
+export type UpdateCvMutationFn = Apollo.MutationFunction<UpdateCvMutation, UpdateCvMutationVariables>;
+export type UpdateCvComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UpdateCvMutation, UpdateCvMutationVariables>, 'mutation'>;
 
-    export const UpdateEducationEntryComponent = (props: UpdateEducationEntryComponentProps) => (
-      <ApolloReactComponents.Mutation<UpdateEducationEntryMutation, UpdateEducationEntryMutationVariables> mutation={UpdateEducationEntryDocument} {...props} />
+    export const UpdateCvComponent = (props: UpdateCvComponentProps) => (
+      <ApolloReactComponents.Mutation<UpdateCvMutation, UpdateCvMutationVariables> mutation={UpdateCvDocument} {...props} />
     );
     
 
 /**
- * __useUpdateEducationEntryMutation__
+ * __useUpdateCvMutation__
  *
- * To run a mutation, you first call `useUpdateEducationEntryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateEducationEntryMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateCvMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCvMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateEducationEntryMutation, { data, loading, error }] = useUpdateEducationEntryMutation({
+ * const [updateCvMutation, { data, loading, error }] = useUpdateCvMutation({
  *   variables: {
  *      cvId: // value for 'cvId'
- *      _id: // value for '_id'
- *      name: // value for 'name'
- *      degree: // value for 'degree'
- *      duration: // value for 'duration'
- *      location: // value for 'location'
- *      type: // value for 'type'
- *      skills: // value for 'skills'
- *      description: // value for 'description'
+ *      data: // value for 'data'
  *   },
  * });
  */
-export function useUpdateEducationEntryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEducationEntryMutation, UpdateEducationEntryMutationVariables>) {
+export function useUpdateCvMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCvMutation, UpdateCvMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateEducationEntryMutation, UpdateEducationEntryMutationVariables>(UpdateEducationEntryDocument, options);
+        return Apollo.useMutation<UpdateCvMutation, UpdateCvMutationVariables>(UpdateCvDocument, options);
       }
-export type UpdateEducationEntryMutationHookResult = ReturnType<typeof useUpdateEducationEntryMutation>;
-export type UpdateEducationEntryMutationResult = Apollo.MutationResult<UpdateEducationEntryMutation>;
-export type UpdateEducationEntryMutationOptions = Apollo.BaseMutationOptions<UpdateEducationEntryMutation, UpdateEducationEntryMutationVariables>;
-export const UpdateContactInfoDocument = gql`
-    mutation UpdateContactInfo($cvId: ID!, $email: String, $phone: String, $name: String) {
-  updateCv(
-    cvId: $cvId
-    data: {contactInfo: {email: $email, phone: $phone, name: $name}}
-  ) {
-    contactInfo {
-      email
-      phone
-      name
-    }
-  }
-}
-    `;
-export type UpdateContactInfoMutationFn = Apollo.MutationFunction<UpdateContactInfoMutation, UpdateContactInfoMutationVariables>;
-export type UpdateContactInfoComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UpdateContactInfoMutation, UpdateContactInfoMutationVariables>, 'mutation'>;
-
-    export const UpdateContactInfoComponent = (props: UpdateContactInfoComponentProps) => (
-      <ApolloReactComponents.Mutation<UpdateContactInfoMutation, UpdateContactInfoMutationVariables> mutation={UpdateContactInfoDocument} {...props} />
-    );
-    
-
-/**
- * __useUpdateContactInfoMutation__
- *
- * To run a mutation, you first call `useUpdateContactInfoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateContactInfoMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateContactInfoMutation, { data, loading, error }] = useUpdateContactInfoMutation({
- *   variables: {
- *      cvId: // value for 'cvId'
- *      email: // value for 'email'
- *      phone: // value for 'phone'
- *      name: // value for 'name'
- *   },
- * });
- */
-export function useUpdateContactInfoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateContactInfoMutation, UpdateContactInfoMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateContactInfoMutation, UpdateContactInfoMutationVariables>(UpdateContactInfoDocument, options);
-      }
-export type UpdateContactInfoMutationHookResult = ReturnType<typeof useUpdateContactInfoMutation>;
-export type UpdateContactInfoMutationResult = Apollo.MutationResult<UpdateContactInfoMutation>;
-export type UpdateContactInfoMutationOptions = Apollo.BaseMutationOptions<UpdateContactInfoMutation, UpdateContactInfoMutationVariables>;
-export const UpdateSkillEntryDocument = gql`
-    mutation UpdateSkillEntry($cvId: ID!, $_id: ID!, $category: String, $items: [String!]) {
-  updateCv(
-    cvId: $cvId
-    data: {skillEntries: {_id: $_id, category: $category, items: $items}}
-  ) {
-    skillEntries {
-      ...SkillFragment
-    }
-  }
-}
-    ${SkillFragmentDoc}`;
-export type UpdateSkillEntryMutationFn = Apollo.MutationFunction<UpdateSkillEntryMutation, UpdateSkillEntryMutationVariables>;
-export type UpdateSkillEntryComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UpdateSkillEntryMutation, UpdateSkillEntryMutationVariables>, 'mutation'>;
-
-    export const UpdateSkillEntryComponent = (props: UpdateSkillEntryComponentProps) => (
-      <ApolloReactComponents.Mutation<UpdateSkillEntryMutation, UpdateSkillEntryMutationVariables> mutation={UpdateSkillEntryDocument} {...props} />
-    );
-    
-
-/**
- * __useUpdateSkillEntryMutation__
- *
- * To run a mutation, you first call `useUpdateSkillEntryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateSkillEntryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateSkillEntryMutation, { data, loading, error }] = useUpdateSkillEntryMutation({
- *   variables: {
- *      cvId: // value for 'cvId'
- *      _id: // value for '_id'
- *      category: // value for 'category'
- *      items: // value for 'items'
- *   },
- * });
- */
-export function useUpdateSkillEntryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSkillEntryMutation, UpdateSkillEntryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateSkillEntryMutation, UpdateSkillEntryMutationVariables>(UpdateSkillEntryDocument, options);
-      }
-export type UpdateSkillEntryMutationHookResult = ReturnType<typeof useUpdateSkillEntryMutation>;
-export type UpdateSkillEntryMutationResult = Apollo.MutationResult<UpdateSkillEntryMutation>;
-export type UpdateSkillEntryMutationOptions = Apollo.BaseMutationOptions<UpdateSkillEntryMutation, UpdateSkillEntryMutationVariables>;
-export const UpdateAboutMeDocument = gql`
-    mutation UpdateAboutMe($cvId: ID!, $fieldName: String, $description: String) {
-  updateCv(
-    cvId: $cvId
-    data: {aboutMe: {fieldName: $fieldName, description: $description}}
-  ) {
-    aboutMe {
-      fieldName
-      description
-      _id
-    }
-  }
-}
-    `;
-export type UpdateAboutMeMutationFn = Apollo.MutationFunction<UpdateAboutMeMutation, UpdateAboutMeMutationVariables>;
-export type UpdateAboutMeComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UpdateAboutMeMutation, UpdateAboutMeMutationVariables>, 'mutation'>;
-
-    export const UpdateAboutMeComponent = (props: UpdateAboutMeComponentProps) => (
-      <ApolloReactComponents.Mutation<UpdateAboutMeMutation, UpdateAboutMeMutationVariables> mutation={UpdateAboutMeDocument} {...props} />
-    );
-    
-
-/**
- * __useUpdateAboutMeMutation__
- *
- * To run a mutation, you first call `useUpdateAboutMeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAboutMeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateAboutMeMutation, { data, loading, error }] = useUpdateAboutMeMutation({
- *   variables: {
- *      cvId: // value for 'cvId'
- *      fieldName: // value for 'fieldName'
- *      description: // value for 'description'
- *   },
- * });
- */
-export function useUpdateAboutMeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAboutMeMutation, UpdateAboutMeMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateAboutMeMutation, UpdateAboutMeMutationVariables>(UpdateAboutMeDocument, options);
-      }
-export type UpdateAboutMeMutationHookResult = ReturnType<typeof useUpdateAboutMeMutation>;
-export type UpdateAboutMeMutationResult = Apollo.MutationResult<UpdateAboutMeMutation>;
-export type UpdateAboutMeMutationOptions = Apollo.BaseMutationOptions<UpdateAboutMeMutation, UpdateAboutMeMutationVariables>;
-export const UpdateWorkExperienceEntryDocument = gql`
-    mutation UpdateWorkExperienceEntry($cvId: ID!, $_id: ID!, $name: String, $position: String, $duration: String, $location: String, $type: String, $description: String, $skills: [String!]) {
-  updateCv(
-    cvId: $cvId
-    data: {workExperienceEntries: {_id: $_id, name: $name, description: $description, position: $position, duration: $duration, location: $location, type: $type, skills: $skills}}
-  ) {
-    workExperienceEntries {
-      ...WorkExperienceFragment
-    }
-  }
-}
-    ${WorkExperienceFragmentDoc}`;
-export type UpdateWorkExperienceEntryMutationFn = Apollo.MutationFunction<UpdateWorkExperienceEntryMutation, UpdateWorkExperienceEntryMutationVariables>;
-export type UpdateWorkExperienceEntryComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UpdateWorkExperienceEntryMutation, UpdateWorkExperienceEntryMutationVariables>, 'mutation'>;
-
-    export const UpdateWorkExperienceEntryComponent = (props: UpdateWorkExperienceEntryComponentProps) => (
-      <ApolloReactComponents.Mutation<UpdateWorkExperienceEntryMutation, UpdateWorkExperienceEntryMutationVariables> mutation={UpdateWorkExperienceEntryDocument} {...props} />
-    );
-    
-
-/**
- * __useUpdateWorkExperienceEntryMutation__
- *
- * To run a mutation, you first call `useUpdateWorkExperienceEntryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateWorkExperienceEntryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateWorkExperienceEntryMutation, { data, loading, error }] = useUpdateWorkExperienceEntryMutation({
- *   variables: {
- *      cvId: // value for 'cvId'
- *      _id: // value for '_id'
- *      name: // value for 'name'
- *      position: // value for 'position'
- *      duration: // value for 'duration'
- *      location: // value for 'location'
- *      type: // value for 'type'
- *      description: // value for 'description'
- *      skills: // value for 'skills'
- *   },
- * });
- */
-export function useUpdateWorkExperienceEntryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateWorkExperienceEntryMutation, UpdateWorkExperienceEntryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateWorkExperienceEntryMutation, UpdateWorkExperienceEntryMutationVariables>(UpdateWorkExperienceEntryDocument, options);
-      }
-export type UpdateWorkExperienceEntryMutationHookResult = ReturnType<typeof useUpdateWorkExperienceEntryMutation>;
-export type UpdateWorkExperienceEntryMutationResult = Apollo.MutationResult<UpdateWorkExperienceEntryMutation>;
-export type UpdateWorkExperienceEntryMutationOptions = Apollo.BaseMutationOptions<UpdateWorkExperienceEntryMutation, UpdateWorkExperienceEntryMutationVariables>;
-export const UpdateProjectEntryDocument = gql`
-    mutation UpdateProjectEntry($cvId: ID!, $_id: ID!, $name: String, $description: String, $skills: [String!]) {
-  updateCv(
-    cvId: $cvId
-    data: {projectEntries: {_id: $_id, name: $name, description: $description, skills: $skills}}
-  ) {
-    projectEntries {
-      ...ProjectFragment
-    }
-  }
-}
-    ${ProjectFragmentDoc}`;
-export type UpdateProjectEntryMutationFn = Apollo.MutationFunction<UpdateProjectEntryMutation, UpdateProjectEntryMutationVariables>;
-export type UpdateProjectEntryComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UpdateProjectEntryMutation, UpdateProjectEntryMutationVariables>, 'mutation'>;
-
-    export const UpdateProjectEntryComponent = (props: UpdateProjectEntryComponentProps) => (
-      <ApolloReactComponents.Mutation<UpdateProjectEntryMutation, UpdateProjectEntryMutationVariables> mutation={UpdateProjectEntryDocument} {...props} />
-    );
-    
-
-/**
- * __useUpdateProjectEntryMutation__
- *
- * To run a mutation, you first call `useUpdateProjectEntryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateProjectEntryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateProjectEntryMutation, { data, loading, error }] = useUpdateProjectEntryMutation({
- *   variables: {
- *      cvId: // value for 'cvId'
- *      _id: // value for '_id'
- *      name: // value for 'name'
- *      description: // value for 'description'
- *      skills: // value for 'skills'
- *   },
- * });
- */
-export function useUpdateProjectEntryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProjectEntryMutation, UpdateProjectEntryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateProjectEntryMutation, UpdateProjectEntryMutationVariables>(UpdateProjectEntryDocument, options);
-      }
-export type UpdateProjectEntryMutationHookResult = ReturnType<typeof useUpdateProjectEntryMutation>;
-export type UpdateProjectEntryMutationResult = Apollo.MutationResult<UpdateProjectEntryMutation>;
-export type UpdateProjectEntryMutationOptions = Apollo.BaseMutationOptions<UpdateProjectEntryMutation, UpdateProjectEntryMutationVariables>;
+export type UpdateCvMutationHookResult = ReturnType<typeof useUpdateCvMutation>;
+export type UpdateCvMutationResult = Apollo.MutationResult<UpdateCvMutation>;
+export type UpdateCvMutationOptions = Apollo.BaseMutationOptions<UpdateCvMutation, UpdateCvMutationVariables>;
 export const GenerateNewEntryItemDocument = gql`
     mutation GenerateNewEntryItem($cvId: ID!, $entryType: CvEntryType!) {
   generateNewEntryItem(cvId: $cvId, entryType: $entryType) {
-    ... on WorkExperience {
-      ...WorkExperienceFragment
-    }
-    ... on Project {
-      ...ProjectFragment
-    }
-    ... on Education {
-      ...EducationFragment
-    }
+    ...CvFragment
   }
 }
-    ${WorkExperienceFragmentDoc}
-${ProjectFragmentDoc}
-${EducationFragmentDoc}`;
+    ${CvFragmentDoc}`;
 export type GenerateNewEntryItemMutationFn = Apollo.MutationFunction<GenerateNewEntryItemMutation, GenerateNewEntryItemMutationVariables>;
 export type GenerateNewEntryItemComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<GenerateNewEntryItemMutation, GenerateNewEntryItemMutationVariables>, 'mutation'>;
 
@@ -1278,6 +1005,55 @@ export type GetProjectEntriesSuspenseQueryHookResult = ReturnType<typeof useGetP
 export type GetProjectEntriesQueryResult = Apollo.QueryResult<GetProjectEntriesQuery, GetProjectEntriesQueryVariables>;
 export function refetchGetProjectEntriesQuery(variables: GetProjectEntriesQueryVariables) {
       return { query: GetProjectEntriesDocument, variables: variables }
+    }
+export const GetCvDocument = gql`
+    query GetCv($cvId: ID!) {
+  getCv(cvId: $cvId) {
+    ...CvFragment
+  }
+}
+    ${CvFragmentDoc}`;
+export type GetCvComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetCvQuery, GetCvQueryVariables>, 'query'> & ({ variables: GetCvQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const GetCvComponent = (props: GetCvComponentProps) => (
+      <ApolloReactComponents.Query<GetCvQuery, GetCvQueryVariables> query={GetCvDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetCvQuery__
+ *
+ * To run a query within a React component, call `useGetCvQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCvQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCvQuery({
+ *   variables: {
+ *      cvId: // value for 'cvId'
+ *   },
+ * });
+ */
+export function useGetCvQuery(baseOptions: Apollo.QueryHookOptions<GetCvQuery, GetCvQueryVariables> & ({ variables: GetCvQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCvQuery, GetCvQueryVariables>(GetCvDocument, options);
+      }
+export function useGetCvLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCvQuery, GetCvQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCvQuery, GetCvQueryVariables>(GetCvDocument, options);
+        }
+export function useGetCvSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCvQuery, GetCvQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCvQuery, GetCvQueryVariables>(GetCvDocument, options);
+        }
+export type GetCvQueryHookResult = ReturnType<typeof useGetCvQuery>;
+export type GetCvLazyQueryHookResult = ReturnType<typeof useGetCvLazyQuery>;
+export type GetCvSuspenseQueryHookResult = ReturnType<typeof useGetCvSuspenseQuery>;
+export type GetCvQueryResult = Apollo.QueryResult<GetCvQuery, GetCvQueryVariables>;
+export function refetchGetCvQuery(variables: GetCvQueryVariables) {
+      return { query: GetCvDocument, variables: variables }
     }
 export const CheckCvDocument = gql`
     query CheckCv($cvId: ID!) {

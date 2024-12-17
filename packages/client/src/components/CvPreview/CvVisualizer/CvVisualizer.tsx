@@ -1,12 +1,14 @@
 import React from 'react';
 import { Box, Divider } from '@mui/material';
 import { widthToPerc } from '../../utils';
-import { ContactInfo } from './CvFields';
-import { AboutMe } from './CvFields/AboutMe';
-import { WorkExperience } from './CvFields/WorkExperience';
-import { Projects } from './CvFields/Projects';
-import { Education } from './CvFields/Education';
-import { Skills } from './CvFields/Skills';
+import {
+  AboutMe,
+  ContactInfo,
+  Education,
+  Projects,
+  Skills,
+  WorkExperience,
+} from './CvFields';
 
 type CvVisualizerProps = {
   cvId: string;

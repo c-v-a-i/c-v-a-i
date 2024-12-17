@@ -4,7 +4,10 @@ import type { TypographyProps, TextFieldProps, BoxProps } from '@mui/material';
 import { TypographyWithMarkdown } from './TypographyWithMarkdown';
 import { useMeasureTextWidth } from './utils';
 
-type EditableTypographyBaseProps = Pick<BoxProps, 'onMouseUp' | 'onMouseDown'> & {
+type EditableTypographyBaseProps = Pick<
+  BoxProps,
+  'onMouseUp' | 'onMouseDown'
+> & {
   id: string;
   isEditing: boolean;
   tempValue: string;

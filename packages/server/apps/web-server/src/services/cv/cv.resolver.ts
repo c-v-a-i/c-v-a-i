@@ -15,7 +15,6 @@ import { CvService } from './cv.service';
 import {
   convertCvToObjectType,
   CvEntryType,
-  CvEntryUnion,
   CvObjectType,
   isCvPropertyItemizedEntry,
   UpdateCvInput,
@@ -157,18 +156,18 @@ export class CvResolver {
     return this.cvService.deleteCv({ cvId, userId });
   }
 
-  // given a cv entry type name, generate a "dummy" item so it can then be changed
-  @Mutation(() => CvEntryUnion)
+  @Mutation(() => CvObjectType)
   async generateNewEntryItem(
     @CurrentUser() { client_id: userId }: DecodedUserObjectType,
     @Args('cvId', { type: () => ID }) cvId: string,
     @Args('entryType', { type: () => CvEntryType }) entryType: CvEntryType
-  ): Promise<typeof CvEntryUnion> {
-    return this.cvService.generateNewEntryItem({
+  ): Promise<CvObjectType> {
+    const cvDocument = await this.cvService.generateNewEntryItem({
       entryType,
       cvId,
       userId,
     });
+    return convertCvToObjectType(cvDocument);
   }
 
   @Mutation(() => Boolean)

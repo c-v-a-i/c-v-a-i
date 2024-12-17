@@ -1,3 +1,39 @@
+fragment CvFragment on CvObjectType {
+  _id
+  title
+  aboutMe {
+    ...AboutMeFragment
+  }
+  contactInfo {
+    ...ContactInfoFragment
+  }
+  workExperienceEntries {
+    ...WorkExperienceFragment
+  }
+  projectEntries {
+    ...ProjectFragment
+  }
+  educationEntries {
+    ...EducationFragment
+  }
+  skillEntries {
+    ...SkillFragment
+  }
+}
+
+fragment AboutMeFragment on AboutMe {
+  _id
+  fieldName
+  description
+}
+
+fragment ContactInfoFragment on ContactInfo {
+  _id
+  name
+  email
+  phone
+}
+
 fragment WorkExperienceFragment on WorkExperience {
   _id
   name

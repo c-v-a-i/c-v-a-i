@@ -20,8 +20,6 @@ enum CvEntryType {
   WORK_EXPERIENCE
 }
 
-union CvEntryUnion = Education | Project | Skill | WorkExperience
-
 type CvObjectType {
   _id: ID!
   aboutMe: AboutMe
@@ -54,7 +52,7 @@ type Mutation {
   deleteCv(cvId: ID!): Boolean!
   deleteCvEntryItem(cvId: ID!, entryItemId: ID!, entryType: CvEntryType!): Boolean!
   deleteEntryItem(cvId: ID!, entryItemId: ID!, entryType: CvEntryType!): Boolean!
-  generateNewEntryItem(cvId: ID!, entryType: CvEntryType!): CvEntryUnion!
+  generateNewEntryItem(cvId: ID!, entryType: CvEntryType!): CvObjectType!
   logout: Boolean!
   updateCv(cvId: ID!, data: UpdateCvInput!): CvObjectType!
 }

@@ -114,7 +114,7 @@ export class CvService {
   }: {
     userId: string;
     cvId: string;
-  }): Promise<Cv> {
+  }) {
     const templateCv = await this.getCv({ cvId, userId });
 
     const newCv = new this.cvModel({
@@ -128,9 +128,7 @@ export class CvService {
     return newCv.save();
   }
 
-  async generateExampleCv({
-    userId,
-  }: Pick<CvManagerProps, 'userId'>): Promise<Cv> {
+  async generateExampleCv({ userId }: Pick<CvManagerProps, 'userId'>) {
     const example = new this.cvModel({
       title: 'Example CV',
       userId,
@@ -281,26 +279,6 @@ export class CvService {
       newEntryItem as ConvertOrTypeToAndType<typeof newEntryItem> & Document
     );
 
-    await cv.save();
-
-    const updatedDoc = cv[cvEntryName].get(newEntryItem._id);
-
-    if (!updatedDoc) {
-      throw new NotFoundException(
-        `Unable to fetch the newly saved item with ID '${newEntryItem._id}'. Probably didn't save it correctly.`
-      );
-    }
-
-    const classInstance = match(entryType)
-      .with(CvEntryType.PROJECT, () => new Project())
-      .with(CvEntryType.WORK_EXPERIENCE, () => new WorkExperience())
-      .with(CvEntryType.EDUCATION, () => new Education())
-      .with(CvEntryType.SKILL, () => new Skill())
-      .exhaustive();
-
-    return Object.assign(
-      classInstance,
-      updatedDoc.toObject()
-    ) as typeof classInstance;
+    return cv.save();
   }
 }
