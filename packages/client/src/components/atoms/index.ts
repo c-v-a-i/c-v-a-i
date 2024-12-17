@@ -1,3 +1,4 @@
+export * from './RemoveEntryButton';
 export * from './MenuList';
 export * from './PopupMenu';
 export * from './AddButton';

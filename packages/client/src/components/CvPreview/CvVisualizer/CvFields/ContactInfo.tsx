@@ -1,16 +1,15 @@
 import React from 'react';
-import type { UpdateContactInfoMutationVariables } from '../../../../generated/graphql';
+import type { CvEntryComponentProps, UpdateFieldProps } from '../types';
 import {
   GetContactInfoComponent,
   refetchGetContactInfoQuery,
-  useUpdateContactInfoMutation,
+  useUpdateCvMutation,
 } from '../../../../generated/graphql';
 import { Box, Typography } from '@mui/material';
 import { EditableTypography } from '../../../atoms';
-import type { CvEntryComponentProps, UpdateFieldProps } from '../types';
 
 export const ContactInfo = ({ cvId }: CvEntryComponentProps) => {
-  const [updateContactInfo] = useUpdateContactInfoMutation({
+  const [updateCv] = useUpdateCvMutation({
     refetchQueries: [
       refetchGetContactInfoQuery({
         cvId,
@@ -21,11 +20,15 @@ export const ContactInfo = ({ cvId }: CvEntryComponentProps) => {
   const updateField = async ({
     fieldName,
     value,
-  }: UpdateFieldProps<UpdateContactInfoMutationVariables>) => {
-    await updateContactInfo({
+  }: UpdateFieldProps<'contactInfo'>) => {
+    await updateCv({
       variables: {
         cvId,
-        [fieldName]: value,
+        data: {
+          contactInfo: {
+            [fieldName]: value,
+          },
+        },
       },
     });
   };

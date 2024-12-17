@@ -1,16 +1,15 @@
 import React from 'react';
 import type { CvEntryComponentProps, UpdateFieldProps } from '../types';
-import type { UpdateAboutMeMutationVariables } from '../../../../generated/graphql';
 import {
   GetAboutMeComponent,
   refetchGetAboutMeQuery,
-  useUpdateAboutMeMutation,
+  useUpdateCvMutation,
 } from '../../../../generated/graphql';
 import { Box, Typography } from '@mui/material';
 import { EditableTypography } from '../../../atoms';
 
 export const AboutMe = ({ cvId }: CvEntryComponentProps) => {
-  const [updateAboutMe] = useUpdateAboutMeMutation({
+  const [updateAboutMe] = useUpdateCvMutation({
     refetchQueries: [
       refetchGetAboutMeQuery({
         cvId,
@@ -21,11 +20,15 @@ export const AboutMe = ({ cvId }: CvEntryComponentProps) => {
   const updateField = async ({
     fieldName,
     value,
-  }: UpdateFieldProps<UpdateAboutMeMutationVariables>) => {
+  }: UpdateFieldProps<'aboutMe'>) => {
     await updateAboutMe({
       variables: {
         cvId,
-        [fieldName]: value,
+        data: {
+          aboutMe: {
+            [fieldName]: value,
+          },
+        },
       },
     });
   };
