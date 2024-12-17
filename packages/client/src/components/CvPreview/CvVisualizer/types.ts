@@ -5,6 +5,7 @@ import type {
   UpdateCvInput,
   Project,
   Skill,
+  ContactInfo,
 } from '../../../generated/graphql';
 
 export type CvEntriesOfArrayType = Pick<
@@ -54,6 +55,7 @@ type CvFieldNameToObjectType = {
   educationEntries: Education;
   projectEntries: Project;
   skillEntries: Skill;
+  contactInfoEntries: ContactInfo;
 };
 
 export type CvEntryItemProps<T extends CvEntryArrayFieldName> = {

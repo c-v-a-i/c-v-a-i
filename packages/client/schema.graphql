@@ -4,16 +4,18 @@ type AboutMe {
   _id: ID!
   description: String!
   fieldName: String!
+  name: String!
 }
 
 type ContactInfo {
   _id: ID!
-  email: String!
-  name: String!
-  phone: String!
+  link: String!
+  linkName: String!
+  positionIndex: Float!
 }
 
 enum CvEntryType {
+  CONTACT_INFO
   EDUCATION
   PROJECT
   SKILL
@@ -23,7 +25,7 @@ enum CvEntryType {
 type CvObjectType {
   _id: ID!
   aboutMe: AboutMe
-  contactInfo: ContactInfo
+  contactInfoEntries: [ContactInfo!]
   educationEntries: [Education!]
   projectEntries: [Project!]
   skillEntries: [Skill!]
@@ -87,18 +89,18 @@ input UpdateAboutMeInput {
   _id: ID
   description: String
   fieldName: String
+  name: String
 }
 
 input UpdateContactInfoInput {
   _id: ID
-  email: String
-  name: String
-  phone: String
+  link: String
+  linkName: String
 }
 
 input UpdateCvInput {
   aboutMe: UpdateAboutMeInput
-  contactInfo: UpdateContactInfoInput
+  contactInfoEntries: UpdateContactInfoInput
   educationEntries: [UpdateEducationInput!]
   projectEntries: [UpdateProjectInput!]
   skillEntries: [UpdateSkillInput!]

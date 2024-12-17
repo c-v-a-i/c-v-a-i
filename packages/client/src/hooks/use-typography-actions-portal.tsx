@@ -1,29 +1,24 @@
-import { useEffect, useRef } from 'react';
+// useTypographyActionsPortal.ts
+import { useEffect, useRef, useState } from 'react';
 import type { Root } from 'react-dom/client';
 import { createRoot } from 'react-dom/client';
-import { Box, IconButton, TextField, Tooltip } from '@mui/material';
+import { Box, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
 
 interface UseTypographyActionsPortalOptions {
   onEdit: () => void;
-  onAiEdit?: (prompt: string) => void;
 }
 
 export const useTypographyActionsPortal = (
   options: UseTypographyActionsPortalOptions
 ) => {
-  const { onEdit, onAiEdit } = options;
+  const { onEdit } = options;
 
   const portalRootRef = useRef<HTMLDivElement | null>(null);
   const portalRootInstanceRef = useRef<Root | null>(null);
-
   const visibleRef = useRef(false);
   const positionRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-  const showAiPromptRef = useRef(false);
-  const aiPromptRef = useRef('');
 
-  // Create portal root if it doesn't exist
   useEffect(() => {
     if (!portalRootRef.current) {
       const portalRoot = document.createElement('div');
@@ -44,18 +39,24 @@ export const useTypographyActionsPortal = (
     };
   }, []);
 
+  const [isPortalVisible, setIsPortalVisible] = useState(false);
+
   const renderPortal = () => {
     if (!portalRootInstanceRef.current || !visibleRef.current) return;
+    setIsPortalVisible(true);
 
-    // TODO: move it into a separate component
     const portalContent = (
       <Box
+        onMouseDown={(e) => {
+          // Prevent this click from closing the popup immediately
+          e.stopPropagation();
+        }}
         sx={{
           position: 'absolute',
           top: positionRef.current.y,
           left: positionRef.current.x,
           display: 'flex',
-          alignItems: 'center',
+          flexDirection: 'column',
           backgroundColor: 'background.paper',
           padding: '4px',
           borderRadius: '4px',
@@ -64,53 +65,16 @@ export const useTypographyActionsPortal = (
         }}
       >
         <Tooltip title="Edit">
-          <IconButton size="small" onClick={onEdit}>
+          <IconButton
+            size="small"
+            onClick={() => {
+              onEdit();
+              triggerPortal(false);
+            }}
+          >
             <EditIcon fontSize="small" />
           </IconButton>
         </Tooltip>
-        {onAiEdit && (
-          <Tooltip title="Enhance with AI">
-            <IconButton
-              size="small"
-              onClick={() => {
-                showAiPromptRef.current = true;
-                renderPortal(); // Re-render to show AI prompt
-              }}
-            >
-              <SmartToyIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        )}
-        {showAiPromptRef.current && (
-          <TextField
-            defaultValue={aiPromptRef.current}
-            onChange={(e) => {
-              aiPromptRef.current = e.target.value;
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                onAiEdit?.(aiPromptRef.current);
-                aiPromptRef.current = '';
-                showAiPromptRef.current = false;
-                visibleRef.current = false;
-                renderPortal(); // Re-render to hide portal
-              } else if (e.key === 'Escape') {
-                aiPromptRef.current = '';
-                showAiPromptRef.current = false;
-                renderPortal(); // Re-render to hide AI prompt
-              }
-            }}
-            autoFocus
-            variant="outlined"
-            size="small"
-            placeholder="Enter AI prompt"
-            onBlur={() => {
-              showAiPromptRef.current = false;
-              renderPortal(); // Re-render to hide AI prompt
-            }}
-            sx={{ ml: 1 }}
-          />
-        )}
       </Box>
     );
 
@@ -122,15 +86,14 @@ export const useTypographyActionsPortal = (
     coords?: { x: number; y: number }
   ) => {
     visibleRef.current = shouldShow;
-    if (coords) {
-      positionRef.current = coords;
-    }
+    if (coords) positionRef.current = coords;
+
     if (!shouldShow) {
-      // Unmount the portal
+      // Clear the portal content
       setTimeout(() => {
-        if (portalRootInstanceRef.current) {
+        if (portalRootInstanceRef.current)
           portalRootInstanceRef.current.render(null);
-        }
+        setIsPortalVisible(false);
       }, 0);
     } else {
       renderPortal();
@@ -139,5 +102,6 @@ export const useTypographyActionsPortal = (
 
   return {
     triggerPortal,
+    isPortalVisible,
   };
 };

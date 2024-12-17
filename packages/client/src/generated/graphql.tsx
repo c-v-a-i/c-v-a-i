@@ -27,17 +27,19 @@ export type AboutMe = {
   _id: Scalars['ID']['output'];
   description: Scalars['String']['output'];
   fieldName: Scalars['String']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type ContactInfo = {
   __typename?: 'ContactInfo';
   _id: Scalars['ID']['output'];
-  email: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  phone: Scalars['String']['output'];
+  link: Scalars['String']['output'];
+  linkName: Scalars['String']['output'];
+  positionIndex: Scalars['Float']['output'];
 };
 
 export enum CvEntryType {
+  ContactInfo = 'CONTACT_INFO',
   Education = 'EDUCATION',
   Project = 'PROJECT',
   Skill = 'SKILL',
@@ -48,7 +50,7 @@ export type CvObjectType = {
   __typename?: 'CvObjectType';
   _id: Scalars['ID']['output'];
   aboutMe?: Maybe<AboutMe>;
-  contactInfo?: Maybe<ContactInfo>;
+  contactInfoEntries?: Maybe<Array<ContactInfo>>;
   educationEntries?: Maybe<Array<Education>>;
   projectEntries?: Maybe<Array<Project>>;
   skillEntries?: Maybe<Array<Skill>>;
@@ -156,18 +158,18 @@ export type UpdateAboutMeInput = {
   _id?: InputMaybe<Scalars['ID']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   fieldName?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateContactInfoInput = {
   _id?: InputMaybe<Scalars['ID']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  phone?: InputMaybe<Scalars['String']['input']>;
+  link?: InputMaybe<Scalars['String']['input']>;
+  linkName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateCvInput = {
   aboutMe?: InputMaybe<UpdateAboutMeInput>;
-  contactInfo?: InputMaybe<UpdateContactInfoInput>;
+  contactInfoEntries?: InputMaybe<UpdateContactInfoInput>;
   educationEntries?: InputMaybe<Array<UpdateEducationInput>>;
   projectEntries?: InputMaybe<Array<UpdateProjectInput>>;
   skillEntries?: InputMaybe<Array<UpdateSkillInput>>;
@@ -254,11 +256,11 @@ export type GetCvsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCvsQuery = { __typename?: 'Query', getCvs: Array<{ __typename?: 'CvObjectType', _id: string, name: string }> };
 
-export type CvFragment = { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, fieldName: string, description: string } | null, contactInfo?: { __typename?: 'ContactInfo', _id: string, name: string, email: string, phone: string } | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null };
+export type CvFragment = { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null };
 
-export type AboutMeFragment = { __typename?: 'AboutMe', _id: string, fieldName: string, description: string };
+export type AboutMeFragment = { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string };
 
-export type ContactInfoFragment = { __typename?: 'ContactInfo', _id: string, name: string, email: string, phone: string };
+export type ContactInfoFragment = { __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string };
 
 export type WorkExperienceFragment = { __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number };
 
@@ -274,7 +276,7 @@ export type UpdateCvMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCvMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, fieldName: string, description: string } | null, contactInfo?: { __typename?: 'ContactInfo', _id: string, name: string, email: string, phone: string } | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
+export type UpdateCvMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
 
 export type GenerateNewEntryItemMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -282,7 +284,7 @@ export type GenerateNewEntryItemMutationVariables = Exact<{
 }>;
 
 
-export type GenerateNewEntryItemMutation = { __typename?: 'Mutation', generateNewEntryItem: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, fieldName: string, description: string } | null, contactInfo?: { __typename?: 'ContactInfo', _id: string, name: string, email: string, phone: string } | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
+export type GenerateNewEntryItemMutation = { __typename?: 'Mutation', generateNewEntryItem: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
 
 export type DeleteEntryItemMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -307,19 +309,26 @@ export type GetEducationEntriesQueryVariables = Exact<{
 
 export type GetEducationEntriesQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null } };
 
-export type GetContactInfoQueryVariables = Exact<{
+export type GetCvQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
 }>;
 
 
-export type GetContactInfoQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', contactInfo?: { __typename?: 'ContactInfo', _id: string, name: string, email: string, phone: string } | null } };
+export type GetCvQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
+
+export type GetContactInfoEntriesQueryVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+}>;
+
+
+export type GetContactInfoEntriesQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null } };
 
 export type GetAboutMeQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
 }>;
 
 
-export type GetAboutMeQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', aboutMe?: { __typename?: 'AboutMe', _id: string, fieldName: string, description: string } | null } };
+export type GetAboutMeQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null } };
 
 export type GetWorkExperienceEntriesQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -334,13 +343,6 @@ export type GetProjectEntriesQueryVariables = Exact<{
 
 
 export type GetProjectEntriesQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null } };
-
-export type GetCvQueryVariables = Exact<{
-  cvId: Scalars['ID']['input'];
-}>;
-
-
-export type GetCvQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, fieldName: string, description: string } | null, contactInfo?: { __typename?: 'ContactInfo', _id: string, name: string, email: string, phone: string } | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
 
 export type CheckCvQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -367,6 +369,7 @@ export type GetCurrentUserQuery = { __typename?: 'Query', currentUser: { __typen
 export const AboutMeFragmentDoc = gql`
     fragment AboutMeFragment on AboutMe {
   _id
+  name
   fieldName
   description
 }
@@ -374,9 +377,9 @@ export const AboutMeFragmentDoc = gql`
 export const ContactInfoFragmentDoc = gql`
     fragment ContactInfoFragment on ContactInfo {
   _id
-  name
-  email
-  phone
+  linkName
+  positionIndex
+  link
 }
     `;
 export const WorkExperienceFragmentDoc = gql`
@@ -428,7 +431,7 @@ export const CvFragmentDoc = gql`
   aboutMe {
     ...AboutMeFragment
   }
-  contactInfo {
+  contactInfoEntries {
     ...ContactInfoFragment
   }
   workExperienceEntries {
@@ -797,71 +800,115 @@ export type GetEducationEntriesQueryResult = Apollo.QueryResult<GetEducationEntr
 export function refetchGetEducationEntriesQuery(variables: GetEducationEntriesQueryVariables) {
       return { query: GetEducationEntriesDocument, variables: variables }
     }
-export const GetContactInfoDocument = gql`
-    query GetContactInfo($cvId: ID!) {
+export const GetCvDocument = gql`
+    query GetCv($cvId: ID!) {
   getCv(cvId: $cvId) {
-    contactInfo {
-      _id
-      name
-      email
-      phone
-    }
+    ...CvFragment
   }
 }
-    `;
-export type GetContactInfoComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetContactInfoQuery, GetContactInfoQueryVariables>, 'query'> & ({ variables: GetContactInfoQueryVariables; skip?: boolean; } | { skip: boolean; });
+    ${CvFragmentDoc}`;
+export type GetCvComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetCvQuery, GetCvQueryVariables>, 'query'> & ({ variables: GetCvQueryVariables; skip?: boolean; } | { skip: boolean; });
 
-    export const GetContactInfoComponent = (props: GetContactInfoComponentProps) => (
-      <ApolloReactComponents.Query<GetContactInfoQuery, GetContactInfoQueryVariables> query={GetContactInfoDocument} {...props} />
+    export const GetCvComponent = (props: GetCvComponentProps) => (
+      <ApolloReactComponents.Query<GetCvQuery, GetCvQueryVariables> query={GetCvDocument} {...props} />
     );
     
 
 /**
- * __useGetContactInfoQuery__
+ * __useGetCvQuery__
  *
- * To run a query within a React component, call `useGetContactInfoQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetContactInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCvQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCvQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetContactInfoQuery({
+ * const { data, loading, error } = useGetCvQuery({
  *   variables: {
  *      cvId: // value for 'cvId'
  *   },
  * });
  */
-export function useGetContactInfoQuery(baseOptions: Apollo.QueryHookOptions<GetContactInfoQuery, GetContactInfoQueryVariables> & ({ variables: GetContactInfoQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetCvQuery(baseOptions: Apollo.QueryHookOptions<GetCvQuery, GetCvQueryVariables> & ({ variables: GetCvQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetContactInfoQuery, GetContactInfoQueryVariables>(GetContactInfoDocument, options);
+        return Apollo.useQuery<GetCvQuery, GetCvQueryVariables>(GetCvDocument, options);
       }
-export function useGetContactInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetContactInfoQuery, GetContactInfoQueryVariables>) {
+export function useGetCvLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCvQuery, GetCvQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetContactInfoQuery, GetContactInfoQueryVariables>(GetContactInfoDocument, options);
+          return Apollo.useLazyQuery<GetCvQuery, GetCvQueryVariables>(GetCvDocument, options);
         }
-export function useGetContactInfoSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetContactInfoQuery, GetContactInfoQueryVariables>) {
+export function useGetCvSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCvQuery, GetCvQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetContactInfoQuery, GetContactInfoQueryVariables>(GetContactInfoDocument, options);
+          return Apollo.useSuspenseQuery<GetCvQuery, GetCvQueryVariables>(GetCvDocument, options);
         }
-export type GetContactInfoQueryHookResult = ReturnType<typeof useGetContactInfoQuery>;
-export type GetContactInfoLazyQueryHookResult = ReturnType<typeof useGetContactInfoLazyQuery>;
-export type GetContactInfoSuspenseQueryHookResult = ReturnType<typeof useGetContactInfoSuspenseQuery>;
-export type GetContactInfoQueryResult = Apollo.QueryResult<GetContactInfoQuery, GetContactInfoQueryVariables>;
-export function refetchGetContactInfoQuery(variables: GetContactInfoQueryVariables) {
-      return { query: GetContactInfoDocument, variables: variables }
+export type GetCvQueryHookResult = ReturnType<typeof useGetCvQuery>;
+export type GetCvLazyQueryHookResult = ReturnType<typeof useGetCvLazyQuery>;
+export type GetCvSuspenseQueryHookResult = ReturnType<typeof useGetCvSuspenseQuery>;
+export type GetCvQueryResult = Apollo.QueryResult<GetCvQuery, GetCvQueryVariables>;
+export function refetchGetCvQuery(variables: GetCvQueryVariables) {
+      return { query: GetCvDocument, variables: variables }
+    }
+export const GetContactInfoEntriesDocument = gql`
+    query GetContactInfoEntries($cvId: ID!) {
+  getCv(cvId: $cvId) {
+    contactInfoEntries {
+      ...ContactInfoFragment
+    }
+  }
+}
+    ${ContactInfoFragmentDoc}`;
+export type GetContactInfoEntriesComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetContactInfoEntriesQuery, GetContactInfoEntriesQueryVariables>, 'query'> & ({ variables: GetContactInfoEntriesQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const GetContactInfoEntriesComponent = (props: GetContactInfoEntriesComponentProps) => (
+      <ApolloReactComponents.Query<GetContactInfoEntriesQuery, GetContactInfoEntriesQueryVariables> query={GetContactInfoEntriesDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetContactInfoEntriesQuery__
+ *
+ * To run a query within a React component, call `useGetContactInfoEntriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetContactInfoEntriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetContactInfoEntriesQuery({
+ *   variables: {
+ *      cvId: // value for 'cvId'
+ *   },
+ * });
+ */
+export function useGetContactInfoEntriesQuery(baseOptions: Apollo.QueryHookOptions<GetContactInfoEntriesQuery, GetContactInfoEntriesQueryVariables> & ({ variables: GetContactInfoEntriesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetContactInfoEntriesQuery, GetContactInfoEntriesQueryVariables>(GetContactInfoEntriesDocument, options);
+      }
+export function useGetContactInfoEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetContactInfoEntriesQuery, GetContactInfoEntriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetContactInfoEntriesQuery, GetContactInfoEntriesQueryVariables>(GetContactInfoEntriesDocument, options);
+        }
+export function useGetContactInfoEntriesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetContactInfoEntriesQuery, GetContactInfoEntriesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetContactInfoEntriesQuery, GetContactInfoEntriesQueryVariables>(GetContactInfoEntriesDocument, options);
+        }
+export type GetContactInfoEntriesQueryHookResult = ReturnType<typeof useGetContactInfoEntriesQuery>;
+export type GetContactInfoEntriesLazyQueryHookResult = ReturnType<typeof useGetContactInfoEntriesLazyQuery>;
+export type GetContactInfoEntriesSuspenseQueryHookResult = ReturnType<typeof useGetContactInfoEntriesSuspenseQuery>;
+export type GetContactInfoEntriesQueryResult = Apollo.QueryResult<GetContactInfoEntriesQuery, GetContactInfoEntriesQueryVariables>;
+export function refetchGetContactInfoEntriesQuery(variables: GetContactInfoEntriesQueryVariables) {
+      return { query: GetContactInfoEntriesDocument, variables: variables }
     }
 export const GetAboutMeDocument = gql`
     query GetAboutMe($cvId: ID!) {
   getCv(cvId: $cvId) {
     aboutMe {
-      _id
-      fieldName
-      description
+      ...AboutMeFragment
     }
   }
 }
-    `;
+    ${AboutMeFragmentDoc}`;
 export type GetAboutMeComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetAboutMeQuery, GetAboutMeQueryVariables>, 'query'> & ({ variables: GetAboutMeQueryVariables; skip?: boolean; } | { skip: boolean; });
 
     export const GetAboutMeComponent = (props: GetAboutMeComponentProps) => (
@@ -1005,55 +1052,6 @@ export type GetProjectEntriesSuspenseQueryHookResult = ReturnType<typeof useGetP
 export type GetProjectEntriesQueryResult = Apollo.QueryResult<GetProjectEntriesQuery, GetProjectEntriesQueryVariables>;
 export function refetchGetProjectEntriesQuery(variables: GetProjectEntriesQueryVariables) {
       return { query: GetProjectEntriesDocument, variables: variables }
-    }
-export const GetCvDocument = gql`
-    query GetCv($cvId: ID!) {
-  getCv(cvId: $cvId) {
-    ...CvFragment
-  }
-}
-    ${CvFragmentDoc}`;
-export type GetCvComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetCvQuery, GetCvQueryVariables>, 'query'> & ({ variables: GetCvQueryVariables; skip?: boolean; } | { skip: boolean; });
-
-    export const GetCvComponent = (props: GetCvComponentProps) => (
-      <ApolloReactComponents.Query<GetCvQuery, GetCvQueryVariables> query={GetCvDocument} {...props} />
-    );
-    
-
-/**
- * __useGetCvQuery__
- *
- * To run a query within a React component, call `useGetCvQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCvQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCvQuery({
- *   variables: {
- *      cvId: // value for 'cvId'
- *   },
- * });
- */
-export function useGetCvQuery(baseOptions: Apollo.QueryHookOptions<GetCvQuery, GetCvQueryVariables> & ({ variables: GetCvQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCvQuery, GetCvQueryVariables>(GetCvDocument, options);
-      }
-export function useGetCvLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCvQuery, GetCvQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCvQuery, GetCvQueryVariables>(GetCvDocument, options);
-        }
-export function useGetCvSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCvQuery, GetCvQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetCvQuery, GetCvQueryVariables>(GetCvDocument, options);
-        }
-export type GetCvQueryHookResult = ReturnType<typeof useGetCvQuery>;
-export type GetCvLazyQueryHookResult = ReturnType<typeof useGetCvLazyQuery>;
-export type GetCvSuspenseQueryHookResult = ReturnType<typeof useGetCvSuspenseQuery>;
-export type GetCvQueryResult = Apollo.QueryResult<GetCvQuery, GetCvQueryVariables>;
-export function refetchGetCvQuery(variables: GetCvQueryVariables) {
-      return { query: GetCvDocument, variables: variables }
     }
 export const CheckCvDocument = gql`
     query CheckCv($cvId: ID!) {

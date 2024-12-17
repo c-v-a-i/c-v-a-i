@@ -12,7 +12,6 @@ import type { InternalRefetchQueriesInclude } from '@apollo/client';
 import type {
   CvEntryArrayFieldName,
   CvEntryItem,
-  IterableCvEntry,
   UpdateItemizedFieldProps,
 } from '../CvVisualizer/types';
 import { match } from 'ts-pattern';
@@ -37,6 +36,7 @@ export function useCvEntries<T extends CvEntryArrayFieldName>(
         .with('educationEntries', () => CvEntryType.Education)
         .with('projectEntries', () => CvEntryType.Project)
         .with('skillEntries', () => CvEntryType.Skill)
+        .with('contactInfoEntries', () => CvEntryType.ContactInfo)
         .exhaustive(),
     [entryFieldName]
   );
@@ -51,7 +51,7 @@ export function useCvEntries<T extends CvEntryArrayFieldName>(
   });
 
   const entriesData = useMemo(
-    () => (data?.getCv?.[entryFieldName] ?? []) as IterableCvEntry<T>,
+    () => data?.getCv?.[entryFieldName] ?? [],
     [data, entryFieldName]
   );
 

@@ -11,6 +11,10 @@ export class AboutMe {
 
   @Field(() => String)
   @Prop({ required: true })
+  name!: string;
+
+  @Field(() => String)
+  @Prop({ required: true })
   fieldName!: string;
 
   @Field(() => String)

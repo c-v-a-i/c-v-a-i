@@ -1,12 +1,22 @@
+import type { AboutMe } from '../../../../../libs/schemas';
+
 const withDot = (str: string) => (str.endsWith('.') ? str : str + '.');
+type OmitId<T> = Omit<T, '_id'>;
 
 export const exampleEducationEntries = [
   {
     name: 'Brno University of Technology',
     degree: 'Bachelor in Information Technology',
     duration: '2020 — 2023',
-    description: 'Top 1% student, specialized in AI, data analysis and theoretical computer science',
-    skills: ['Python', 'C/C++', 'Big Data', 'Machine Learning', 'Deep Learning'],
+    description:
+      'Top 1% student, specialized in AI, data analysis and theoretical computer science',
+    skills: [
+      'Python',
+      'C/C++',
+      'Big Data',
+      'Machine Learning',
+      'Deep Learning',
+    ],
     location: 'Brno, Czechia',
   },
   {
@@ -34,7 +44,16 @@ export const exampleWorkExperienceEntries = [
     ]
       .map(withDot)
       .join('\n'),
-    skills: ['NestJS', 'Python', 'TypeORM', 'ReactJS', 'OpenAI API', 'Stripe API', 'GraphQl', 'UX/UI'],
+    skills: [
+      'NestJS',
+      'Python',
+      'TypeORM',
+      'ReactJS',
+      'OpenAI API',
+      'Stripe API',
+      'GraphQl',
+      'UX/UI',
+    ],
   },
   {
     position: 'Senior Software Engineer',
@@ -50,7 +69,15 @@ export const exampleWorkExperienceEntries = [
     ]
       .map(withDot)
       .join('\n'),
-    skills: ['ReactJS', 'PSQL', 'TeamCity', 'GCP', 'ReactJS', 'Kubernetes', 'Docker'],
+    skills: [
+      'ReactJS',
+      'PSQL',
+      'TeamCity',
+      'GCP',
+      'ReactJS',
+      'Kubernetes',
+      'Docker',
+    ],
   },
   {
     position: 'Software Engineer',
@@ -64,7 +91,15 @@ export const exampleWorkExperienceEntries = [
     ]
       .map(withDot)
       .join('\n'),
-    skills: ['OpenAI API', 'Kotlin', 'NodeJS', 'ReactJS', 'GraphQL', 'Jenkins', 'ThreeJS'],
+    skills: [
+      'OpenAI API',
+      'Kotlin',
+      'NodeJS',
+      'ReactJS',
+      'GraphQL',
+      'Jenkins',
+      'ThreeJS',
+    ],
   },
   {
     position: 'AI Researcher',
@@ -94,7 +129,11 @@ export const exampleWorkExperienceEntries = [
 export const exampleProjectEntries = [
   {
     name: 'GPT-4 Powered CV Builder',
-    description: ['Developing a CV builder using LLMs to generate, modify and review CVs'].map(withDot).join('\n'),
+    description: [
+      'Developing a CV builder using LLMs to generate, modify and review CVs',
+    ]
+      .map(withDot)
+      .join('\n'),
     skills: ['TypeScript', 'NestJS', 'React', 'OpenAI API', 'GraphQl', 'UI/UX'],
   },
   {
@@ -108,7 +147,14 @@ export const exampleProjectEntries = [
     ]
       .map(withDot)
       .join('\n'),
-    skills: ['C/C++', 'Python', 'Django', 'Qt', 'Database Design', 'System Architecture'],
+    skills: [
+      'C/C++',
+      'Python',
+      'Django',
+      'Qt',
+      'Database Design',
+      'System Architecture',
+    ],
   },
   {
     name: 'Machine Learning Projects',
@@ -119,14 +165,42 @@ export const exampleProjectEntries = [
     ]
       .map(withDot)
       .join('\n'),
-    skills: ['Pytorch', 'HuggingFace', 'Nvidia NeMo', 'Seaborn', 'Pandas', 'NLP', 'ASR'],
+    skills: [
+      'Pytorch',
+      'HuggingFace',
+      'Nvidia NeMo',
+      'Seaborn',
+      'Pandas',
+      'NLP',
+      'ASR',
+    ],
+  },
+];
+
+export const exampleContactInfoEntries = [
+  {
+    linkName: 'LinkedIn',
+    link: 'https://www.linkedin.com/in/aliaksandr-skuratovich-4a2ab01a0',
+  },
+  {
+    linkName: 'Github',
+    link: 'github.com/SkuratovichA',
+  },
+  {
+    linkName: 'Email',
+    link: 'skuratovich.aliaksandr@gmail.com',
   },
 ];
 
 export const exampleSkillEntries = [
   {
     category: 'Soft Skills',
-    items: ['Management', 'Team Leading', 'Working under tight deadlines', 'Problem Solving'],
+    items: [
+      'Management',
+      'Team Leading',
+      'Working under tight deadlines',
+      'Problem Solving',
+    ],
   },
   {
     category: 'Tools',
@@ -147,18 +221,15 @@ export const exampleSkillEntries = [
   },
 ];
 
-export const exampleContactInfo = {
+export const exampleAboutMe: OmitId<AboutMe> = {
   name: 'Skuratovich Aliaksandr',
-  email: 'skuratovich.aliaksandr@gmail.com',
-  phone: '+420735594008',
-};
-
-export const exampleAboutMe = {
   fieldName: 'whoami',
   description: [
     'An engineer with a mix of fullstack development experience and AI',
     'Proven track record in developing AI-powered solutions',
     'Skilled in managing project lifecycles from inception to deployment, including CI/CD pipelines',
     'When not working, I train for triathlons',
-  ].join('\n'),
+  ]
+    .map(withDot)
+    .join('\n'),
 };

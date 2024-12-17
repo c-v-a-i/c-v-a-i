@@ -27,12 +27,7 @@ export const CvVisualizer = ({ cvId }: CvVisualizerProps) => {
         justifyContent: 'center',
       }}
     >
-      <Box
-        display="flex"
-        flexDirection="column"
-        sx={{ width: '100%', gap: '20px' }}
-      >
-        <ContactInfo cvId={cvId} />
+      <Box display="flex" flexDirection="column" sx={{ width: '100%' }}>
         <AboutMe cvId={cvId} />
       </Box>
 
@@ -57,6 +52,7 @@ export const CvVisualizer = ({ cvId }: CvVisualizerProps) => {
             gap="16px"
             sx={{ textAlign: 'end' }}
           >
+            <ContactInfo cvId={cvId} />
             <Education cvId={cvId} />
             <Skills cvId={cvId} />
           </Box>

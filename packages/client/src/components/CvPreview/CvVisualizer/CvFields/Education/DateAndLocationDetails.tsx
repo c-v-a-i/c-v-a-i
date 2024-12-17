@@ -19,7 +19,7 @@ export const DateAndLocationDetails: React.FC<
               value,
             })
           }
-          variant="subtitle2"
+          variant="body2"
           isEditing={isEditing}
           sx={{
             width: '100%',
@@ -37,7 +37,7 @@ export const DateAndLocationDetails: React.FC<
               value,
             })
           }
-          variant="subtitle2"
+          variant="body2"
           isEditing={isEditing}
           sx={{
             width: '100%',

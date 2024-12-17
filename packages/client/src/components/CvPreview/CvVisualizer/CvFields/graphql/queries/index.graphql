@@ -18,17 +18,20 @@ query GetEducationEntries (
   }
 }
 
-query GetContactInfo (
+query GetCv ($cvId: ID!) {
+  getCv(cvId: $cvId) {
+    ...CvFragment
+  }
+}
+
+query GetContactInfoEntries (
   $cvId: ID!
 ) {
   getCv (
     cvId: $cvId
   ) {
-    contactInfo {
-      _id
-      name
-      email
-      phone
+    contactInfoEntries {
+      ...ContactInfoFragment
     }
   }
 }
@@ -40,9 +43,7 @@ query GetAboutMe (
     cvId: $cvId
   ) {
     aboutMe {
-      _id
-      fieldName
-      description
+      ...AboutMeFragment
     }
   }
 }

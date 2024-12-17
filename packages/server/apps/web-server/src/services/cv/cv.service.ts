@@ -20,8 +20,8 @@ import {
 import { match } from 'ts-pattern';
 import {
   exampleAboutMe,
-  exampleContactInfo,
   exampleEducationEntries,
+  exampleContactInfoEntries,
   exampleProjectEntries,
   exampleSkillEntries,
   exampleWorkExperienceEntries,
@@ -30,6 +30,7 @@ import { arrayToMap } from './utils';
 import { entries } from '@server/common/utils';
 import { ConvertOrTypeToAndType, Values } from '@server/common/types';
 import {
+  ContactInfo,
   Cv,
   CvDocument,
   Education,
@@ -37,7 +38,6 @@ import {
   Skill,
   WorkExperience,
 } from '../../../../../libs/schemas';
-import { Document } from 'mongoose';
 
 type CvManagerProps = {
   cvId: string;
@@ -92,12 +92,7 @@ export class CvService {
   }: CvEntryItemManagerProps): Promise<boolean> {
     const cv = await this.getCv({ cvId, userId });
 
-    const entryMap = match(entryType)
-      .with(CvEntryType.EDUCATION, () => cv.educationEntries)
-      .with(CvEntryType.WORK_EXPERIENCE, () => cv.workExperienceEntries)
-      .with(CvEntryType.PROJECT, () => cv.projectEntries)
-      .with(CvEntryType.SKILL, () => cv.skillEntries)
-      .exhaustive();
+    const entryMap = cv[cvEntryTypeToCvEntryNameMap[entryType]];
 
     if (!entryMap?.has(entryItemId)) {
       return false;
@@ -133,11 +128,11 @@ export class CvService {
       title: 'Example CV',
       userId,
       aboutMe: exampleAboutMe,
-      contactInfo: exampleContactInfo,
       educationEntries: arrayToMap(exampleEducationEntries),
       workExperienceEntries: arrayToMap(exampleWorkExperienceEntries),
       projectEntries: arrayToMap(exampleProjectEntries),
       skillEntries: arrayToMap(exampleSkillEntries),
+      contactInfoEntries: arrayToMap(exampleContactInfoEntries),
     });
 
     return example.save();
@@ -201,9 +196,7 @@ export class CvService {
         }
 
         // store back. not sure we need that here implicitly
-        cv[key] = existingObject as ConvertOrTypeToAndType<
-          typeof existingObject
-        >;
+        cv[key] = existingObject;
       }
     }
 
@@ -215,7 +208,7 @@ export class CvService {
     const _id = new Types.ObjectId().toString();
 
     return match(entryType)
-      .returnType<Education | Project | Skill | WorkExperience>()
+      .returnType<Education | Project | Skill | WorkExperience | ContactInfo>()
       .with(CvEntryType.EDUCATION, () => {
         const item: Education = {
           _id,
@@ -257,6 +250,15 @@ export class CvService {
         };
         return item;
       })
+      .with(CvEntryType.CONTACT_INFO, () => {
+        const item: ContactInfo = {
+          _id,
+          linkName: 'GitHub',
+          link: 'github.com/SkuratovichA',
+          positionIndex,
+        };
+        return item;
+      })
       .exhaustive();
   }
 
@@ -274,10 +276,8 @@ export class CvService {
 
     const newEntryItem = this.createEntryItem({ entryType, positionIndex });
 
-    cvEntryMap.set(
-      newEntryItem._id,
-      newEntryItem as ConvertOrTypeToAndType<typeof newEntryItem> & Document
-    );
+    // @ts-ignore it expects SomethingDocument, but actually Something is enough, and Document is generated on the runtime
+    cvEntryMap.set(newEntryItem._id, newEntryItem);
 
     return cv.save();
   }

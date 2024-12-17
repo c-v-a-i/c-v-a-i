@@ -11,15 +11,15 @@ export class ContactInfo {
 
   @Field(() => String)
   @Prop({ required: true })
-  name!: string;
+  linkName!: string;
+
+  @Field(() => Number)
+  @Prop({ required: true })
+  positionIndex!: number;
 
   @Field(() => String)
   @Prop({ required: true })
-  email!: string;
-
-  @Field(() => String)
-  @Prop({ required: true })
-  phone!: string;
+  link!: string;
 }
 
 export type ContactInfoDocument = ContactInfo & Document;
