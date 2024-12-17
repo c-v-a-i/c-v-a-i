@@ -1,18 +1,27 @@
-import type { IconButtonProps} from "@mui/material";
-import {IconButton, Tooltip} from "@mui/material";
-import RemoveIcon from "@mui/icons-material/Remove";
-import React from "react";
+import type { IconButtonProps } from '@mui/material';
+import { IconButton, Tooltip, Box } from '@mui/material';
+import React from 'react';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 export const RemoveEntryButton = ({ onClick }: IconButtonProps) => (
-  <Tooltip title={'Remove entry'}>
-    <IconButton
-      onClick={onClick}
-      sx={(theme) => ({
-        color: theme.palette.error.light,
-        height: 'fit-content',
-      })}
-    >
-      <RemoveIcon />
-    </IconButton>
-  </Tooltip>
+  <Box
+    display={'flex'}
+    alignItems={'center'}
+    justifyContent={'center'}
+    width={'36px'}
+  >
+    <Tooltip title="Remove entry">
+      <IconButton
+        onClick={onClick}
+        sx={(theme) => ({
+          color: theme.palette.error.light,
+          width: '100%',
+          height: '100%',
+          borderRadius: '8px',
+        })}
+      >
+        <RemoveIcon />
+      </IconButton>
+    </Tooltip>
+  </Box>
 );

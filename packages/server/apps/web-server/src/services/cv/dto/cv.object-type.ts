@@ -24,9 +24,6 @@ export class CvObjectType {
   @Field(() => AboutMe, { nullable: true })
   aboutMe?: AboutMe;
 
-  @Field(() => ContactInfo, { nullable: true })
-  contactInfo?: ContactInfo;
-
   @Field(() => [Education], { nullable: true })
   educationEntries?: Education[];
 
@@ -38,6 +35,9 @@ export class CvObjectType {
 
   @Field(() => [Skill], { nullable: true })
   skillEntries?: Skill[];
+
+  @Field(() => [ContactInfo], { nullable: true })
+  contactInfoEntries?: ContactInfo[];
 }
 
 // convert for getCv-like resolvers, all other fields are fetched on-demand

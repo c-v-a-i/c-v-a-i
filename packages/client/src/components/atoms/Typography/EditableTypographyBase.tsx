@@ -6,7 +6,7 @@ import { useMeasureTextWidth } from './utils';
 
 type EditableTypographyBaseProps = Pick<
   BoxProps,
-  'onMouseUp' | 'onMouseDown'
+  'onMouseUp' | 'onMouseDown' | 'onContextMenu'
 > & {
   id: string;
   isEditing: boolean;
@@ -38,6 +38,7 @@ export const EditableTypographyBase = React.memo(
         value,
         onMouseUp,
         onMouseDown,
+        onContextMenu,
       },
       ref
     ) => {
@@ -46,27 +47,21 @@ export const EditableTypographyBase = React.memo(
         width: '100%',
         padding: '0 2px',
       };
-
-      const typographyWidth = useMeasureTextWidth({
-        text: value,
-        variant,
-      });
+      const typographyWidth = useMeasureTextWidth({ text: value, variant });
 
       return (
         <Box
           id={id}
-          sx={{
-            width: `min(${typographyWidth}, 100%)`,
-          }}
+          sx={{ width: `min(${typographyWidth}, 100%)` }}
           onMouseUp={onMouseUp}
           onMouseDown={onMouseDown}
+          onContextMenu={onContextMenu}
           ref={ref}
         >
           {isEditing ? (
             <TextField
               value={tempValue}
               onChange={(e) => setTempValue(e.target.value)}
-              // onBlur={handleCancel}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   handleSave();
@@ -79,24 +74,16 @@ export const EditableTypographyBase = React.memo(
               multiline={multiline}
               variant="standard"
               size="small"
-              sx={{
-                ...commonStyles,
-              }}
+              sx={{ ...commonStyles }}
               InputProps={{
-                sx: {
-                  ...commonStyles,
-                  borderRadius: 0,
-                  margin: 0,
-                },
+                sx: { ...commonStyles, borderRadius: 0, margin: 0 },
               }}
               {...textFieldProps}
             />
           ) : (
             <TypographyWithMarkdown
               variant={variant}
-              sx={{
-                ...commonStyles,
-              }}
+              sx={{ ...commonStyles }}
               {...typographyProps}
             >
               {value}

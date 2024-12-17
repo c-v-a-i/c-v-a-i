@@ -5,3 +5,4 @@ export * from './cv.schema';
 export * from './project.schema';
 export * from './skill.schema';
 export * from './work-experience.schema';
+export * from './contact-info.schema';

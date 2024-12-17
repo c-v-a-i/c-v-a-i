@@ -1,4 +1,5 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+// EditableTypography.tsx
+import React, { useRef, useCallback, useEffect } from 'react';
 import { useEditableTypographyBase } from '../../../hooks';
 import { useTypographyActionsPortal } from '../../../hooks';
 import { EditableTypographyBase } from './EditableTypographyBase';
@@ -23,81 +24,54 @@ export const EditableTypography = ({
     setTempValue,
     handleSave,
     handleCancel,
-  } = useEditableTypographyBase({
-    value,
-    onSave,
-  });
+  } = useEditableTypographyBase({ value, onSave });
 
   useEffect(() => {
-    if (defaultIsEditing) {
-      startEditing();
-    }
-  }, [startEditing, defaultIsEditing]);
+    if (defaultIsEditing) startEditing();
+  }, [defaultIsEditing, startEditing]);
 
-  const { triggerPortal } = useTypographyActionsPortal({
+  const { triggerPortal, isPortalVisible } = useTypographyActionsPortal({
     onEdit: startEditing,
-    onAiEdit,
   });
 
-  useEffect(() => {
-    if (!isEditing) {
-      return;
-    }
-    triggerPortal(false);
-  }, [triggerPortal, isEditing]);
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent) => {
+      // Don't show popup if editing
+      if (isEditing) return;
+      e.preventDefault();
+      const coords = {
+        x: e.clientX + window.scrollX,
+        y: e.clientY + window.scrollY,
+      };
+      triggerPortal(true, coords);
+    },
+    [isEditing, triggerPortal]
+  );
 
-  const [isPortalVisible, setIsPortalVisible] = useState(false);
-
-  const getIsAnyTextSelected = useCallback(() => {
-    return window.getSelection()?.getRangeAt(0)?.toString()?.length ?? 0;
-  }, []);
-
-  const onMouseDown = useCallback(() => {
-    const isAnyTextSelected = getIsAnyTextSelected();
-    if (isAnyTextSelected) {
-      triggerPortal(false);
-      setIsPortalVisible(false);
-    }
-  }, [triggerPortal, getIsAnyTextSelected]);
-
-  const onMouseUp = useCallback(() => {
-    if (!textRef.current) {
-      return;
-    }
-
-    setIsPortalVisible((prevVisible) => {
-      const noTextSelected = !getIsAnyTextSelected();
-
-      if (!prevVisible && !isEditing && noTextSelected) {
-        const rect = textRef.current!.getBoundingClientRect();
-        const coords = {
-          x: rect.left + window.scrollX - 40,
-          y: rect.top + window.scrollY - 5,
-        };
-        triggerPortal(true, coords);
-        return true;
-      } else {
-        triggerPortal(false);
-        return false;
+  const onMouseDown = useCallback(
+    (event: React.MouseEvent) => {
+      // if it's right mouse key, don't do anything.
+      // if it's left mouse key click, hide
+      if (event.button !== 0) {
+        // Only proceed if it's the left mouse button (button 0)
+        return;
       }
-    });
-  }, [getIsAnyTextSelected, isEditing, triggerPortal]);
+      triggerPortal(false);
+    },
+    [triggerPortal]
+  );
 
   return (
     <EditableTypographyBase
       ref={textRef}
-      onMouseUp={onMouseUp}
       onMouseDown={onMouseDown}
+      onContextMenu={handleContextMenu}
       typographyProps={{
         ...typographyProps,
         sx: {
           border: `1px dashed ${isPortalVisible ? grey[300] : 'transparent'}`,
           borderRadius: '10px',
           width: 'fit-content',
-
-          // for debug
-          // background: alpha(pink[300], 0.1),
-
           ...(typographyProps.sx ?? {}),
         },
       }}

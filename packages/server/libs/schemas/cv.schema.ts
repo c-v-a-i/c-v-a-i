@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { AboutMeDocument, AboutMeSchema } from './about-me.schema';
-import { ContactInfoDocument, ContactInfoSchema } from './contact-info.schema';
 import { EducationDocument, EducationSchema } from './education.schema';
 import {
   WorkExperienceDocument,
@@ -9,6 +8,7 @@ import {
 } from './work-experience.schema';
 import { ProjectDocument, ProjectSchema } from './project.schema';
 import { SkillDocument, SkillSchema } from './skill.schema';
+import { ContactInfoDocument, ContactInfoSchema } from './contact-info.schema';
 
 @Schema({ timestamps: true })
 export class Cv {
@@ -24,9 +24,6 @@ export class Cv {
   @Prop({ type: AboutMeSchema })
   aboutMe?: AboutMeDocument;
 
-  @Prop({ type: ContactInfoSchema })
-  contactInfo?: ContactInfoDocument;
-
   @Prop({ type: Map, of: EducationSchema })
   educationEntries!: Map<string, EducationDocument>;
 
@@ -38,6 +35,9 @@ export class Cv {
 
   @Prop({ type: Map, of: SkillSchema })
   skillEntries!: Map<string, SkillDocument>;
+
+  @Prop({ type: Map, of: ContactInfoSchema })
+  contactInfoEntries!: Map<string, ContactInfoDocument>;
 }
 
 export type CvDocument = Cv & Document;

@@ -10,7 +10,7 @@ export const SkillEntry = ({
   removeEntry,
 }: CvEntryItemProps<'skillEntries'>) => {
   return (
-    <Box display={'flex'} alignItems={'center'}>
+    <Box display={'flex'} gap={1}>
       <RemoveEntryButton onClick={removeEntry} />
 
       <Box flex={1} sx={{ textAlign: 'right' }}>

@@ -4,7 +4,7 @@ fragment CvFragment on CvObjectType {
   aboutMe {
     ...AboutMeFragment
   }
-  contactInfo {
+  contactInfoEntries {
     ...ContactInfoFragment
   }
   workExperienceEntries {
@@ -23,15 +23,16 @@ fragment CvFragment on CvObjectType {
 
 fragment AboutMeFragment on AboutMe {
   _id
+  name
   fieldName
   description
 }
 
 fragment ContactInfoFragment on ContactInfo {
   _id
-  name
-  email
-  phone
+  linkName
+  positionIndex
+  link
 }
 
 fragment WorkExperienceFragment on WorkExperience {

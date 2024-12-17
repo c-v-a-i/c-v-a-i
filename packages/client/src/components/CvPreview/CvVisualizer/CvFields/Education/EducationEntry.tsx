@@ -4,7 +4,6 @@ import { EditableTypography, RemoveEntryButton } from '../../../../atoms';
 import { grey } from '@mui/material/colors';
 import { GeneralEducationInformation } from './GeneralEducationInformation';
 import type { CvEntryItemProps } from '../../types';
-import { DateAndLocationDetails } from './DateAndLocationDetails';
 
 export const EducationEntry = ({
   entry: ed,
@@ -13,7 +12,7 @@ export const EducationEntry = ({
   removeEntry,
 }: CvEntryItemProps<'educationEntries'>) => {
   return (
-    <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+    <Box display={'flex'} flexDirection={'row'} gap={1}>
       <RemoveEntryButton onClick={removeEntry} />
 
       <Box
@@ -27,8 +26,6 @@ export const EducationEntry = ({
           isEditing={isEditing}
           updateField={updateField}
         />
-
-        <DateAndLocationDetails ed={ed} updateField={updateField} />
 
         {ed.description && (
           <EditableTypography

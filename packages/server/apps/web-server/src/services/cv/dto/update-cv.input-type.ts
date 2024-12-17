@@ -25,8 +25,9 @@ class BaseUpdateInput {
 export class UpdateAboutMeInput extends PartialType(AboutMe, InputType) {}
 
 @InputType()
-export class UpdateContactInfoInput extends PartialType(
-  ContactInfo,
+export class UpdateContactInfoInput extends IntersectionType(
+  BaseUpdateInput,
+  PartialType(OmitType(ContactInfo, ['positionIndex'])),
   InputType
 ) {}
 
@@ -67,7 +68,7 @@ export class UpdateCvInput {
   aboutMe?: UpdateAboutMeInput;
 
   @Field(() => UpdateContactInfoInput, { nullable: true })
-  contactInfo?: UpdateContactInfoInput;
+  contactInfoEntries?: UpdateContactInfoInput[];
 
   @Field(() => [UpdateEducationInput], { nullable: true })
   educationEntries?: UpdateEducationInput[];

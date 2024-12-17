@@ -9,7 +9,7 @@ export const ProjectEntry = ({
   removeEntry,
 }: CvEntryItemProps<'projectEntries'>) => {
   return (
-    <Box display={'flex'} alignItems={'center'}>
+    <Box display={'flex'} gap={1}>
       <Box flex={1}>
         <EditableTypography
           id={`project-name-${project._id}`}

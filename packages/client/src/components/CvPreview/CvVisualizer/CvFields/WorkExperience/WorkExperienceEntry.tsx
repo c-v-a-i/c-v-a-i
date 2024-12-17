@@ -11,7 +11,7 @@ export const WorkExperienceEntry = ({
   removeEntry,
 }: CvEntryItemProps<'workExperienceEntries'>) => {
   return (
-    <Box display={'flex'} alignItems={'center'}>
+    <Box display={'flex'} gap={1}>
       <Box flex={1}>
         <Grid container justifyContent="space-between" flex={1}>
           <Grid item xs={12} sm={8}>

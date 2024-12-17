@@ -10,14 +10,12 @@ export const cvKeys = {
     'workExperienceEntries',
     'projectEntries',
     'skillEntries',
+    'contactInfoEntries',
   ] as const satisfies (keyof UpdateCvInput)[],
 
   primitiveEntries: ['title'] as const satisfies (keyof UpdateCvInput)[],
 
-  objectEntries: [
-    'aboutMe',
-    'contactInfo',
-  ] as const satisfies (keyof UpdateCvInput)[],
+  objectEntries: ['aboutMe'] as const satisfies (keyof UpdateCvInput)[],
 };
 
 export const isCvObjectTypeKeyForObjectEntries = (
@@ -52,6 +50,7 @@ export const cvEntryTypeToCvEntryNameMap: Record<
   [CvEntryType.PROJECT]: 'projectEntries',
   [CvEntryType.WORK_EXPERIENCE]: 'workExperienceEntries',
   [CvEntryType.SKILL]: 'skillEntries',
+  [CvEntryType.CONTACT_INFO]: 'contactInfoEntries',
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

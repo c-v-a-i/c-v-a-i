@@ -15,13 +15,13 @@ import { CvService } from './cv.service';
 import {
   convertCvToObjectType,
   CvEntryType,
+  cvKeys,
   CvObjectType,
   isCvPropertyItemizedEntry,
   UpdateCvInput,
 } from './dto';
 import {
   AboutMe,
-  ContactInfo,
   Cv,
   Education,
   Project,
@@ -71,67 +71,53 @@ export class CvResolver {
     return this.cvService.getTopLevelProperty(_id, 'aboutMe');
   }
 
-  @ResolveField(() => ContactInfo, { nullable: true })
-  async contactInfo(
+  private async getEntries<T>(
+    cvId: string,
+    propertyName: (typeof cvKeys.itemizedEntries)[number]
+  ): Promise<T[] | undefined> {
+    const entries = await this.cvService.getTopLevelProperty(
+      cvId,
+      propertyName
+    );
+    if (!entries) {
+      return undefined;
+    }
+    return [...entries.values()].map((e) => e.toObject() as T);
+  }
+
+  @ResolveField(() => [WorkExperience], { nullable: true })
+  async contactInfoEntries(
     @Parent() { _id }: CvObjectType
-  ): Promise<ContactInfo | undefined> {
-    return this.cvService.getTopLevelProperty(_id, 'contactInfo');
+  ): Promise<WorkExperience[] | undefined> {
+    return this.getEntries<WorkExperience>(_id, 'contactInfoEntries');
   }
 
   @ResolveField(() => [WorkExperience], { nullable: true })
   async workExperienceEntries(
     @Parent() { _id }: CvObjectType
   ): Promise<WorkExperience[] | undefined> {
-    const entries = await this.cvService.getTopLevelProperty(
-      _id,
-      'workExperienceEntries'
-    );
-    if (!entries) {
-      return undefined;
-    }
-    return [...entries.values()].map((e) => e.toObject() as WorkExperience);
+    return this.getEntries<WorkExperience>(_id, 'workExperienceEntries');
   }
 
   @ResolveField(() => [Project], { nullable: true })
   async projectEntries(
     @Parent() { _id }: CvObjectType
   ): Promise<Project[] | undefined> {
-    const entries = await this.cvService.getTopLevelProperty(
-      _id,
-      'projectEntries'
-    );
-    if (!entries) {
-      return undefined;
-    }
-    return [...entries.values()].map((e) => e.toObject() as Project);
+    return this.getEntries<Project>(_id, 'projectEntries');
   }
 
   @ResolveField(() => [Education], { nullable: true })
   async educationEntries(
     @Parent() { _id }: CvObjectType
   ): Promise<Education[] | undefined> {
-    const entries = await this.cvService.getTopLevelProperty(
-      _id,
-      'educationEntries'
-    );
-    if (!entries) {
-      return undefined;
-    }
-    return [...entries.values()].map((e) => e.toObject() as Education);
+    return this.getEntries<Education>(_id, 'educationEntries');
   }
 
   @ResolveField(() => [Skill], { nullable: true })
   async skillEntries(
     @Parent() { _id }: CvObjectType
   ): Promise<Skill[] | undefined> {
-    const entries = await this.cvService.getTopLevelProperty(
-      _id,
-      'skillEntries'
-    );
-    if (!entries) {
-      return undefined;
-    }
-    return [...entries.values()].map((e) => e.toObject() as Skill);
+    return this.getEntries<Skill>(_id, 'skillEntries');
   }
 
   @Mutation(() => CvObjectType)
