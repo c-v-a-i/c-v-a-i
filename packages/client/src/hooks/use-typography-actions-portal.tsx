@@ -9,6 +9,7 @@ interface UseTypographyActionsPortalOptions {
   onEdit: () => void;
 }
 
+// FIXME: this hook is fucked up. I need to re-write it
 export const useTypographyActionsPortal = (
   options: UseTypographyActionsPortalOptions
 ) => {

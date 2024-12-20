@@ -150,8 +150,8 @@ export type Skill = {
   __typename?: 'Skill';
   _id: Scalars['ID']['output'];
   category: Scalars['String']['output'];
-  items: Array<Scalars['String']['output']>;
   positionIndex: Scalars['Int']['output'];
+  skills: Array<Scalars['String']['output']>;
 };
 
 export type UpdateAboutMeInput = {
@@ -198,8 +198,8 @@ export type UpdateProjectInput = {
 export type UpdateSkillInput = {
   _id?: InputMaybe<Scalars['ID']['input']>;
   category?: InputMaybe<Scalars['String']['input']>;
-  items?: InputMaybe<Array<Scalars['String']['input']>>;
   positionIndex?: InputMaybe<Scalars['Int']['input']>;
+  skills?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type UpdateWorkExperienceInput = {
@@ -256,7 +256,7 @@ export type GetCvsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCvsQuery = { __typename?: 'Query', getCvs: Array<{ __typename?: 'CvObjectType', _id: string, name: string }> };
 
-export type CvFragment = { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null };
+export type CvFragment = { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null };
 
 export type AboutMeFragment = { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string };
 
@@ -268,7 +268,7 @@ export type ProjectFragment = { __typename?: 'Project', _id: string, name: strin
 
 export type EducationFragment = { __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number };
 
-export type SkillFragment = { __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number };
+export type SkillFragment = { __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number };
 
 export type UpdateCvMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -276,7 +276,7 @@ export type UpdateCvMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCvMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
+export type UpdateCvMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
 
 export type GenerateNewEntryItemMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -284,7 +284,7 @@ export type GenerateNewEntryItemMutationVariables = Exact<{
 }>;
 
 
-export type GenerateNewEntryItemMutation = { __typename?: 'Mutation', generateNewEntryItem: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
+export type GenerateNewEntryItemMutation = { __typename?: 'Mutation', generateNewEntryItem: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
 
 export type DeleteEntryItemMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -300,7 +300,7 @@ export type GetSkillEntriesQueryVariables = Exact<{
 }>;
 
 
-export type GetSkillEntriesQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
+export type GetSkillEntriesQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
 
 export type GetEducationEntriesQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -314,7 +314,7 @@ export type GetCvQueryVariables = Exact<{
 }>;
 
 
-export type GetCvQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, items: Array<string>, positionIndex: number }> | null } };
+export type GetCvQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
 
 export type GetContactInfoEntriesQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -420,7 +420,7 @@ export const SkillFragmentDoc = gql`
     fragment SkillFragment on Skill {
   _id
   category
-  items
+  skills
   positionIndex
 }
     `;

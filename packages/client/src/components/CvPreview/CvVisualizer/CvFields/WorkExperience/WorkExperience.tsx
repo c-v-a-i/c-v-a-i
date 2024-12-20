@@ -1,11 +1,10 @@
 import React from 'react';
 import { WorkExperienceEntry } from './WorkExperienceEntry';
-import { useCvEntries } from '../../../EntriesSection';
+import { GenericEntriesSection, useCvEntries } from '../../../components';
 import type { CvEntryComponentProps } from '../../types';
 import type { WorkExperience as WorkExperienceGraphqlType } from '../../../../../generated/graphql';
 import { useGetCvQuery } from '../../../../../generated/graphql';
 import { refetchGetWorkExperienceEntriesQuery } from '../../../../../generated/graphql';
-import { GenericEntriesSection } from '../../../EntriesSection/GenericEntriesSection';
 
 export const WorkExperience: React.FC<CvEntryComponentProps> = ({ cvId }) => {
   const useGetEntriesQueryResult = useGetCvQuery({

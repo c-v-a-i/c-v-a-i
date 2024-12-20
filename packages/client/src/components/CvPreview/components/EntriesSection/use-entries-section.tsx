@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { GetCvQueryHookResult } from '../../../generated/graphql';
+import type { GetCvQueryHookResult } from '../../../../generated/graphql';
 import {
   CvEntryType,
   useDeleteEntryItemMutation,
   useGenerateNewEntryItemMutation,
   useGetCvQuery,
   useUpdateCvMutation,
-} from '../../../generated/graphql';
-import { sortByPosition } from '../../utils';
+} from '../../../../generated/graphql';
+import { sortByPosition } from '../../../utils';
 import type { InternalRefetchQueriesInclude } from '@apollo/client';
 import type {
   CvEntryArrayFieldName,
   CvEntryItem,
   UpdateItemizedFieldProps,
-} from '../CvVisualizer/types';
+} from '../../CvVisualizer/types';
 import { match } from 'ts-pattern';
 
 interface UseCvEntriesOptions<T extends CvEntryArrayFieldName> {

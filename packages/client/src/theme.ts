@@ -9,7 +9,7 @@ const customPalette = {
     contrastText: '#17171a',
   },
   secondary: {
-    light: alpha('#f0ebf2', 0.6),
+    light: alpha('#d7d7d7', 0.2),
     main: '#b468d5',
     dark: '#9254ad',
     contrastText: '#603772',

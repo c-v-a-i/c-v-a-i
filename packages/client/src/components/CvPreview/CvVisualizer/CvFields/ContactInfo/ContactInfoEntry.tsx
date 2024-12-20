@@ -10,11 +10,7 @@ export const ContactInfoEntry = ({
   removeEntry,
 }: CvEntryItemProps<'contactInfoEntries'>) => {
   return (
-    <Box
-      display={'flex'}
-      justifyContent={'space-between'}
-      // alignItems={'center'}
-    >
+    <Box display={'flex'} justifyContent={'space-between'}>
       <RemoveEntryButton onClick={removeEntry} />
 
       <Box flex={1} display={'flex'} flexDirection={'column'}>

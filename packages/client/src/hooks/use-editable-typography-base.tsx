@@ -1,18 +1,24 @@
 import { useState, useCallback, useEffect } from 'react';
+import type { Maybe } from '../generated/graphql';
 
 type UseEditableTypographyBaseProps = {
-  value: string;
+  value?: Maybe<string>;
   onSave: (newValue: string) => Promise<void>;
 };
 
 type UseEditableTypographyBaseReturn = {
   isEditing: boolean;
   startEditing: () => void;
-  tempValue: string;
+  tempValue?: Maybe<string>;
   setTempValue: React.Dispatch<React.SetStateAction<string>>;
   handleSave: () => void;
   handleCancel: () => void;
 };
+
+type NonNullableSetStateAction<T> =
+  T extends React.Dispatch<React.SetStateAction<infer S>>
+    ? React.Dispatch<React.SetStateAction<NonNullable<S>>>
+    : T;
 
 export const useEditableTypographyBase = ({
   value,
@@ -30,7 +36,7 @@ export const useEditableTypographyBase = ({
   }, [value]);
 
   const handleSave = useCallback(() => {
-    if (tempValue === value) {
+    if (!tempValue || tempValue === value) {
       setIsEditing(false);
       return;
     }
@@ -50,7 +56,9 @@ export const useEditableTypographyBase = ({
     isEditing,
     startEditing,
     tempValue,
-    setTempValue,
+    setTempValue: setTempValue as NonNullableSetStateAction<
+      typeof setTempValue
+    >,
     handleSave,
     handleCancel,
   };

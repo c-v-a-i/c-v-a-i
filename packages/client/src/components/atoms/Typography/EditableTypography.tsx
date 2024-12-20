@@ -1,4 +1,3 @@
-// EditableTypography.tsx
 import React, { useRef, useCallback, useEffect } from 'react';
 import { useEditableTypographyBase } from '../../../hooks';
 import { useTypographyActionsPortal } from '../../../hooks';
@@ -6,6 +5,9 @@ import { EditableTypographyBase } from './EditableTypographyBase';
 import { grey } from '@mui/material/colors';
 import type { EditableTypographyProps } from './types';
 
+// TODO: this is a large piece of shit.
+//  the implementation needs to be changed. There's too much ad-hoc things.
+//  color doesn't work and it's buggy and forgive me god I've ever written this component...
 export const EditableTypography = ({
   id,
   value,
@@ -14,6 +16,9 @@ export const EditableTypography = ({
   multiline,
   isEditing: defaultIsEditing,
   component,
+  textFieldProps,
+  valueRender,
+  sx,
   ...typographyProps
 }: EditableTypographyProps) => {
   const textRef = useRef<HTMLDivElement>(null);
@@ -64,26 +69,28 @@ export const EditableTypography = ({
   return (
     <EditableTypographyBase
       ref={textRef}
+      sx={sx}
       onMouseDown={onMouseDown}
       onContextMenu={handleContextMenu}
       typographyProps={{
         ...typographyProps,
         sx: {
-          border: `1px dashed ${isPortalVisible ? grey[300] : 'transparent'}`,
+          border: `1px inset dashed ${isPortalVisible ? grey[300] : 'transparent'}`,
           borderRadius: '10px',
           width: 'fit-content',
-          ...(typographyProps.sx ?? {}),
         },
       }}
       id={id}
       isEditing={isEditing}
       tempValue={tempValue}
+      value={value}
       setTempValue={setTempValue}
       handleSave={handleSave}
       handleCancel={handleCancel}
       multiline={multiline}
-      value={value}
       variant={typographyProps.variant}
+      textFieldProps={textFieldProps}
+      valueRender={valueRender}
     />
   );
 };

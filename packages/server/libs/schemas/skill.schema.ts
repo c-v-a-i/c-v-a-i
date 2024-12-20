@@ -15,7 +15,7 @@ export class Skill {
 
   @Field(() => [String])
   @Prop([String])
-  items!: string[];
+  skills!: string[];
 
   @Field(() => Int)
   @Prop({ required: true })

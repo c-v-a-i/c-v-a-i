@@ -1,11 +1,10 @@
 import React from 'react';
 import { ContactInfoEntry } from './ContactInfoEntry';
-import { useCvEntries } from '../../../EntriesSection';
 import type { CvEntryComponentProps } from '../../types';
 import type { ContactInfo as ContactInfoGraphqlType } from '../../../../../generated/graphql';
 import { useGetCvQuery } from '../../../../../generated/graphql';
 import { refetchGetContactInfoEntriesQuery } from '../../../../../generated/graphql';
-import { GenericEntriesSection } from '../../../EntriesSection/GenericEntriesSection';
+import { GenericEntriesSection, useCvEntries } from '../../../components';
 
 export const ContactInfo: React.FC<CvEntryComponentProps> = ({ cvId }) => {
   const useGetEntriesQueryResult = useGetCvQuery({

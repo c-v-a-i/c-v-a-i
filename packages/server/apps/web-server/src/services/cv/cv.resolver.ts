@@ -7,7 +7,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { Logger, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../../auth/guards/gql-auth/gql-auth.guard';
 import { CurrentUser } from '../../common/decorators';
 import { DecodedUserObjectType } from '../../auth/dto';
@@ -17,37 +17,20 @@ import {
   CvEntryType,
   cvKeys,
   CvObjectType,
-  isCvPropertyItemizedEntry,
   UpdateCvInput,
 } from './dto';
 import {
   AboutMe,
-  Cv,
   Education,
   Project,
   Skill,
   WorkExperience,
 } from '../../../../../libs/schemas';
-import { Document } from 'mongoose';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => CvObjectType)
 export class CvResolver {
-  private readonly logger = new Logger(CvResolver.name);
-
   constructor(private readonly cvService: CvService) {}
-
-  private convertToSerializableType = (property: Cv[keyof Cv]) => {
-    if (isCvPropertyItemizedEntry(property)) {
-      const values = [...property.values()];
-      return Array.from(
-        values.map((p) => p.toObject() as Omit<typeof p, keyof Document>)
-      );
-    }
-    return typeof property === 'string'
-      ? property
-      : (property?.toObject() as Omit<typeof property, keyof Document>);
-  };
 
   @Query(() => [CvObjectType])
   async getCvs(

@@ -1,8 +1,8 @@
 import React from 'react';
 import type { TypographyProps } from '@mui/material';
 import { Box, Typography } from '@mui/material';
-import { NewEntryManager } from '../CvVisualizer/CvFields/WorkExperience/NewEntryManager';
-import type { CvEntryItem } from '../CvVisualizer/types';
+import { AddEntryButton } from '../../CvVisualizer/CvFields/WorkExperience/AddEntryButton';
+import type { CvEntryItem } from '../../CvVisualizer/types';
 
 type GenericEntriesSectionProps<TEntry extends CvEntryItem> = {
   title: string;
@@ -38,7 +38,7 @@ export function GenericEntriesSection<TEntry extends CvEntryItem>({
       <Box display="flex" flexDirection="column" gap={2}>
         {entries.map((entry) => renderEntry(entry))}
         {!entries.length && <Typography>{noEntriesText}</Typography>}
-        {onAdd && <NewEntryManager onAddEntry={async () => onAdd()} />}
+        {onAdd && <AddEntryButton onAddEntry={async () => onAdd()} />}
       </Box>
     </Box>
   );

@@ -1,6 +1,8 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { EditableTypography, RemoveEntryButton } from '../../../../atoms';
 import type { CvEntryItemProps } from '../../types';
+import { SkillsForItemizedEntryEditor } from '../../../components';
+import React from 'react';
 
 export const ProjectEntry = ({
   entry: project,
@@ -40,11 +42,20 @@ export const ProjectEntry = ({
             isEditing={isEditing}
           />
         )}
-        {project.skills && project.skills.length > 0 && (
-          <Typography variant="body2">
-            Skills: {project.skills.join(', ')}
-          </Typography>
-        )}
+        <SkillsForItemizedEntryEditor
+          id={`project-skills-${project._id}`}
+          isEditing={isEditing}
+          value={
+            project.skills?.length ? project.skills?.join(', ') : undefined
+          }
+          onSave={async (value) =>
+            updateField({
+              _id: project._id,
+              fieldName: 'skills',
+              value: value.split(',').map((s) => s.trim()),
+            })
+          }
+        />
       </Box>
       <RemoveEntryButton onClick={removeEntry} />
     </Box>

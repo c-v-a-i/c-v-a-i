@@ -1,11 +1,10 @@
 import React from 'react';
 import { SkillEntry } from './SkillEntry';
-import { useCvEntries } from '../../../EntriesSection';
+import { useCvEntries, GenericEntriesSection } from '../../../components';
 import type { CvEntryComponentProps } from '../../types';
 import type { Skill as SkillGraphqlType } from '../../../../../generated/graphql';
 import { useGetCvQuery } from '../../../../../generated/graphql';
 import { refetchGetSkillEntriesQuery } from '../../../../../generated/graphql';
-import { GenericEntriesSection } from '../../../EntriesSection/GenericEntriesSection';
 
 export const Skills: React.FC<CvEntryComponentProps> = ({ cvId }) => {
   const useGetEntriesQueryResult = useGetCvQuery({

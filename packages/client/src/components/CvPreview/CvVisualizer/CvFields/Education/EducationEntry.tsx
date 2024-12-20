@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { EditableTypography, RemoveEntryButton } from '../../../../atoms';
-import { grey } from '@mui/material/colors';
 import { GeneralEducationInformation } from './GeneralEducationInformation';
 import type { CvEntryItemProps } from '../../types';
+import { SkillsForItemizedEntryEditor } from '../../../components';
 
 export const EducationEntry = ({
   entry: ed,
@@ -27,30 +27,36 @@ export const EducationEntry = ({
           updateField={updateField}
         />
 
-        {ed.description && (
-          <EditableTypography
-            id={`education-description-${ed._id}`}
-            value={ed.description}
-            onSave={(value) =>
-              updateField({
-                _id: ed._id,
-                fieldName: 'description',
-                value,
-              })
-            }
-            multiline
-            sx={{
-              width: '100%',
-              textAlign: 'right',
-            }}
-            isEditing={isEditing}
-          />
-        )}
-        {ed.skills && ed.skills.length > 0 && (
-          <Typography variant="body2" color={grey[600]}>
-            Skills: {ed.skills.join(', ')}
-          </Typography>
-        )}
+        <EditableTypography
+          id={`education-description-${ed._id}`}
+          value={ed.description}
+          valueRender={(v) => v ?? 'Description (empty)'}
+          onSave={(value) =>
+            updateField({
+              _id: ed._id,
+              fieldName: 'description',
+              value,
+            })
+          }
+          multiline
+          sx={{
+            width: '100%',
+            textAlign: 'right',
+          }}
+          isEditing={isEditing}
+        />
+        <SkillsForItemizedEntryEditor
+          id={`education-skills-${ed._id}`}
+          isEditing={isEditing}
+          value={ed.skills?.length ? ed.skills?.join(', ') : undefined}
+          onSave={async (value) =>
+            updateField({
+              _id: ed._id,
+              fieldName: 'skills',
+              value: value.split(',').map((s) => s.trim()),
+            })
+          }
+        />
       </Box>
     </Box>
   );
