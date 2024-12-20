@@ -1,9 +1,16 @@
-import type { AboutMe } from '../../../../../libs/schemas';
+import type {
+  AboutMe,
+  ContactInfo,
+  Education,
+  Project,
+  Skill,
+  WorkExperience,
+} from '../../../../../libs/schemas';
 
 const withDot = (str: string) => (str.endsWith('.') ? str : str + '.');
 type OmitId<T> = Omit<T, '_id'>;
 
-export const exampleEducationEntries = [
+export const exampleEducationEntries: Array<OmitId<Education>> = [
   {
     name: 'Brno University of Technology',
     degree: 'Bachelor in Information Technology',
@@ -18,6 +25,7 @@ export const exampleEducationEntries = [
       'Deep Learning',
     ],
     location: 'Brno, Czechia',
+    positionIndex: 0,
   },
   {
     name: 'Unicorn University',
@@ -26,10 +34,11 @@ export const exampleEducationEntries = [
     description: 'Not top 1% student',
     skills: ['Economics', 'Management', 'Finance'],
     location: 'Prague, Czechia',
+    positionIndex: 1,
   },
 ];
 
-export const exampleWorkExperienceEntries = [
+export const exampleWorkExperienceEntries: Array<OmitId<WorkExperience>> = [
   {
     position: 'Senior Software Engineer',
     name: 'Dishboard',
@@ -54,6 +63,7 @@ export const exampleWorkExperienceEntries = [
       'GraphQl',
       'UX/UI',
     ],
+    positionIndex: 0,
   },
   {
     position: 'Senior Software Engineer',
@@ -78,6 +88,7 @@ export const exampleWorkExperienceEntries = [
       'Kubernetes',
       'Docker',
     ],
+    positionIndex: 1,
   },
   {
     position: 'Software Engineer',
@@ -100,6 +111,7 @@ export const exampleWorkExperienceEntries = [
       'Jenkins',
       'ThreeJS',
     ],
+    positionIndex: 2,
   },
   {
     position: 'AI Researcher',
@@ -123,10 +135,11 @@ export const exampleWorkExperienceEntries = [
       'Pandas',
       'Pytorch/HuggingFace/Nvidia NeMo',
     ],
+    positionIndex: 3,
   },
 ];
 
-export const exampleProjectEntries = [
+export const exampleProjectEntries: Array<OmitId<Project>> = [
   {
     name: 'GPT-4 Powered CV Builder',
     description: [
@@ -135,6 +148,7 @@ export const exampleProjectEntries = [
       .map(withDot)
       .join('\n'),
     skills: ['TypeScript', 'NestJS', 'React', 'OpenAI API', 'GraphQl', 'UI/UX'],
+    positionIndex: 0,
   },
   {
     name: 'Various Coding Projects',
@@ -155,6 +169,7 @@ export const exampleProjectEntries = [
       'Database Design',
       'System Architecture',
     ],
+    positionIndex: 1,
   },
   {
     name: 'Machine Learning Projects',
@@ -174,37 +189,42 @@ export const exampleProjectEntries = [
       'NLP',
       'ASR',
     ],
+    positionIndex: 2,
   },
 ];
 
-export const exampleContactInfoEntries = [
+export const exampleContactInfoEntries: Array<OmitId<ContactInfo>> = [
   {
     linkName: 'LinkedIn',
     link: 'https://www.linkedin.com/in/aliaksandr-skuratovich-4a2ab01a0',
+    positionIndex: 0,
   },
   {
     linkName: 'Github',
     link: 'github.com/SkuratovichA',
+    positionIndex: 1,
   },
   {
     linkName: 'Email',
     link: 'skuratovich.aliaksandr@gmail.com',
+    positionIndex: 2,
   },
 ];
 
-export const exampleSkillEntries = [
+export const exampleSkillEntries: Array<OmitId<Skill>> = [
   {
     category: 'Soft Skills',
-    items: [
+    skills: [
       'Management',
       'Team Leading',
       'Working under tight deadlines',
       'Problem Solving',
     ],
+    positionIndex: 0,
   },
   {
     category: 'Tools',
-    items: [
+    skills: [
       'TypeScript/Python/Kotlin',
       'ReactJS/RemixJS/NextJS',
       'NestJS/Express/Django/FastAPI/Spring',
@@ -214,10 +234,12 @@ export const exampleSkillEntries = [
       'Docker/Kubernetes',
       'TeamCity/Jenkins/Github Actions',
     ],
+    positionIndex: 1,
   },
   {
     category: 'Languages',
-    items: ['Czech', 'English', 'Ukrainian'],
+    skills: ['Czech', 'English', 'Ukrainian'],
+    positionIndex: 2,
   },
 ];
 

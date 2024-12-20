@@ -69,6 +69,6 @@ fragment EducationFragment on Education {
 fragment SkillFragment on Skill {
   _id
   category
-  items
+  skills
   positionIndex
 }

@@ -236,7 +236,7 @@ export class CvService {
         const item: Skill = {
           _id,
           category: 'Soft Skills',
-          items: ['Adaptability'],
+          skills: ['Adaptability'],
           positionIndex,
         };
         return item;

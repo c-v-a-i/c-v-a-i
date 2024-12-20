@@ -81,8 +81,8 @@ type ScopeObjectType {
 type Skill {
   _id: ID!
   category: String!
-  items: [String!]!
   positionIndex: Int!
+  skills: [String!]!
 }
 
 input UpdateAboutMeInput {
@@ -129,8 +129,8 @@ input UpdateProjectInput {
 input UpdateSkillInput {
   _id: ID
   category: String
-  items: [String!]
   positionIndex: Int
+  skills: [String!]
 }
 
 input UpdateWorkExperienceInput {

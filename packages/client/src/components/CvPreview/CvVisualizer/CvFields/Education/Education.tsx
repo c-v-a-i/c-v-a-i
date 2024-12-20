@@ -1,6 +1,4 @@
 import React from 'react';
-import { useCvEntries } from '../../../EntriesSection';
-import { GenericEntriesSection } from '../../../EntriesSection/GenericEntriesSection';
 import type { CvEntryComponentProps } from '../../types';
 import type { Education as EducationGraphqlType } from '../../../../../generated/graphql';
 import {
@@ -8,6 +6,7 @@ import {
   refetchGetEducationEntriesQuery,
 } from '../../../../../generated/graphql';
 import { EducationEntry } from './EducationEntry';
+import { GenericEntriesSection, useCvEntries } from '../../../components';
 
 export const Education: React.FC<CvEntryComponentProps> = ({ cvId }) => {
   const useGetEntriesQueryResult = useGetCvQuery({

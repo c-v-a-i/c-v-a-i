@@ -1,8 +1,59 @@
 import React from 'react';
-import { Typography, Grid, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { EditableTypography, RemoveEntryButton } from '../../../../atoms';
-import type { CvEntryItemProps } from '../../types';
+import type { CvEntryItemProps, UpdateItemizedFieldProps } from '../../types';
+import { SkillsForItemizedEntryEditor } from '../../../components';
+import type { Maybe } from '../../../../../generated/graphql';
+
+interface LocationAndDateProps {
+  id: string;
+  location?: Maybe<string>;
+  duration?: Maybe<string>;
+  updateField: (
+    update: UpdateItemizedFieldProps<'workExperienceEntries'>
+  ) => Promise<void>;
+  isEditing?: boolean;
+}
+
+const LocationAndDate: React.FC<LocationAndDateProps> = ({
+  id,
+  location,
+  duration,
+  updateField,
+  isEditing,
+}) => (
+  <Box display="flex" flexDirection="column" alignItems="start" pt={'4px'}>
+    <EditableTypography
+      id={`we-location-${id}`}
+      valueRender={(v) => v ?? 'Location (empty)'}
+      value={location}
+      onSave={async (value) =>
+        updateField({
+          _id: id,
+          fieldName: 'location',
+          value,
+        })
+      }
+      variant="body2"
+      isEditing={isEditing}
+    />
+    <EditableTypography
+      id={`we-duration-${id}`}
+      valueRender={(v) => v ?? 'Duration (empty)'}
+      value={duration}
+      onSave={async (value) =>
+        updateField({
+          _id: id,
+          fieldName: 'duration',
+          value,
+        })
+      }
+      variant="body2"
+      isEditing={isEditing}
+    />
+  </Box>
+);
 
 export const WorkExperienceEntry = ({
   entry: we,
@@ -11,11 +62,15 @@ export const WorkExperienceEntry = ({
   removeEntry,
 }: CvEntryItemProps<'workExperienceEntries'>) => {
   return (
-    <Box display={'flex'} gap={1}>
+    <Box display="flex" gap={1}>
       <Box flex={1}>
-        <Grid container justifyContent="space-between" flex={1}>
-          <Grid item xs={12} sm={8}>
-            <Box display="flex" alignContent={'center'} height={'4ch'}>
+        <Box display="flex" flexDirection="column" gap={1}>
+          <Box
+            display={'flex'}
+            justifyContent={'space-between'}
+            alignItems={'start'}
+          >
+            <Box display={'flex'} flexDirection={'column'}>
               <EditableTypography
                 id={`we-name-${we._id}`}
                 value={we.name}
@@ -29,24 +84,24 @@ export const WorkExperienceEntry = ({
                 variant="h6"
                 isEditing={isEditing}
               />
-            </Box>
 
-            <EditableTypography
-              id={`we-position-${we._id}`}
-              value={we.position}
-              onSave={(value) =>
-                updateField({
-                  _id: we._id,
-                  fieldName: 'position',
-                  value,
-                })
-              }
-              variant="body1"
-              isEditing={isEditing}
-            />
-            {we.type && (
+              <EditableTypography
+                id={`we-position-${we._id}`}
+                value={we.position}
+                onSave={(value) =>
+                  updateField({
+                    _id: we._id,
+                    fieldName: 'position',
+                    value,
+                  })
+                }
+                variant="body1"
+                isEditing={isEditing}
+              />
+
               <EditableTypography
                 id={`we-type-${we._id}`}
+                valueRender={(v) => v ?? 'Type (empty)'}
                 value={we.type}
                 onSave={(value) =>
                   updateField({
@@ -61,52 +116,20 @@ export const WorkExperienceEntry = ({
                 }}
                 isEditing={isEditing}
               />
-            )}
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={4}
-            textAlign="right"
-            display={'flex'}
-            flexDirection={'column'}
-            alignItems={'end'}
-          >
-            {we.location && (
-              <EditableTypography
-                id={`we-location-${we._id}`}
-                value={we.location}
-                onSave={(value) =>
-                  updateField({
-                    _id: we._id,
-                    fieldName: 'location',
-                    value,
-                  })
-                }
-                variant="body2"
-                isEditing={isEditing}
-              />
-            )}
-            {we.duration && (
-              <EditableTypography
-                id={`we-duration-${we._id}`}
-                value={we.duration}
-                onSave={(value) =>
-                  updateField({
-                    _id: we._id,
-                    fieldName: 'duration',
-                    value,
-                  })
-                }
-                variant="body2"
-                isEditing={isEditing}
-              />
-            )}
-          </Grid>
-        </Grid>
-        {we.description && (
+            </Box>
+
+            <LocationAndDate
+              id={we._id}
+              location={we.location}
+              duration={we.duration}
+              updateField={updateField}
+              isEditing={isEditing}
+            />
+          </Box>
+
           <EditableTypography
             id={`we-description-${we._id}`}
+            valueRender={(v) => v ?? 'Description (empty)'}
             value={we.description}
             onSave={(value) =>
               updateField({
@@ -117,14 +140,26 @@ export const WorkExperienceEntry = ({
             }
             multiline
             isEditing={isEditing}
+            textFieldProps={{
+              sx: {
+                width: '100%',
+              },
+            }}
           />
-        )}
-        {we.skills && we.skills.length > 0 && (
-          // TODO: Implement editing functionality for skills array
-          <Typography variant="body2" color={grey[600]}>
-            Skills: {we.skills.join(', ')}
-          </Typography>
-        )}
+
+          <SkillsForItemizedEntryEditor
+            id={`we-skills-${we._id}`}
+            isEditing={isEditing}
+            value={we.skills?.length ? we.skills?.join(', ') : undefined}
+            onSave={async (value) =>
+              updateField({
+                _id: we._id,
+                fieldName: 'skills',
+                value: value.split(',').map((s) => s.trim()),
+              })
+            }
+          />
+        </Box>
       </Box>
       <RemoveEntryButton onClick={removeEntry} />
     </Box>

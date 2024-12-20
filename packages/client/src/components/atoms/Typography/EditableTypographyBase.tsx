@@ -3,14 +3,14 @@ import { TextField, Box } from '@mui/material';
 import type { TypographyProps, TextFieldProps, BoxProps } from '@mui/material';
 import { TypographyWithMarkdown } from './TypographyWithMarkdown';
 import { useMeasureTextWidth } from './utils';
+import type { Maybe } from '../../../generated/graphql';
 
 type EditableTypographyBaseProps = Pick<
   BoxProps,
-  'onMouseUp' | 'onMouseDown' | 'onContextMenu'
+  'onMouseUp' | 'onMouseDown' | 'onContextMenu' | 'sx'
 > & {
   id: string;
   isEditing: boolean;
-  tempValue: string;
   setTempValue: React.Dispatch<React.SetStateAction<string>>;
   handleSave: () => void;
   handleCancel: () => void;
@@ -18,79 +18,109 @@ type EditableTypographyBaseProps = Pick<
   variant?: TypographyProps['variant'];
   typographyProps?: TypographyProps;
   textFieldProps?: TextFieldProps;
-  value: string;
+  tempValue?: Maybe<string>;
+  value?: Maybe<string>;
+  valueRender?: (v?: Maybe<string>) => string;
 };
 
-export const EditableTypographyBase = React.memo(
-  React.forwardRef<HTMLDivElement, EditableTypographyBaseProps>(
-    (
-      {
-        id,
-        isEditing,
-        tempValue,
-        setTempValue,
-        handleSave,
-        handleCancel,
-        multiline = false,
-        variant = 'body1',
-        typographyProps,
-        textFieldProps,
-        value,
-        onMouseUp,
-        onMouseDown,
-        onContextMenu,
-      },
-      ref
-    ) => {
-      const commonStyles = {
-        typography: variant,
-        width: '100%',
-        padding: '0 2px',
-      };
-      const typographyWidth = useMeasureTextWidth({ text: value, variant });
+// FIXME: this component is fucked up. Simplify...
+export const EditableTypographyBase = React.forwardRef<
+  HTMLDivElement,
+  EditableTypographyBaseProps
+>(
+  (
+    {
+      id,
+      isEditing,
+      tempValue,
+      setTempValue,
+      handleSave,
+      handleCancel,
+      multiline = false,
+      variant = 'body1',
+      typographyProps,
+      textFieldProps,
+      value,
+      onMouseUp,
+      onMouseDown,
+      onContextMenu,
+      valueRender,
+      sx,
+    },
+    ref
+  ) => {
+    const commonStyles = {
+      typography: variant,
+      width: '100%',
+      padding: '0 2px',
+    };
+    const typographyWidth = useMeasureTextWidth({
+      text: value ?? valueRender?.(undefined) ?? Array(16).fill('A').toString(),
+      variant,
+    });
 
-      return (
-        <Box
-          id={id}
-          sx={{ width: `min(${typographyWidth}, 100%)` }}
-          onMouseUp={onMouseUp}
-          onMouseDown={onMouseDown}
-          onContextMenu={onContextMenu}
-          ref={ref}
-        >
-          {isEditing ? (
-            <TextField
-              value={tempValue}
-              onChange={(e) => setTempValue(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  handleSave();
-                } else if (e.key === 'Escape') {
-                  handleCancel();
-                }
-              }}
-              autoFocus
-              fullWidth
-              multiline={multiline}
-              variant="standard"
-              size="small"
-              sx={{ ...commonStyles }}
-              InputProps={{
-                sx: { ...commonStyles, borderRadius: 0, margin: 0 },
-              }}
-              {...textFieldProps}
-            />
-          ) : (
-            <TypographyWithMarkdown
-              variant={variant}
-              sx={{ ...commonStyles }}
-              {...typographyProps}
-            >
-              {value}
-            </TypographyWithMarkdown>
-          )}
-        </Box>
-      );
-    }
-  )
+    return (
+      <Box
+        id={id}
+        onMouseUp={onMouseUp}
+        onMouseDown={onMouseDown}
+        onContextMenu={onContextMenu}
+        ref={ref}
+        sx={{
+          width: '100%',
+          ...sx,
+        }}
+      >
+        {isEditing ? (
+          <TextField
+            autoFocus
+            {...textFieldProps}
+            value={tempValue ?? ''}
+            onChange={(e) => setTempValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                handleSave();
+              } else if (e.key === 'Escape') {
+                handleCancel();
+              }
+            }}
+            fullWidth
+            multiline={multiline}
+            variant="standard"
+            size="small"
+            sx={{
+              ...commonStyles,
+              width: `min(${typographyWidth}px + 10px, 100%)`,
+              ...(textFieldProps?.sx ?? {}),
+            }}
+            InputProps={{
+              sx: {
+                ...commonStyles,
+                borderRadius: 0,
+                margin: 0,
+                ...(textFieldProps?.InputProps?.sx ?? {}),
+              },
+            }}
+          />
+        ) : (
+          <TypographyWithMarkdown
+            {...typographyProps}
+            variant={variant}
+            sx={{
+              ...(typographyProps?.sx ?? {}),
+              ...commonStyles,
+              ...(!value
+                ? {
+                    color: 'black',
+                    opacity: '0.3',
+                  }
+                : {}),
+            }}
+          >
+            {valueRender?.(value) ?? value}
+          </TypographyWithMarkdown>
+        )}
+      </Box>
+    );
+  }
 );

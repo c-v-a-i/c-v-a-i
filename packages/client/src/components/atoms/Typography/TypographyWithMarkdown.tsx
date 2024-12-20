@@ -17,15 +17,25 @@ export const TypographyWithMarkdown: React.FC<TypographyWithMarkdownProps> = ({
     <ReactMarkdown
       components={{
         p: ({ node, ref, ...props }) => (
-          <Typography variant={variant} sx={sx} onClick={onClick} {...props}></Typography>
+          <Typography variant={variant} sx={sx} onClick={onClick} {...props} />
         ),
         strong: ({ node, ref, ...props }) => (
-          <Typography component="span" variant={variant} sx={{ fontWeight: 'bold' }} {...props}></Typography>
+          <Typography
+            component="span"
+            variant={variant}
+            sx={{ fontWeight: 'bold', ...sx }}
+            {...props}
+          />
         ),
         em: ({ node, ref, ...props }) => (
-          <Typography component="span" variant={variant} sx={{ fontStyle: 'italic' }} {...props}></Typography>
+          <Typography
+            component="span"
+            variant={variant}
+            sx={{ fontStyle: 'italic', ...sx }}
+            {...props}
+          />
         ),
-        a: ({ node, ref, ...props }) => <Link {...props} />,
+        a: ({ node, ref, ...props }) => <Link {...props} sx={sx} />,
       }}
     >
       {children}

@@ -1,11 +1,11 @@
 import React from 'react';
 import { ProjectEntry } from './ProjectEntry';
-import { useCvEntries } from '../../../EntriesSection';
+import { useCvEntries } from '../../../components';
 import type { CvEntryComponentProps } from '../../types';
 import type { Project as ProjectGraphqlType } from '../../../../../generated/graphql';
 import { useGetCvQuery } from '../../../../../generated/graphql';
 import { refetchGetProjectEntriesQuery } from '../../../../../generated/graphql';
-import { GenericEntriesSection } from '../../../EntriesSection/GenericEntriesSection';
+import { GenericEntriesSection } from '../../../components';
 
 export const Projects: React.FC<CvEntryComponentProps> = ({ cvId }) => {
   const useGetEntriesQueryResult = useGetCvQuery({
