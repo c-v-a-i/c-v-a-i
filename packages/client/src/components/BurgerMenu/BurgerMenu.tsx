@@ -1,10 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Drawer as DrawerMui, Box, Button, styled } from '@mui/material';
-import { ChevronRight as ChevronRightIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
+
 import { MenuHeader } from './MenuHeader';
-import { BadgeButton } from './BadgeButton';
-import { useUser } from '../../contexts/use-user';
+import { usePreviewMode, useUser } from '../../contexts';
 import { CvMenuList } from './CvMenuList';
+import { BadgeButton } from './BadgeButton';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const drawerWidth = 300;
 
@@ -22,8 +24,8 @@ const MainContent = styled('div', {
 
 export const BurgerMenu = ({ children }: React.PropsWithChildren) => {
   const [open, setOpen] = useState(false);
-
   const { user, logout } = useUser();
+  const { isPreviewing } = usePreviewMode();
 
   const handleDrawerOpen = useCallback(() => {
     setOpen(true);
@@ -32,12 +34,29 @@ export const BurgerMenu = ({ children }: React.PropsWithChildren) => {
   const handleDrawerClose = useCallback(() => {
     setOpen(false);
   }, []);
+  const savedState = useRef(false);
+
+  useEffect(() => {
+    if (isPreviewing) {
+      setOpen((prev) => {
+        savedState.current = prev;
+        return false;
+      });
+    } else {
+      setOpen(savedState.current);
+    }
+  }, [isPreviewing, handleDrawerClose]);
 
   return (
     <>
-      <BadgeButton onClick={open ? handleDrawerClose : handleDrawerOpen} isOpen={open}>
-        {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-      </BadgeButton>
+      {!isPreviewing && (
+        <BadgeButton
+          onClick={open ? handleDrawerClose : handleDrawerOpen}
+          isOpen={open}
+        >
+          {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+        </BadgeButton>
+      )}
       <Drawer open={open}>
         <DrawerContainer>
           <MenuHeader user={user} onClose={handleDrawerClose} />
@@ -45,7 +64,12 @@ export const BurgerMenu = ({ children }: React.PropsWithChildren) => {
           <CvMenuList />
 
           <Box sx={{ marginTop: 'auto', padding: 2 }}>
-            <Button variant="outlined" color="secondary" fullWidth onClick={logout}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              onClick={logout}
+            >
               Logout
             </Button>
           </Box>
@@ -62,7 +86,10 @@ const DrawerContainer = styled(Box)({
   height: '100%',
 });
 
-const Drawer = ({ children, open }: React.PropsWithChildren & { open: boolean }) => {
+const Drawer = ({
+  children,
+  open,
+}: React.PropsWithChildren & { open: boolean }) => {
   return (
     <DrawerMui
       variant="persistent"

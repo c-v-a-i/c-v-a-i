@@ -1,7 +1,10 @@
 import React from 'react';
-import { Box } from '@mui/material';
-import { EditableTypography, RemoveEntryButton } from '../../../../atoms';
+import { EditableTypography } from '../../../../atoms';
 import type { CvEntryItemProps } from '../../types';
+import {
+  RightCvColumnEntriesContainer,
+  WithRemoveEntryButton,
+} from '../../../components';
 
 export const ContactInfoEntry = ({
   entry: contactInfo,
@@ -10,10 +13,11 @@ export const ContactInfoEntry = ({
   removeEntry,
 }: CvEntryItemProps<'contactInfoEntries'>) => {
   return (
-    <Box display={'flex'} justifyContent={'space-between'}>
-      <RemoveEntryButton onClick={removeEntry} />
-
-      <Box flex={1} display={'flex'} flexDirection={'column'}>
+    <RightCvColumnEntriesContainer>
+      <WithRemoveEntryButton
+        removeEntry={removeEntry}
+        flexDirection={'row-reverse'}
+      >
         <EditableTypography
           id={`contactInfo-category-${contactInfo._id}`}
           value={contactInfo.linkName}
@@ -30,25 +34,25 @@ export const ContactInfoEntry = ({
           }}
           isEditing={isEditing}
         />
+      </WithRemoveEntryButton>
 
-        {/* TODO: make it actually a link */}
-        <EditableTypography
-          id={`contactInfo-category-${contactInfo._id}`}
-          value={contactInfo.link}
-          onSave={(value) =>
-            updateField({
-              _id: contactInfo._id,
-              fieldName: 'link',
-              value,
-            })
-          }
-          variant="body1"
-          sx={{
-            width: '100%',
-          }}
-          isEditing={isEditing}
-        />
-      </Box>
-    </Box>
+      {/* TODO: make it actually a link */}
+      <EditableTypography
+        id={`contactInfo-category-${contactInfo._id}`}
+        value={contactInfo.link}
+        onSave={(value) =>
+          updateField({
+            _id: contactInfo._id,
+            fieldName: 'link',
+            value,
+          })
+        }
+        variant="body1"
+        sx={{
+          width: '100%',
+        }}
+        isEditing={isEditing}
+      />
+    </RightCvColumnEntriesContainer>
   );
 };

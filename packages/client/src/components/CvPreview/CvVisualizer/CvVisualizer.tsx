@@ -49,11 +49,13 @@ export const CvVisualizer = ({ cvId }: CvVisualizerProps) => {
           <Box
             display="flex"
             flexDirection="column"
-            gap="16px"
+            gap={3}
             sx={{ textAlign: 'end' }}
           >
             <ContactInfo cvId={cvId} />
+            <Divider />
             <Education cvId={cvId} />
+            <Divider />
             <Skills cvId={cvId} />
           </Box>
         </Box>

@@ -2,11 +2,14 @@ import React, { useCallback } from 'react';
 import { Box, Button } from '@mui/material';
 import { environment } from '../environment';
 import { BurgerMenu } from './BurgerMenu';
-import { useAuth } from '../contexts/use-auth';
-import { CurrentUserProvider } from '../contexts/use-user';
-import { CurrentCvProvider } from '../contexts/use-current-cv';
 import { CurrentCvPreview } from './CvPreview';
 import { CenteredBox } from './atoms';
+import {
+  CurrentCvProvider,
+  CurrentUserProvider,
+  PreviewModeProvider,
+  useAuth,
+} from '../contexts';
 
 export const LoginButton: React.FC = () => {
   const handleLogin = useCallback(() => {
@@ -35,11 +38,13 @@ export const IndexPage = () => {
   return (
     <CurrentUserProvider user={user} logout={logout}>
       <CurrentCvProvider>
-        <Box sx={{ display: 'flex' }}>
-          <BurgerMenu>
-            <CurrentCvPreview />
-          </BurgerMenu>
-        </Box>
+        <PreviewModeProvider>
+          <Box sx={{ display: 'flex' }}>
+            <BurgerMenu>
+              <CurrentCvPreview />
+            </BurgerMenu>
+          </Box>
+        </PreviewModeProvider>
       </CurrentCvProvider>
     </CurrentUserProvider>
   );
