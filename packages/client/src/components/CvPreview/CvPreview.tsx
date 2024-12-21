@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
-import { useCurrentCv } from '../../contexts/use-current-cv';
+import { Box, styled, Typography } from '@mui/material';
+import { useCurrentCv } from '../../contexts';
 import { CvVisualizer } from './CvVisualizer';
 import { CenteredBox } from '../atoms';
 import { useCheckCvLazyQuery } from '../../generated/graphql';
+import { PreviewModeButton } from '../atoms/PreviewModeButton';
 
 export const CurrentCvPreview: React.FC = () => {
   const { currentCvId } = useCurrentCv();
@@ -44,7 +45,19 @@ export const CurrentCvPreview: React.FC = () => {
         padding: 2,
       }}
     >
+      <ActionButtonsContainer>
+        <PreviewModeButton />
+      </ActionButtonsContainer>
       <CvVisualizer cvId={data.getCv._id} />
     </Box>
   );
 };
+
+const ActionButtonsContainer = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 48px;
+  top: 48px;
+  z-index: 1000;
+`;

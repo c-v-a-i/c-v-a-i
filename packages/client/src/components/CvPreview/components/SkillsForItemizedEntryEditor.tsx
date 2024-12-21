@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { EditableTypography } from '../../atoms';
 import type { EditableTypographyProps } from '../../atoms/Typography/types';
+import { usePreviewMode } from '../../../contexts';
 
 type SkillsForItemizedEntryEditorProps = Pick<
   EditableTypographyProps,
@@ -12,6 +13,16 @@ type SkillsForItemizedEntryEditorProps = Pick<
 export const SkillsForItemizedEntryEditor: React.FC<
   SkillsForItemizedEntryEditorProps
 > = ({ id, isEditing, value, onSave }) => {
+  const { isPreviewing } = usePreviewMode();
+
+  const shouldShowSkills = useMemo(
+    () => !isPreviewing || value,
+    [isPreviewing, value]
+  );
+
+  if (!shouldShowSkills) {
+    return null;
+  }
   return (
     <Box color={grey[600]}>
       <EditableTypography

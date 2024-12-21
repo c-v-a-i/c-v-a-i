@@ -6,7 +6,7 @@ import { IndexPage } from './components/IndexPage';
 import { apolloClient } from './clients';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AuthProvider } from './contexts/auth-context';
+import { AuthProvider } from './contexts';
 import { theme } from './theme';
 
 const App: React.FC = () => {
