@@ -1,6 +1,7 @@
 import type { BoxProps } from '@mui/material';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
+import { TypographyWithMarkdown } from '../atoms';
 
 type MessageBubbleProps = BoxProps & {
   content: string;
@@ -23,9 +24,9 @@ export const MessageBubble = ({
       })}
       {...props}
     >
-      <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
+      <TypographyWithMarkdown variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
         {content}
-      </Typography>
+      </TypographyWithMarkdown>
     </Box>
   );
 };

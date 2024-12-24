@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useReviewCvLlmMutation } from './use-review-cv-llm-mutation';
+import { useReviewCvMutation } from '../generated/graphql';
 
 interface UseCvReviewParams {
   cvId: string;
@@ -10,11 +10,11 @@ interface UseCvReviewParams {
 export function useCvReview({ cvId }: UseCvReviewParams) {
   // This uses an auto-generated hook from your GraphQL codegen:
   // "skip" if no cvId is present, so it doesn't fire prematurely.
-  const [cvReviewMutation, { data, loading, error }] = useReviewCvLlmMutation({
+  const [cvReviewMutation, { data, loading, error }] = useReviewCvMutation({
     variables: { cvId },
   });
 
-  const reviewMessages = useMemo(() => data?.reviewCvLLM?.textReview, [data]);
+  const reviewMessages = useMemo(() => data?.reviewCv?.messages, [data]);
 
   const fetchReview = () => {
     if (!cvId) return;

@@ -1,6 +1,5 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { MainResumeAssistantScreen } from './MainResumeAssistantScreen';
-import { ResumeAssistantButtons } from './ResumeAssistantButtons';
 import { useCurrentCv } from '../../contexts';
 import { useCvReview } from '../../hooks';
 
@@ -26,22 +25,37 @@ const ResumeAssistantSectionInner = ({
         flexDirection: 'column',
         justifyContent: 'space-around',
         width: '100%',
-        height: '600px',
+        height: '60%',
         borderTop: `1px solid`,
         borderRadius: '10px',
         borderColor: palette.primary.main,
       })}
     >
+      <Box display={'flex'} padding={1}>
+        <Typography flex={1} variant="h6" textAlign={'center'}>
+          AI CV review
+        </Typography>
+
+        <Button
+          sx={{
+            gap: 2,
+            height: 'fit-content',
+            width: 'fit-content',
+            borderRadius: '10px',
+          }}
+          onClick={handleReviewClick}
+          size={'small'}
+        >
+          Run review!
+        </Button>
+      </Box>
+
       <MainResumeAssistantScreen
         reviewMessages={reviewMessages}
         loading={loading}
         error={error}
         flex={1}
       />
-
-      {!reviewMessages && (
-        <ResumeAssistantButtons onReviewClick={handleReviewClick} />
-      )}
     </Box>
   );
 };

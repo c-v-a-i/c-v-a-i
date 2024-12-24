@@ -1,0 +1,5 @@
+mutation ReviewCv ($cvId: ID!) {
+  reviewCv(cvId: $cvId) {
+    messages
+  }
+}

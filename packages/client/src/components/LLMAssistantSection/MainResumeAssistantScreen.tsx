@@ -23,10 +23,6 @@ export const MainResumeAssistantScreen = ({
       }}
       {...props}
     >
-      <Typography variant="h6" textAlign={'center'}>
-        Some title
-      </Typography>
-
       <Box
         sx={{
           height: '100%',
@@ -36,13 +32,13 @@ export const MainResumeAssistantScreen = ({
         }}
       >
         {loading && (
-          <Typography variant="body2" sx={{ mt: 2 }}>
+          <Typography variant="subtitle1" sx={{ mt: 2 }}>
             Review is loading...
           </Typography>
         )}
 
         {error && (
-          <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+          <Typography variant="subtitle1" color="error" sx={{ mt: 2 }}>
             {error.message}
           </Typography>
         )}

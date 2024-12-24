@@ -2,12 +2,12 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Drawer as DrawerMui, Box, styled } from '@mui/material';
 
 import { MenuHeader } from './MenuHeader';
-import { useCurrentCv, usePreviewMode, useUser } from '../../contexts';
+import { usePreviewMode, useUser } from '../../contexts';
 import { CvMenuList } from './CvMenuList';
 import { BadgeButton } from './BadgeButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { ResumeAssistantSection } from '../ResumeAssistantSection';
+import { ResumeAssistantSection } from '../LLMAssistantSection';
 
 const drawerWidth = 600;
 
@@ -27,7 +27,6 @@ export const BurgerMenu = ({ children }: React.PropsWithChildren) => {
   const [open, setOpen] = useState(false);
   const { user } = useUser();
   const { isPreviewing } = usePreviewMode();
-  const { currentCvId } = useCurrentCv();
 
   const handleDrawerOpen = useCallback(() => {
     setOpen(true);
