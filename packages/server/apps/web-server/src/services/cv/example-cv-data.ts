@@ -244,7 +244,7 @@ export const exampleSkillEntries: Array<OmitId<Skill>> = [
 ];
 
 export const exampleAboutMe: OmitId<AboutMe> = {
-  name: 'Skuratovich Aliaksandr',
+  name: 'Aliaksandr Skuratovich',
   fieldName: 'whoami',
   description: [
     'An engineer with a mix of fullstack development experience and AI',
