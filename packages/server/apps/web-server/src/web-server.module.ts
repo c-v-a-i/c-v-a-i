@@ -1,7 +1,6 @@
 import { TypeormConfigService } from '../../../config/typeorm/typeorm.config.service';
 import { AuthModule } from './auth/auth.module';
 import { CoreModule } from './core/core.module';
-import { HealthCheckGraphQLModule } from './services/healthcheck-graphql/healthcheck.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DateScalar } from '@server/common/graphql/scalars';
@@ -10,6 +9,7 @@ import { typeormConfig } from '../../../config/typeorm/typeorm.config';
 import { UserModule } from './entity-modules/user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CvModule } from './services/cv/cv.module';
+import { LlmIntegrationModule } from './services/llm-integration/llm-integration.module';
 
 @Module({
   imports: [
@@ -26,11 +26,11 @@ import { CvModule } from './services/cv/cv.module';
     TypeOrmModule.forRootAsync({
       useClass: TypeormConfigService,
     }),
-    HealthCheckGraphQLModule,
     CoreModule,
     AuthModule,
     UserModule,
     CvModule,
+    LlmIntegrationModule,
   ],
   providers: [DateScalar],
 })

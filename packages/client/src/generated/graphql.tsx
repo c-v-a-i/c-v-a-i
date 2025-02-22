@@ -80,6 +80,7 @@ export type Mutation = {
   deleteEntryItem: Scalars['Boolean']['output'];
   generateNewEntryItem: CvObjectType;
   logout: Scalars['Boolean']['output'];
+  reviewCv: ReviewCvOutput;
   updateCv: CvObjectType;
 };
 
@@ -114,6 +115,11 @@ export type MutationGenerateNewEntryItemArgs = {
 };
 
 
+export type MutationReviewCvArgs = {
+  cvId: Scalars['ID']['input'];
+};
+
+
 export type MutationUpdateCvArgs = {
   cvId: Scalars['ID']['input'];
   data: UpdateCvInput;
@@ -133,13 +139,30 @@ export type Query = {
   currentUser: User;
   getCv: CvObjectType;
   getCvs: Array<CvObjectType>;
-  healthCheck: Scalars['String']['output'];
+  getReviewStatus: ReviewStatusType;
 };
 
 
 export type QueryGetCvArgs = {
   cvId: Scalars['ID']['input'];
 };
+
+
+export type QueryGetReviewStatusArgs = {
+  cvId: Scalars['ID']['input'];
+};
+
+export type ReviewCvOutput = {
+  __typename?: 'ReviewCvOutput';
+  messages: Array<Scalars['String']['output']>;
+};
+
+export enum ReviewStatusType {
+  AlreadyReviewed = 'ALREADY_REVIEWED',
+  NoReviewsRemain = 'NO_REVIEWS_REMAIN',
+  NoSubscription = 'NO_SUBSCRIPTION',
+  ReadyForReview = 'READY_FOR_REVIEW'
+}
 
 export type ScopeObjectType = {
   __typename?: 'ScopeObjectType';
@@ -351,10 +374,19 @@ export type CheckCvQueryVariables = Exact<{
 
 export type CheckCvQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', _id: string } };
 
-export type HealthCheckQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetReviewStatusQueryVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+}>;
 
 
-export type HealthCheckQuery = { __typename?: 'Query', healthCheck: string };
+export type GetReviewStatusQuery = { __typename?: 'Query', getReviewStatus: ReviewStatusType };
+
+export type ReviewCvMutationVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+}>;
+
+
+export type ReviewCvMutation = { __typename?: 'Mutation', reviewCv: { __typename?: 'ReviewCvOutput', messages: Array<string> } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -1102,52 +1134,92 @@ export type CheckCvQueryResult = Apollo.QueryResult<CheckCvQuery, CheckCvQueryVa
 export function refetchCheckCvQuery(variables: CheckCvQueryVariables) {
       return { query: CheckCvDocument, variables: variables }
     }
-export const HealthCheckDocument = gql`
-    query HealthCheck {
-  healthCheck
+export const GetReviewStatusDocument = gql`
+    query getReviewStatus($cvId: ID!) {
+  getReviewStatus(cvId: $cvId)
 }
     `;
-export type HealthCheckComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<HealthCheckQuery, HealthCheckQueryVariables>, 'query'>;
+export type GetReviewStatusComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetReviewStatusQuery, GetReviewStatusQueryVariables>, 'query'> & ({ variables: GetReviewStatusQueryVariables; skip?: boolean; } | { skip: boolean; });
 
-    export const HealthCheckComponent = (props: HealthCheckComponentProps) => (
-      <ApolloReactComponents.Query<HealthCheckQuery, HealthCheckQueryVariables> query={HealthCheckDocument} {...props} />
+    export const GetReviewStatusComponent = (props: GetReviewStatusComponentProps) => (
+      <ApolloReactComponents.Query<GetReviewStatusQuery, GetReviewStatusQueryVariables> query={GetReviewStatusDocument} {...props} />
     );
     
 
 /**
- * __useHealthCheckQuery__
+ * __useGetReviewStatusQuery__
  *
- * To run a query within a React component, call `useHealthCheckQuery` and pass it any options that fit your needs.
- * When your component renders, `useHealthCheckQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetReviewStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReviewStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useHealthCheckQuery({
+ * const { data, loading, error } = useGetReviewStatusQuery({
  *   variables: {
+ *      cvId: // value for 'cvId'
  *   },
  * });
  */
-export function useHealthCheckQuery(baseOptions?: Apollo.QueryHookOptions<HealthCheckQuery, HealthCheckQueryVariables>) {
+export function useGetReviewStatusQuery(baseOptions: Apollo.QueryHookOptions<GetReviewStatusQuery, GetReviewStatusQueryVariables> & ({ variables: GetReviewStatusQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<HealthCheckQuery, HealthCheckQueryVariables>(HealthCheckDocument, options);
+        return Apollo.useQuery<GetReviewStatusQuery, GetReviewStatusQueryVariables>(GetReviewStatusDocument, options);
       }
-export function useHealthCheckLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HealthCheckQuery, HealthCheckQueryVariables>) {
+export function useGetReviewStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReviewStatusQuery, GetReviewStatusQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<HealthCheckQuery, HealthCheckQueryVariables>(HealthCheckDocument, options);
+          return Apollo.useLazyQuery<GetReviewStatusQuery, GetReviewStatusQueryVariables>(GetReviewStatusDocument, options);
         }
-export function useHealthCheckSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<HealthCheckQuery, HealthCheckQueryVariables>) {
+export function useGetReviewStatusSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetReviewStatusQuery, GetReviewStatusQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<HealthCheckQuery, HealthCheckQueryVariables>(HealthCheckDocument, options);
+          return Apollo.useSuspenseQuery<GetReviewStatusQuery, GetReviewStatusQueryVariables>(GetReviewStatusDocument, options);
         }
-export type HealthCheckQueryHookResult = ReturnType<typeof useHealthCheckQuery>;
-export type HealthCheckLazyQueryHookResult = ReturnType<typeof useHealthCheckLazyQuery>;
-export type HealthCheckSuspenseQueryHookResult = ReturnType<typeof useHealthCheckSuspenseQuery>;
-export type HealthCheckQueryResult = Apollo.QueryResult<HealthCheckQuery, HealthCheckQueryVariables>;
-export function refetchHealthCheckQuery(variables?: HealthCheckQueryVariables) {
-      return { query: HealthCheckDocument, variables: variables }
+export type GetReviewStatusQueryHookResult = ReturnType<typeof useGetReviewStatusQuery>;
+export type GetReviewStatusLazyQueryHookResult = ReturnType<typeof useGetReviewStatusLazyQuery>;
+export type GetReviewStatusSuspenseQueryHookResult = ReturnType<typeof useGetReviewStatusSuspenseQuery>;
+export type GetReviewStatusQueryResult = Apollo.QueryResult<GetReviewStatusQuery, GetReviewStatusQueryVariables>;
+export function refetchGetReviewStatusQuery(variables: GetReviewStatusQueryVariables) {
+      return { query: GetReviewStatusDocument, variables: variables }
     }
+export const ReviewCvDocument = gql`
+    mutation ReviewCv($cvId: ID!) {
+  reviewCv(cvId: $cvId) {
+    messages
+  }
+}
+    `;
+export type ReviewCvMutationFn = Apollo.MutationFunction<ReviewCvMutation, ReviewCvMutationVariables>;
+export type ReviewCvComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<ReviewCvMutation, ReviewCvMutationVariables>, 'mutation'>;
+
+    export const ReviewCvComponent = (props: ReviewCvComponentProps) => (
+      <ApolloReactComponents.Mutation<ReviewCvMutation, ReviewCvMutationVariables> mutation={ReviewCvDocument} {...props} />
+    );
+    
+
+/**
+ * __useReviewCvMutation__
+ *
+ * To run a mutation, you first call `useReviewCvMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReviewCvMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [reviewCvMutation, { data, loading, error }] = useReviewCvMutation({
+ *   variables: {
+ *      cvId: // value for 'cvId'
+ *   },
+ * });
+ */
+export function useReviewCvMutation(baseOptions?: Apollo.MutationHookOptions<ReviewCvMutation, ReviewCvMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReviewCvMutation, ReviewCvMutationVariables>(ReviewCvDocument, options);
+      }
+export type ReviewCvMutationHookResult = ReturnType<typeof useReviewCvMutation>;
+export type ReviewCvMutationResult = Apollo.MutationResult<ReviewCvMutation>;
+export type ReviewCvMutationOptions = Apollo.BaseMutationOptions<ReviewCvMutation, ReviewCvMutationVariables>;
 export const LogoutDocument = gql`
     mutation Logout {
   logout

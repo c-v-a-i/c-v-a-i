@@ -43,6 +43,9 @@
   },
   "dependencies": {
     "@apollo/server": "^4.11.2",
+    "@langchain/community": "^0.3.20",
+    "@langchain/core": "^0.3.26",
+    "@langchain/openai": "^0.3.16",
     "@nestjs/apollo": "^12.2.1",
     "@nestjs/cli": "^10.4.5",
     "@nestjs/common": "^10.4.6",
@@ -64,6 +67,8 @@
     "cookie-parser": "^1.4.7",
     "dataloader": "^2.2.2",
     "graphql": "^16.9.0",
+    "js-yaml": "^4.1.0",
+    "langchain": "^0.3.7",
     "lodash": "^4.17.21",
     "mongoose": "^8.8.4",
     "passport": "^0.7.0",
@@ -79,6 +84,7 @@
     "@c-v-a-i/tools": "*",
     "@types/cookie-parser": "^1",
     "@types/jest": "^29.5.14",
+    "@types/js-yaml": "^4",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-jwt": "^4",
@@ -90,5 +96,8 @@
     "pg": "^8.13.1",
     "supertest": "^7.0.0",
     "typescript": "^5.6.3"
+  },
+  "resolutions": {
+    "@langchain/core": "0.3.7"
   }
 }

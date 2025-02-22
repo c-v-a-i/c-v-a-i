@@ -1,4 +1,0 @@
-
-query HealthCheck {
-  healthCheck
-}

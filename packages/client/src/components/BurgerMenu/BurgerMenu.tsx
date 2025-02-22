@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Drawer as DrawerMui, Box, Button, styled } from '@mui/material';
+import { Drawer as DrawerMui, Box, styled } from '@mui/material';
 
 import { MenuHeader } from './MenuHeader';
 import { usePreviewMode, useUser } from '../../contexts';
@@ -7,8 +7,9 @@ import { CvMenuList } from './CvMenuList';
 import { BadgeButton } from './BadgeButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { ResumeAssistantSection } from '../LLMAssistantSection';
 
-const drawerWidth = 300;
+const drawerWidth = 600;
 
 const MainContent = styled('div', {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -24,7 +25,7 @@ const MainContent = styled('div', {
 
 export const BurgerMenu = ({ children }: React.PropsWithChildren) => {
   const [open, setOpen] = useState(false);
-  const { user, logout } = useUser();
+  const { user } = useUser();
   const { isPreviewing } = usePreviewMode();
 
   const handleDrawerOpen = useCallback(() => {
@@ -58,21 +59,13 @@ export const BurgerMenu = ({ children }: React.PropsWithChildren) => {
         </BadgeButton>
       )}
       <Drawer open={open}>
-        <DrawerContainer>
-          <MenuHeader user={user} onClose={handleDrawerClose} />
-
-          <CvMenuList />
-
-          <Box sx={{ marginTop: 'auto', padding: 2 }}>
-            <Button
-              variant="outlined"
-              color="secondary"
-              fullWidth
-              onClick={logout}
-            >
-              Logout
-            </Button>
+        <DrawerContainer justifyContent={'space-between'}>
+          <Box display={'flex'} flexDirection={'column'}>
+            <MenuHeader user={user} onClose={handleDrawerClose} />
+            <CvMenuList />
           </Box>
+
+          <ResumeAssistantSection />
         </DrawerContainer>
       </Drawer>
       <MainContent open={open}>{children}</MainContent>
