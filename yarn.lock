@@ -2748,6 +2748,7 @@ __metadata:
     prettier: "npm:^3.3.3"
     react: "npm:^18.2.0"
     react-dom: "npm:latest"
+    react-dropzone: "npm:^14.3.6"
     react-markdown: "npm:^9.0.1"
     react-router-dom: "npm:^6.28.0"
     react-toastify: "npm:^10.0.6"
@@ -7699,6 +7700,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"attr-accept@npm:^2.2.4":
+  version: 2.2.5
+  resolution: "attr-accept@npm:2.2.5"
+  checksum: 10/474b1c53e62c5b881c745d1f098196f190c8b493245e95d4b0fea9298d3acb56f551868fc12806885277e55e9d8ad3c5963e92d93456f4e4081dfc5190977bfd
+  languageName: node
+  linkType: hard
+
 "auto-bind@npm:~4.0.0":
   version: 4.0.0
   resolution: "auto-bind@npm:4.0.0"
@@ -10806,6 +10814,15 @@ __metadata:
   dependencies:
     flat-cache: "npm:^4.0.0"
   checksum: 10/afe55c4de4e0d226a23c1eae62a7219aafb390859122608a89fa4df6addf55c7fd3f1a2da6f5b41e7cdff496e4cf28bbd215d53eab5c817afa96d2b40c81bfb0
+  languageName: node
+  linkType: hard
+
+"file-selector@npm:^2.1.0":
+  version: 2.1.2
+  resolution: "file-selector@npm:2.1.2"
+  dependencies:
+    tslib: "npm:^2.7.0"
+  checksum: 10/2a6be0e1904df85f8705a5171fd3b93c1b1ff2ad0143556adb78ac4de899bfc0ba1a20083b4febd4f7000759ec9119a31af76a057e29dd9215907da69ac95e50
   languageName: node
   linkType: hard
 
@@ -16090,6 +16107,19 @@ __metadata:
   peerDependencies:
     react: ^18.3.1
   checksum: 10/3f4b73a3aa083091173b29812b10394dd06f4ac06aff410b74702cfb3aa29d7b0ced208aab92d5272919b612e5cda21aeb1d54191848cf6e46e9e354f3541f81
+  languageName: node
+  linkType: hard
+
+"react-dropzone@npm:^14.3.6":
+  version: 14.3.6
+  resolution: "react-dropzone@npm:14.3.6"
+  dependencies:
+    attr-accept: "npm:^2.2.4"
+    file-selector: "npm:^2.1.0"
+    prop-types: "npm:^15.8.1"
+  peerDependencies:
+    react: ">= 16.8 || 18.0.0"
+  checksum: 10/3f14cedd95760e08d79f3f26adf3e099a2ee5949fc143df2713d1d0ee555dd3fcb5a0fa5663220453f0358e007d8038ce9ea3db55f550d527db0fd0ed895586d
   languageName: node
   linkType: hard
 
