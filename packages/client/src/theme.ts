@@ -4,8 +4,8 @@ import { grey } from '@mui/material/colors';
 const customPalette = {
   primary: {
     light: '#dadef2',
-    main: '#737580',
-    dark: '#16161a',
+    main: '#bfbfc4',
+    dark: '#7d7d81',
     contrastText: '#17171a',
   },
   secondary: {
@@ -30,8 +30,8 @@ export const theme = createTheme({
   palette: {
     ...customPalette,
     text: {
-      primary: customPalette.primary.dark,
-      secondary: customPalette.secondary.dark,
+      primary: customPalette.primary.contrastText,
+      secondary: customPalette.secondary.contrastText,
     },
   },
   components: {
@@ -60,9 +60,36 @@ export const theme = createTheme({
       },
     },
     MuiButton: {
+      // on hover, text color should be brighter
+      variants: [
+        {
+          props: { variant: 'contained' },
+          style: {
+            color: customPalette.primary.contrastText,
+            backgroundColor: customPalette.primary.main,
+            '&:hover': {
+              backgroundColor: alpha(customPalette.primary.main, 0.8),
+              color: customPalette.primary.contrastText,
+              boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.25)',
+            },
+          },
+        },
+        {
+          props: { variant: 'outlined' },
+          style: {
+            color: customPalette.primary.main,
+            borderColor: customPalette.primary.main,
+            '&:hover': {
+              backgroundColor: customPalette.primary.light,
+            },
+          },
+        },
+      ],
+
       styleOverrides: {
         root: {
-          borderRadius: '10px',
+          borderRadius: '16px',
+          boxShadow: 'none',
         },
       },
     },
