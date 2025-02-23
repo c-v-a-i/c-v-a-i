@@ -14,6 +14,10 @@ type ContactInfo {
   positionIndex: Float!
 }
 
+type ConvertPdfToCvObjectType {
+  cv: String!
+}
+
 enum CvEntryType {
   CONTACT_INFO
   EDUCATION
@@ -50,6 +54,7 @@ type Education {
 }
 
 type Mutation {
+  convertPdfToCv(file: Upload!): ConvertPdfToCvObjectType!
   createNewCv(templateId: ID!): CvObjectType!
   deleteCv(cvId: ID!): Boolean!
   deleteCvEntryItem(cvId: ID!, entryItemId: ID!, entryType: CvEntryType!): Boolean!
@@ -155,6 +160,9 @@ input UpdateWorkExperienceInput {
   skills: [String!]
   type: String
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type User {
   createdAt: Date!

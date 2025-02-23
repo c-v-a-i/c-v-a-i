@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from '@mui/material';
-import { FileUploader } from './FileUploader';
+import { FileUploader } from '../FileUploader';
+import { toast } from 'react-toastify';
+import {
+  refetchGetCvsQuery,
+  useConvertPdfToCvMutation,
+} from '../../generated/graphql';
 
 interface ImportPdfDialogProps {
   open: boolean;
@@ -15,8 +20,12 @@ interface ImportPdfDialogProps {
 
 export const ImportPdfDialog = ({ open, onClose }: ImportPdfDialogProps) => {
   const [file, setFile] = useState<File | null>(null);
-  // const [importPdfCv, { loading }] = useImportPdfCvMutation();
-  const [loading, setLoading] = useState(false);
+  const [convertPdfToCv, { loading }] = useConvertPdfToCvMutation({
+    refetchQueries: [refetchGetCvsQuery()],
+    context: {
+      hasUpload: true,
+    },
+  });
 
   const handleFileUploaded = (uploadedFile: File) => {
     setFile(uploadedFile);
@@ -25,24 +34,16 @@ export const ImportPdfDialog = ({ open, onClose }: ImportPdfDialogProps) => {
   const handleConvert = async () => {
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = async () => {
-      const base64Data = (reader.result as string).split(',')[1];
-      try {
-        // await importPdfCv({
-        //   variables: { input: { pdfBase64: base64Data } },
-        //   refetchQueries: [refetchGetCvsQuery()],
-        // });
-        // Show success toast
-        setLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-      } catch (error) {
-        // Show error toast
-      } finally {
-        onClose();
-      }
-    };
+    convertPdfToCv({
+      variables: { file },
+    })
+      .then(({ data }) => {
+        console.log(data?.convertPdfToCv.cv);
+        toast.success('CV imported successfully');
+      })
+      .catch()
+      .finally();
+    onClose();
   };
 
   return (

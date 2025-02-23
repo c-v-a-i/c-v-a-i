@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Button, styled } from '@mui/material';
-import { ImportPdfDialog } from '../../ImportPdfDialog';
+import { ImportPdfDialog } from '../../ImportCvDialog';
 
 export const CvCreationActions = () => {
   const [importDialogOpen, setImportDialogOpen] = useState(false);

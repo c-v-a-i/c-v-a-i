@@ -20,6 +20,8 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** Date custom scalar type */
   Date: { input: any; output: any; }
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: { input: any; output: any; }
 };
 
 export type AboutMe = {
@@ -36,6 +38,11 @@ export type ContactInfo = {
   link: Scalars['String']['output'];
   linkName: Scalars['String']['output'];
   positionIndex: Scalars['Float']['output'];
+};
+
+export type ConvertPdfToCvObjectType = {
+  __typename?: 'ConvertPdfToCvObjectType';
+  cv: Scalars['String']['output'];
 };
 
 export enum CvEntryType {
@@ -74,6 +81,7 @@ export type Education = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  convertPdfToCv: ConvertPdfToCvObjectType;
   createNewCv: CvObjectType;
   deleteCv: Scalars['Boolean']['output'];
   deleteCvEntryItem: Scalars['Boolean']['output'];
@@ -82,6 +90,11 @@ export type Mutation = {
   logout: Scalars['Boolean']['output'];
   reviewCv: ReviewCvOutput;
   updateCv: CvObjectType;
+};
+
+
+export type MutationConvertPdfToCvArgs = {
+  file: Scalars['Upload']['input'];
 };
 
 
@@ -373,6 +386,13 @@ export type CheckCvQueryVariables = Exact<{
 
 
 export type CheckCvQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', _id: string } };
+
+export type ConvertPdfToCvMutationVariables = Exact<{
+  file: Scalars['Upload']['input'];
+}>;
+
+
+export type ConvertPdfToCvMutation = { __typename?: 'Mutation', convertPdfToCv: { __typename?: 'ConvertPdfToCvObjectType', cv: string } };
 
 export type GetReviewStatusQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -1134,6 +1154,45 @@ export type CheckCvQueryResult = Apollo.QueryResult<CheckCvQuery, CheckCvQueryVa
 export function refetchCheckCvQuery(variables: CheckCvQueryVariables) {
       return { query: CheckCvDocument, variables: variables }
     }
+export const ConvertPdfToCvDocument = gql`
+    mutation ConvertPdfToCv($file: Upload!) {
+  convertPdfToCv(file: $file) {
+    cv
+  }
+}
+    `;
+export type ConvertPdfToCvMutationFn = Apollo.MutationFunction<ConvertPdfToCvMutation, ConvertPdfToCvMutationVariables>;
+export type ConvertPdfToCvComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<ConvertPdfToCvMutation, ConvertPdfToCvMutationVariables>, 'mutation'>;
+
+    export const ConvertPdfToCvComponent = (props: ConvertPdfToCvComponentProps) => (
+      <ApolloReactComponents.Mutation<ConvertPdfToCvMutation, ConvertPdfToCvMutationVariables> mutation={ConvertPdfToCvDocument} {...props} />
+    );
+    
+
+/**
+ * __useConvertPdfToCvMutation__
+ *
+ * To run a mutation, you first call `useConvertPdfToCvMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConvertPdfToCvMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [convertPdfToCvMutation, { data, loading, error }] = useConvertPdfToCvMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useConvertPdfToCvMutation(baseOptions?: Apollo.MutationHookOptions<ConvertPdfToCvMutation, ConvertPdfToCvMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ConvertPdfToCvMutation, ConvertPdfToCvMutationVariables>(ConvertPdfToCvDocument, options);
+      }
+export type ConvertPdfToCvMutationHookResult = ReturnType<typeof useConvertPdfToCvMutation>;
+export type ConvertPdfToCvMutationResult = Apollo.MutationResult<ConvertPdfToCvMutation>;
+export type ConvertPdfToCvMutationOptions = Apollo.BaseMutationOptions<ConvertPdfToCvMutation, ConvertPdfToCvMutationVariables>;
 export const GetReviewStatusDocument = gql`
     query getReviewStatus($cvId: ID!) {
   getReviewStatus(cvId: $cvId)

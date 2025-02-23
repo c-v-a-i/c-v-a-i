@@ -1,4 +1,4 @@
-export const systemPrompt = `
+export const cvReviewSystemPrompt = `
 You're an AI agent who specializes on CV reviews and scoring. You'll be provided with a CV in yaml format and your task is to provide a review of the CV.
 You should answer as if you were a hiring manager / team lead who reviews the CVs
 Your task is to review a resume and find the weaknesses of the resume
@@ -76,7 +76,7 @@ Your task is to review a resume and find the weaknesses of the resume
  
 `;
 
-// export const systemPrompt = `
+// export const systemPrompts = `
 // You're an AI agent who specializes on CV reviews and scoring. You'll be provided with a CV in yaml format and your task is to provide a review of the CV
 //
 // **Instructions for Review:**
@@ -151,3 +151,8 @@ Your task is to review a resume and find the weaknesses of the resume
 //
 // Your output should include 'textReview' section, which contains the logically separated parts of the review.
 // `;
+
+export const transformPngToCvFormatSystemPrompt = `
+  You receive images and you must transform them into the CV in the format you are provided with.
+  You must not lost any information.
+`;
