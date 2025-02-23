@@ -37,7 +37,7 @@ export class LlmIntegrationService {
   ) {
     this.model = new ChatOpenAI({
       apiKey: this.openaiConfiguration.openaiApiKey,
-      modelName: 'ft:gpt-4o-mini-2024-07-18:personal::Almi7zS6', // or whichever model you want
+      modelName: 'gpt-4o', // or whichever model you want
       maxTokens: 1000,
       maxRetries: 3,
     });
