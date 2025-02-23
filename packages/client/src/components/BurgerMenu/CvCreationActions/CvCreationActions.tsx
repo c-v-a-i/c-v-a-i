@@ -1,24 +1,29 @@
+import { useState } from 'react';
 import { Box, Button, styled } from '@mui/material';
-import React, { useState } from 'react';
 import { ImportPdfDialog } from '../../ImportPdfDialog';
 
 export const CvCreationActions = () => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-  const handleOpenDialog = () => setDialogOpen(true);
-  const handleCloseDialog = () => setDialogOpen(false);
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
 
   return (
     <>
-      <RowContainer justifyContent="space-evenly" gap={4} padding={2}>
-        <FullWidthButton variant="contained" onClick={handleOpenDialog}>
+      <RowContainer justifyContent={'space-evenly'} gap={4} padding={2}>
+        <FullWidthButton
+          variant={'contained'}
+          onClick={() => setImportDialogOpen(true)}
+        >
           Import PDF
         </FullWidthButton>
-        <FullWidthButton variant="contained" disabled>
+
+        <FullWidthButton variant={'contained'} disabled>
           Create with LLM
         </FullWidthButton>
       </RowContainer>
-      <ImportPdfDialog open={dialogOpen} onClose={handleCloseDialog} />
+
+      <ImportPdfDialog
+        open={importDialogOpen}
+        onClose={() => setImportDialogOpen(false)}
+      />
     </>
   );
 };

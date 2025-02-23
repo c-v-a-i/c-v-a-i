@@ -1,78 +1,58 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Typography, Paper } from '@mui/material';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { Box, Typography, styled } from '@mui/material';
+import { UploadFile } from '@mui/icons-material';
+
+const DropzoneContainer = styled(Box)<{ isDragActive: boolean }>(
+  ({ theme, isDragActive }) => ({
+    border: `2px dashed ${theme.palette.divider}`,
+    borderRadius: theme.shape.borderRadius,
+    padding: theme.spacing(4),
+    textAlign: 'center',
+    cursor: 'pointer',
+    backgroundColor: isDragActive ? theme.palette.action.hover : 'transparent',
+    transition: 'background-color 0.2s ease',
+  })
+);
 
 interface FileUploaderProps {
-  onFileUpload: (file: File) => void;
+  onFileUploaded: (file: File) => void;
+  acceptedFileTypes?: string;
+  maxFiles?: number;
 }
 
-export const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
-  const [fileName, setFileName] = useState<string | null>(null);
+export const FileUploader = ({
+  onFileUploaded,
+  acceptedFileTypes = 'application/pdf',
+  maxFiles = 1,
+}: FileUploaderProps) => {
+  const [file, setFile] = useState<File | null>(null);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    if (file) {
-      setFileName(file.name);
-      onFileUpload(file);
-    }
-  }, [onFileUpload]);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const uploadedFile = acceptedFiles[0];
+      setFile(uploadedFile);
+      onFileUploaded(uploadedFile);
+    },
+    [onFileUploaded]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { 'application/pdf': ['.pdf'] },
-    multiple: false,
+    accept: acceptedFileTypes ? { [acceptedFileTypes]: [] } : undefined,
+    maxFiles,
   });
 
-  const handlePaste = (event: React.ClipboardEvent) => {
-    const items = event.clipboardData?.items;
-    if (items) {
-      for (const item of items) {
-        if (item.type === 'application/pdf') {
-          const file = item.getAsFile();
-          if (file) {
-            setFileName(file.name);
-            onFileUpload(file);
-          }
-        }
-      }
-    }
-  };
-
   return (
-    <Paper
-      {...getRootProps()}
-      onPaste={handlePaste}
-      elevation={2}
-      sx={{
-        p: 3,
-        border: '2px dashed #ccc',
-        borderRadius: 2,
-        textAlign: 'center',
-        cursor: 'pointer',
-        bgcolor: isDragActive ? '#f5f5f5' : '#fff',
-        transition: 'background-color 0.3s',
-        '&:hover': { bgcolor: '#fafafa' },
-      }}
-    >
+    <DropzoneContainer {...getRootProps()} isDragActive={isDragActive}>
       <input {...getInputProps()} />
-      <UploadFileIcon sx={{ fontSize: 40, color: '#888', mb: 1 }} />
-      {fileName ? (
-        <Typography variant="body1" color="text.primary">
-          {fileName}
-        </Typography>
-      ) : (
-        <>
-          <Typography variant="body1" color="text.secondary">
-            {isDragActive
-              ? 'Drop your PDF here...'
-              : 'Drag & drop a PDF, paste it, or click to select'}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            (Only *.pdf files are accepted)
-          </Typography>
-        </>
-      )}
-    </Paper>
+      <UploadFile fontSize="large" color="action" />
+      <Typography variant="body1" mt={2}>
+        {file ? file.name : 'Drag & drop file here, or click to select'}
+      </Typography>
+      <Typography variant="caption" color="textSecondary">
+        Supported formats: PDF
+      </Typography>
+    </DropzoneContainer>
   );
 };

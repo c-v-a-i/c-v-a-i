@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   Button,
-  CircularProgress,
-  Typography,
 } from '@mui/material';
 import { FileUploader } from './FileUploader';
 
@@ -15,81 +13,57 @@ interface ImportPdfDialogProps {
   onClose: () => void;
 }
 
-export const ImportPdfDialog: React.FC<ImportPdfDialogProps> = ({
-  open,
-  onClose,
-}) => {
+export const ImportPdfDialog = ({ open, onClose }: ImportPdfDialogProps) => {
   const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+  // const [importPdfCv, { loading }] = useImportPdfCvMutation();
+  const [loading, setLoading] = useState(false);
 
-  // const [importPdfCv] = useMutation(ImportPdfCvDocument, {
-  //   refetchQueries: [{ query: GetCvsDocument }],
-  //   onCompleted: (data) => {
-  //     if (data.importPdfCv.success) {
-  //       showToast('CV uploaded successfully!', 'success');
-  //     } else {
-  //       showToast(data.importPdfCv.message || 'Failed to upload CV', 'error');
-  //     }
-  //   },
-  //   onError: (error) => showToast(`Error: ${error.message}`, 'error'),
-  // });
-
-  const handleFileUpload = (uploadedFile: File) => {
+  const handleFileUploaded = (uploadedFile: File) => {
     setFile(uploadedFile);
   };
 
   const handleConvert = async () => {
     if (!file) return;
 
-    setUploading(true);
-    try {
-      const pdfBase64 = await fileToBase64(file);
-      // await importPdfCv({
-      //   variables: { input: { pdf: pdfBase64 } },
-      // });
-      alert('PDF uploaded successfully!');
-      setFile(null); // Reset file after upload
-    } catch (error) {
-      console.error('Upload error:', error);
-    } finally {
-      setUploading(false);
-    }
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      const base64Data = (reader.result as string).split(',')[1];
+      try {
+        // await importPdfCv({
+        //   variables: { input: { pdfBase64: base64Data } },
+        //   refetchQueries: [refetchGetCvsQuery()],
+        // });
+        // Show success toast
+        setLoading(true);
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+      } catch (error) {
+        // Show error toast
+      } finally {
+        onClose();
+      }
+    };
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>Import PDF CV</DialogTitle>
       <DialogContent>
-        <FileUploader onFileUpload={handleFileUpload} />
-        {uploading && (
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-            Uploading... You can close the dialog now. You’ll see a new CV in
-            the list on the left side.
-          </Typography>
-        )}
+        <FileUploader
+          onFileUploaded={handleFileUploaded}
+          acceptedFileTypes="application/pdf"
+        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={uploading}>
-          Cancel
-        </Button>
+        <Button onClick={onClose}>Cancel</Button>
         <Button
-          onClick={handleConvert}
           variant="contained"
-          disabled={!file || uploading}
-          startIcon={uploading ? <CircularProgress size={20} /> : null}
+          onClick={handleConvert}
+          disabled={!file || loading}
         >
-          Convert
+          {loading ? 'Converting...' : 'Convert'}
         </Button>
       </DialogActions>
     </Dialog>
   );
-};
-
-const fileToBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve((reader.result as string).split(',')[1]);
-    reader.onerror = (error) => reject(error);
-  });
 };
