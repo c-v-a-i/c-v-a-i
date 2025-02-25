@@ -20,8 +20,8 @@ import {
 import { match } from 'ts-pattern';
 import {
   exampleAboutMe,
-  exampleEducationEntries,
   exampleContactInfoEntries,
+  exampleEducationEntries,
   exampleProjectEntries,
   exampleSkillEntries,
   exampleWorkExperienceEntries,
@@ -38,6 +38,8 @@ import {
   Skill,
   WorkExperience,
 } from '../../../../../libs/schemas';
+import { OmitId, WithAutoId } from '../../common/types';
+import { CreateCvParams } from './create-cv-params';
 
 type CvManagerProps = {
   cvId: string;
@@ -103,6 +105,42 @@ export class CvService {
     return true;
   }
 
+  private createWithAutoId<T>(item: OmitId<T>): WithAutoId<T> {
+    return {
+      _id: new Types.ObjectId().toString(),
+      ...item,
+    } as WithAutoId<T>;
+  }
+
+  async createCv(userId: string, params: CreateCvParams): Promise<CvDocument> {
+    const cvData = {
+      _id: new Types.ObjectId().toString(),
+      ...params,
+      userId,
+      aboutMe: params.aboutMe
+        ? this.createWithAutoId(params.aboutMe)
+        : undefined,
+      educationEntries: arrayToMap(params.educationEntries ?? []),
+      workExperienceEntries: arrayToMap(params.workExperienceEntries ?? []),
+      projectEntries: arrayToMap(params.projectEntries ?? []),
+      skillEntries: arrayToMap(params.skillEntries ?? []),
+      contactInfoEntries: arrayToMap(params.contactInfoEntries ?? []),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    const cv = new this.cvModel(cvData);
+
+    const validationError = cv.validateSync();
+    if (validationError) {
+      throw new BadRequestException(
+        `CV validation failed: ${validationError.message}`
+      );
+    }
+
+    return cv.save();
+  }
+
   async generateCvFromTemplate({
     userId,
     cvId,
@@ -124,18 +162,15 @@ export class CvService {
   }
 
   async generateExampleCv({ userId }: Pick<CvManagerProps, 'userId'>) {
-    const example = new this.cvModel({
+    return this.createCv(userId, {
       title: 'Example CV',
-      userId,
       aboutMe: exampleAboutMe,
-      educationEntries: arrayToMap(exampleEducationEntries),
-      workExperienceEntries: arrayToMap(exampleWorkExperienceEntries),
-      projectEntries: arrayToMap(exampleProjectEntries),
-      skillEntries: arrayToMap(exampleSkillEntries),
-      contactInfoEntries: arrayToMap(exampleContactInfoEntries),
+      educationEntries: exampleEducationEntries,
+      workExperienceEntries: exampleWorkExperienceEntries,
+      projectEntries: exampleProjectEntries,
+      skillEntries: exampleSkillEntries,
+      contactInfoEntries: exampleContactInfoEntries,
     });
-
-    return example.save();
   }
 
   async updateCv({

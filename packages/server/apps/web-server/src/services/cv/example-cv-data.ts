@@ -1,16 +1,17 @@
+import type { ZodArray } from '../../common/types';
 import type {
-  AboutMe,
-  ContactInfo,
-  Education,
-  Project,
-  Skill,
-  WorkExperience,
-} from '../../../../../libs/schemas';
+  createAboutMeSchema,
+  createContactInfoSchema,
+  createEducationSchema,
+  createProjectSchema,
+  createSkillSchema,
+  createWorkExperienceSchema,
+} from './create-cv-params';
+import type { z } from 'zod';
 
 const withDot = (str: string) => (str.endsWith('.') ? str : str + '.');
-type OmitId<T> = Omit<T, '_id'>;
 
-export const exampleEducationEntries: Array<OmitId<Education>> = [
+export const exampleEducationEntries: ZodArray<typeof createEducationSchema> = [
   {
     name: 'Brno University of Technology',
     degree: 'Bachelor in Information Technology',
@@ -38,7 +39,9 @@ export const exampleEducationEntries: Array<OmitId<Education>> = [
   },
 ];
 
-export const exampleWorkExperienceEntries: Array<OmitId<WorkExperience>> = [
+export const exampleWorkExperienceEntries: ZodArray<
+  typeof createWorkExperienceSchema
+> = [
   {
     position: 'Senior Software Engineer',
     name: 'Dishboard',
@@ -139,7 +142,7 @@ export const exampleWorkExperienceEntries: Array<OmitId<WorkExperience>> = [
   },
 ];
 
-export const exampleProjectEntries: Array<OmitId<Project>> = [
+export const exampleProjectEntries: ZodArray<typeof createProjectSchema> = [
   {
     name: 'GPT-4 Powered CV Builder',
     description: [
@@ -193,7 +196,9 @@ export const exampleProjectEntries: Array<OmitId<Project>> = [
   },
 ];
 
-export const exampleContactInfoEntries: Array<OmitId<ContactInfo>> = [
+export const exampleContactInfoEntries: ZodArray<
+  typeof createContactInfoSchema
+> = [
   {
     linkName: 'LinkedIn',
     link: 'https://www.linkedin.com/in/aliaksandr-skuratovich-4a2ab01a0',
@@ -211,7 +216,7 @@ export const exampleContactInfoEntries: Array<OmitId<ContactInfo>> = [
   },
 ];
 
-export const exampleSkillEntries: Array<OmitId<Skill>> = [
+export const exampleSkillEntries: ZodArray<typeof createSkillSchema> = [
   {
     category: 'Soft Skills',
     skills: [
@@ -243,7 +248,7 @@ export const exampleSkillEntries: Array<OmitId<Skill>> = [
   },
 ];
 
-export const exampleAboutMe: OmitId<AboutMe> = {
+export const exampleAboutMe: z.infer<typeof createAboutMeSchema> = {
   name: 'Aliaksandr Skuratovich',
   fieldName: 'whoami',
   description: [

@@ -1,13 +1,14 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Drawer as DrawerMui, Box, styled } from '@mui/material';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Box, Drawer as DrawerMui, styled } from '@mui/material';
 
-import { MenuHeader } from './MenuHeader';
 import { usePreviewMode, useUser } from '../../contexts';
 import { CvMenuList } from './CvMenuList';
 import { BadgeButton } from './BadgeButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { ResumeAssistantSection } from '../LLMAssistantSection';
+import { MenuHeader } from './MenuHeader';
+import { CvCreationActions } from './CvCreationActions/CvCreationActions';
 
 const drawerWidth = 600;
 
@@ -60,12 +61,29 @@ export const BurgerMenu = ({ children }: React.PropsWithChildren) => {
       )}
       <Drawer open={open}>
         <DrawerContainer justifyContent={'space-between'}>
-          <Box display={'flex'} flexDirection={'column'}>
+          <Box
+            sx={{
+              flexShrink: 0,
+              height: '40%',
+              borderColor: 'divider',
+              overflow: 'hidden',
+            }}
+          >
             <MenuHeader user={user} onClose={handleDrawerClose} />
             <CvMenuList />
           </Box>
+          <CvCreationActions />
 
-          <ResumeAssistantSection />
+          <Box
+            sx={{
+              flex: 1,
+              overflow: 'auto',
+              borderTop: 1,
+              borderColor: 'divider',
+            }}
+          >
+            <ResumeAssistantSection />
+          </Box>
         </DrawerContainer>
       </Drawer>
       <MainContent open={open}>{children}</MainContent>

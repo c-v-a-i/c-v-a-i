@@ -1,7 +1,9 @@
-import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client';
+import type { ApolloLink } from '@apollo/client';
+import { ApolloClient, from, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { toast } from 'react-toastify';
 import { environment } from '../environment';
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -11,9 +13,12 @@ const cache = new InMemoryCache({
   },
 });
 
-const httpLink = new HttpLink({
+const uploadLink = createUploadLink({
   uri: environment.graphqlUrl,
   credentials: 'include',
+  headers: {
+    'Apollo-Require-Preflight': 'true',
+  },
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -34,7 +39,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 export const apolloClient = new ApolloClient({
   cache,
-  link: from([errorLink, httpLink]),
+  link: from([uploadLink as unknown as ApolloLink, errorLink]),
   credentials: 'include',
   defaultOptions: {
     watchQuery: {

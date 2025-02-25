@@ -2,9 +2,10 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { WebServerModule } from './web-server.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import passport from 'passport';
+import { graphqlUploadExpress } from 'graphql-upload-ts';
 
 const localhostEnvCorsUrls = [
   'http://localhost:3000',
@@ -22,6 +23,12 @@ async function bootstrap() {
 
   app.use(passport.initialize());
   app.use(cookieParser());
+  app.use(
+    graphqlUploadExpress({
+      maxFileSize: 10 * 1024 * 1024 /* 10MB */,
+      maxFiles: 10,
+    })
+  );
 
   const host = '0.0.0.0';
 

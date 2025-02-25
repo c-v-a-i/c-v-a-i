@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 
 import { LlmIntegrationService } from './llm-integration.service';
@@ -8,6 +8,8 @@ import { CurrentUser } from '../../common/decorators';
 import { DecodedUserObjectType } from '../../auth/dto';
 import { ReviewCvOutput } from './dto';
 import { ReviewStatusType } from '../../common/enums';
+import { ConvertPdfToCvObjectType } from './dto/convert-pdf-to-cv.object-type';
+import { ConvertPdfInput } from './dto/convert-pdf-to-cv.input-type';
 
 @UseGuards(GqlAuthGuard)
 @Resolver()
@@ -30,14 +32,40 @@ export class LlmIntegrationResolver {
     @CurrentUser() { client_id: userId }: DecodedUserObjectType,
     @Args('cvId', { type: () => ID }) cvId: string
   ): Promise<ReviewCvOutput> {
-    const { messages, newCvState } = await this.llmIntegrationService.reviewCv({
+    const { messages } = await this.llmIntegrationService.reviewCv({
       userId,
       cvId,
     });
 
     return {
       messages,
-      // newCvState: newCvObjectType,
     };
+  }
+
+  @Mutation(() => ConvertPdfToCvObjectType)
+  async convertPdfToCv(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args() { file }: ConvertPdfInput
+  ): Promise<ConvertPdfToCvObjectType> {
+    const { createReadStream, mimetype } = await file;
+
+    if (mimetype !== 'application/pdf') {
+      throw new Error('Invalid file type');
+    }
+
+    const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
+      const chunks: Uint8Array[] = [];
+      createReadStream()
+        .on('data', (chunk: Uint8Array) => chunks.push(chunk))
+        .on('error', reject)
+        .on('end', () => resolve(Buffer.concat(chunks)));
+    });
+
+    const pdfBase64 = pdfBuffer.toString('base64');
+
+    return this.llmIntegrationService.convertPdfToCv({
+      userId,
+      pdfBase64,
+    });
   }
 }

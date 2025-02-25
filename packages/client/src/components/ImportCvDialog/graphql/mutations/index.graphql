@@ -1,0 +1,10 @@
+mutation ConvertPdfToCv(
+  $file: Upload!
+) {
+  convertPdfToCv(file: $file) {
+    comment
+#    cv {
+#      ...CvFragment
+#    }
+  }
+}

@@ -3,10 +3,11 @@ import { LlmIntegrationResolver } from './llm-integration.resolver';
 import { LlmIntegrationService } from './llm-integration.service';
 import { CvModule } from '../cv/cv.module';
 import { ConfigModule } from '@nestjs/config';
-import { openaiConfig } from '../../auth/config/openai.config';
+import { llmServiceConfig } from '../../auth/config/llmServiceConfig';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [CvModule, ConfigModule.forFeature(openaiConfig)],
+  imports: [HttpModule, CvModule, ConfigModule.forFeature(llmServiceConfig)],
   providers: [LlmIntegrationResolver, LlmIntegrationService],
   exports: [LlmIntegrationService],
 })
