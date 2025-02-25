@@ -42,7 +42,8 @@ export type ContactInfo = {
 
 export type ConvertPdfToCvObjectType = {
   __typename?: 'ConvertPdfToCvObjectType';
-  cv: Scalars['String']['output'];
+  comment: Scalars['String']['output'];
+  cv?: Maybe<CvObjectType>;
 };
 
 export enum CvEntryType {
@@ -392,7 +393,7 @@ export type ConvertPdfToCvMutationVariables = Exact<{
 }>;
 
 
-export type ConvertPdfToCvMutation = { __typename?: 'Mutation', convertPdfToCv: { __typename?: 'ConvertPdfToCvObjectType', cv: string } };
+export type ConvertPdfToCvMutation = { __typename?: 'Mutation', convertPdfToCv: { __typename?: 'ConvertPdfToCvObjectType', comment: string } };
 
 export type GetReviewStatusQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -1157,7 +1158,7 @@ export function refetchCheckCvQuery(variables: CheckCvQueryVariables) {
 export const ConvertPdfToCvDocument = gql`
     mutation ConvertPdfToCv($file: Upload!) {
   convertPdfToCv(file: $file) {
-    cv
+    comment
   }
 }
     `;

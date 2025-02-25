@@ -1,8 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { CvObjectType } from '../../cv/dto';
 
 @ObjectType()
 export class ConvertPdfToCvObjectType {
-  // TODO: update
   @Field(() => String)
-  cv!: string;
+  comment!: string;
+
+  @Field(() => CvObjectType, { nullable: true })
+  cv?: CvObjectType | null;
 }

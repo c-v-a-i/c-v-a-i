@@ -10,10 +10,11 @@ import {
 } from './system-prompts';
 import { z } from 'zod';
 import yaml from 'js-yaml';
-
-import { ChatOpenAI } from '@langchain/openai';
-import { HumanMessage, SystemMessage } from '@langchain/core/messages';
+import { OpenAI } from 'openai';
+import { zodResponseFormat } from 'openai/helpers/zod';
 import { HttpService } from '@nestjs/axios';
+import { createCreateCvParamsSchema } from '../cv/create-cv-params';
+import { convertCvToObjectType } from '../cv/dto';
 
 const reviewCvResponseFormat = z.object({
   textReview: z
@@ -21,21 +22,19 @@ const reviewCvResponseFormat = z.object({
     .describe(
       'array with logically separated parts of the text review response with their content. it should not include any reasoning in it'
     ),
-  // score: z.number().min(1).max(10),
-  // TODO: "newSchema" OR "changeOperation"
 });
 type ReviewCvResponseFormat = z.infer<typeof reviewCvResponseFormat>;
 
-// TODO: use actual CV schema (a real object)
 const convertPdfToCv = z.object({
-  cv: z.string(),
+  createdCv: createCreateCvParamsSchema.optional(),
+  comment: z.string(),
 });
 type CreateCvOutputSchema = z.infer<typeof convertPdfToCv>;
 
 @Injectable()
 export class LlmIntegrationService {
-  private model: ChatOpenAI;
   private readonly logger = new Logger(LlmIntegrationService.name);
+  private openai: OpenAI;
 
   private readonly cvReviewSystemPrompt = cvReviewSystemPrompt;
   private readonly transformPngToCvFormatSystemPrompt =
@@ -49,73 +48,76 @@ export class LlmIntegrationService {
     >,
     private readonly httpService: HttpService
   ) {
-    this.model = new ChatOpenAI({
+    this.openai = new OpenAI({
       apiKey: this.llmServiceConfiguration.openaiApiKey,
-      modelName: 'gpt-4o', // or whichever model you want
-      maxTokens: 1000,
-      maxRetries: 3,
     });
   }
 
   async convertPdfToCv({
-    // userId,
+    userId,
     pdfBase64,
   }: {
     userId: string;
     pdfBase64: string;
-  }) /* Promise<CvDocument> */ {
+  }) {
     const pdfServiceUrl = this.llmServiceConfiguration.pdfServiceUrl;
     const { data: pngs } = await this.httpService.axiosRef.post<string[]>(
       `${pdfServiceUrl}/convert`,
-      {
-        pdf: pdfBase64,
-      }
+      { pdf: pdfBase64 }
     );
 
-    const cv = await this.processImagesWithLLM(pngs);
+    const { comment, createdCv: createCvPayload } =
+      await this.processImagesWithLLM(pngs);
 
-    // // 3. Create and save CV document
-    // const cv = await this.cvService.createCv({
-    //   userId,
-    // });
-    //
-    // return cv;
+    if (!createCvPayload) {
+      return { comment };
+    }
 
-    return cv;
+    const cv = await this.cvService.createCv(userId, createCvPayload);
+    this.logger.log(`Created CV with ID: ${cv.id}`);
+
+    return {
+      comment,
+      cv: convertCvToObjectType(cv),
+    };
   }
 
   private async processImagesWithLLM(pngs: string[]) {
-    const visionMessages = new HumanMessage({
-      content: [
-        {
-          type: 'text',
-          text: 'Extract structured CV information from this document',
-        },
-        ...pngs.map((png) => ({
-          type: 'image_url',
-          image_url: { url: `data:image/png;base64,${png}` },
-        })),
-      ],
+    const pngMessages: OpenAI.ChatCompletionContentPartImage[] = pngs.map(
+      (png) => ({
+        type: 'image_url',
+        image_url: { url: `data:image/png;base64,${png}` },
+      })
+    );
+
+    const messages: OpenAI.ChatCompletionMessageParam[] = [
+      {
+        role: 'system',
+        content: this.transformPngToCvFormatSystemPrompt,
+      },
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: 'Extract structured CV information from this document',
+          },
+          ...pngMessages,
+        ],
+      },
+    ];
+
+    const response = await this.openai.beta.chat.completions.parse({
+      model: 'gpt-4o',
+      messages,
+      response_format: zodResponseFormat(convertPdfToCv, 'convertPdfToCv'),
     });
 
-    const structuredModel =
-      this.model.withStructuredOutput<CreateCvOutputSchema>(convertPdfToCv);
-
-    const result = await structuredModel.invoke([
-      new SystemMessage({ content: this.transformPngToCvFormatSystemPrompt }),
-      visionMessages,
-    ]);
-
-    return result.cv;
+    return response.choices[0].message.parsed as CreateCvOutputSchema;
   }
 
   getReviewStatusForUser(userId: string): ReviewStatusType {
     void userId;
-    // Pseudo-logic:
-    // 1) Check if user has subscription => otherwise NO_SUBSCRIPTION
-    // 2) Check if user has reviews left => otherwise NO_REVIEWS_REMAIN
-    // 3) Check if CV was already reviewed => otherwise ALREADY_REVIEWED
-    // ... default to "READY_FOR_REVIEW" for now
     return ReviewStatusType.READY_FOR_REVIEW;
   }
 
@@ -128,23 +130,27 @@ export class LlmIntegrationService {
   }): Promise<{ messages: string[]; newCvState: CvDocument }> {
     const cv = await this.cvService.getCv({ cvId, userId });
 
-    const structuredModel =
-      this.model.withStructuredOutput<ReviewCvResponseFormat>(
-        reviewCvResponseFormat
-      );
-
     const humanMessage = ['```', yaml.dump(cv.toJSON()), '```'].join('\n');
 
-    const result = await structuredModel.invoke([
+    const messages: OpenAI.ChatCompletionMessageParam[] = [
       { role: 'system', content: this.cvReviewSystemPrompt },
       { role: 'user', content: humanMessage },
-    ]);
+    ];
 
-    const newCvState = cv;
+    const response = await this.openai.beta.chat.completions.parse({
+      model: 'gpt-4o',
+      messages,
+      response_format: zodResponseFormat(
+        reviewCvResponseFormat,
+        'reviewCvResponse'
+      ),
+    });
+
+    const result = response.choices[0].message.parsed as ReviewCvResponseFormat;
 
     return {
       messages: result.textReview,
-      newCvState,
+      newCvState: cv,
     };
   }
 }

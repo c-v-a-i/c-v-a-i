@@ -2,6 +2,9 @@ mutation ConvertPdfToCv(
   $file: Upload!
 ) {
   convertPdfToCv(file: $file) {
-    cv
+    comment
+#    cv {
+#      ...CvFragment
+#    }
   }
 }

@@ -33,19 +33,14 @@ export const CvVisualizer = ({ cvId }: CvVisualizerProps) => {
 
       <Divider flexItem />
 
-      <Box display="flex" gap="80px" sx={{ overflowX: 'hidden' }}>
-        <Box
-          width={widthToPerc(8 / 12)}
-          display="flex"
-          flexDirection="column"
-          gap={3}
-        >
+      <Box display="flex" gap="40px" sx={{ overflowX: 'hidden' }}>
+        <Box flex={1} display="flex" flexDirection="column" gap={3}>
           <WorkExperience cvId={cvId} />
           <Divider />
           <Projects cvId={cvId} />
         </Box>
 
-        <Box width={widthToPerc(4 / 12)}>
+        <Box width={widthToPerc(3 / 12)}>
           <Box
             display="flex"
             flexDirection="column"

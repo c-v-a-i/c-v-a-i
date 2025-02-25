@@ -39,7 +39,6 @@ export class LlmIntegrationResolver {
 
     return {
       messages,
-      // newCvState: newCvObjectType,
     };
   }
 
@@ -64,10 +63,9 @@ export class LlmIntegrationResolver {
 
     const pdfBase64 = pdfBuffer.toString('base64');
 
-    const cv = await this.llmIntegrationService.convertPdfToCv({
+    return this.llmIntegrationService.convertPdfToCv({
       userId,
       pdfBase64,
     });
-    return { cv };
   }
 }

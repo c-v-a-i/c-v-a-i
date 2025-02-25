@@ -34,15 +34,19 @@ export const ImportPdfDialog = ({ open, onClose }: ImportPdfDialogProps) => {
   const handleConvert = async () => {
     if (!file) return;
 
-    convertPdfToCv({
+    const data = await convertPdfToCv({
       variables: { file },
     })
       .then(({ data }) => {
-        console.log(data?.convertPdfToCv.cv);
-        toast.success('CV imported successfully');
+        const comment = data?.convertPdfToCv.comment;
+        console.log(comment);
+        if (comment) {
+          toast.success(comment);
+        }
       })
       .catch()
-      .finally();
+      .finally(() => {});
+
     onClose();
   };
 

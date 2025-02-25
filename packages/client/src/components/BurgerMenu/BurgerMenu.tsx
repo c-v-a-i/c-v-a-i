@@ -62,20 +62,28 @@ export const BurgerMenu = ({ children }: React.PropsWithChildren) => {
       <Drawer open={open}>
         <DrawerContainer justifyContent={'space-between'}>
           <Box
-            display={'flex'}
-            flexDirection={'column'}
-            justifyContent={'space-between'}
-            height={'100%'}
+            sx={{
+              flexShrink: 0,
+              height: '40%',
+              borderColor: 'divider',
+              overflow: 'hidden',
+            }}
           >
-            <Box>
-              <MenuHeader user={user} onClose={handleDrawerClose} />
-              <CvMenuList />
-            </Box>
-
-            <CvCreationActions />
+            <MenuHeader user={user} onClose={handleDrawerClose} />
+            <CvMenuList />
           </Box>
+          <CvCreationActions />
 
-          <ResumeAssistantSection />
+          <Box
+            sx={{
+              flex: 1,
+              overflow: 'auto',
+              borderTop: 1,
+              borderColor: 'divider',
+            }}
+          >
+            <ResumeAssistantSection />
+          </Box>
         </DrawerContainer>
       </Drawer>
       <MainContent open={open}>{children}</MainContent>

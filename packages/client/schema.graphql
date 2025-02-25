@@ -15,7 +15,8 @@ type ContactInfo {
 }
 
 type ConvertPdfToCvObjectType {
-  cv: String!
+  comment: String!
+  cv: CvObjectType
 }
 
 enum CvEntryType {

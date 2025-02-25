@@ -2816,10 +2816,10 @@ __metadata:
     graphql-upload-ts: "npm:^2.1.2"
     jest: "npm:^29.7.0"
     js-yaml: "npm:^4.1.0"
-    langchain: "npm:^0.3.7"
     lodash: "npm:^4.17.21"
     mongodb-memory-server: "npm:^10.1.2"
     mongoose: "npm:^8.8.4"
+    openai: "npm:^4.85.4"
     passport: "npm:^0.7.0"
     passport-google-oauth20: "npm:^2.0.0"
     passport-jwt: "npm:^4.0.1"
@@ -13498,7 +13498,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"langchain@npm:>=0.2.3 <0.3.0 || >=0.3.4 <0.4.0, langchain@npm:^0.3.7":
+"langchain@npm:>=0.2.3 <0.3.0 || >=0.3.4 <0.4.0":
   version: 0.3.7
   resolution: "langchain@npm:0.3.7"
   dependencies:
@@ -15223,6 +15223,31 @@ __metadata:
   bin:
     openai: bin/cli
   checksum: 10/51ef7522d3c3589401b9bb0d49a3bd9df2a84648b996b3452dd4bae99c8e6b27d63a415c41847900954197051b5598de85a76f12c6b2deab33d8d70ceab5d7c3
+  languageName: node
+  linkType: hard
+
+"openai@npm:^4.85.4":
+  version: 4.85.4
+  resolution: "openai@npm:4.85.4"
+  dependencies:
+    "@types/node": "npm:^18.11.18"
+    "@types/node-fetch": "npm:^2.6.4"
+    abort-controller: "npm:^3.0.0"
+    agentkeepalive: "npm:^4.2.1"
+    form-data-encoder: "npm:1.7.2"
+    formdata-node: "npm:^4.3.2"
+    node-fetch: "npm:^2.6.7"
+  peerDependencies:
+    ws: ^8.18.0
+    zod: ^3.23.8
+  peerDependenciesMeta:
+    ws:
+      optional: true
+    zod:
+      optional: true
+  bin:
+    openai: bin/cli
+  checksum: 10/5eda2a305bacd126513e6743b0f77842560a1273a850fc281439aed16d3ca264bc6673dd4f720ded378e0a22ac109863b1c319c6a23ff2e77b9acf672ac73d8b
   languageName: node
   linkType: hard
 
