@@ -34,7 +34,7 @@ export const ImportPdfDialog = ({ open, onClose }: ImportPdfDialogProps) => {
   const handleConvert = async () => {
     if (!file) return;
 
-    const data = await convertPdfToCv({
+    await convertPdfToCv({
       variables: { file },
     })
       .then(({ data }) => {
