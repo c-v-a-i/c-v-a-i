@@ -26,6 +26,7 @@ const customPalette = {
   },
 };
 
+// TODO: define spacings
 export const theme = createTheme({
   palette: {
     ...customPalette,
@@ -35,6 +36,23 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: '32px',
+          background: alpha(customPalette.background.paper, 0.9),
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)', // For Safari support
+        },
+      },
+    },
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          backgroundColor: alpha('#000', 0.2), // Lighter backdrop for better blur visibility
+        },
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: {
@@ -60,7 +78,6 @@ export const theme = createTheme({
       },
     },
     MuiButton: {
-      // on hover, text color should be brighter
       variants: [
         {
           props: { variant: 'contained' },
@@ -85,7 +102,6 @@ export const theme = createTheme({
           },
         },
       ],
-
       styleOverrides: {
         root: {
           borderRadius: '16px',

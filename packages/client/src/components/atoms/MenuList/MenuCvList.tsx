@@ -1,12 +1,8 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { List } from '@mui/material';
 import { MenuItem } from './MenuItem';
 import type { ListItem } from './types';
 import { useCurrentCv } from '../../../contexts';
-import {
-  refetchGetCvsQuery,
-  useCreateCvMutation,
-} from '../../../generated/graphql';
 
 type MenuListProps = {
   items: ListItem[];
@@ -16,9 +12,9 @@ type MenuListProps = {
 export const MenuCvList = React.memo(
   ({ items, onDeleteItem }: MenuListProps) => {
     const { setCurrentCvId } = useCurrentCv();
-    const [createNewCv] = useCreateCvMutation({
-      refetchQueries: [refetchGetCvsQuery()],
-    });
+    const [isDialogOpen, setIsOpenDialog] = useState(false);
+
+    const openDialog = useCallback((id: string) => setIsOpenDialog(true), []);
 
     const handleSelectCv = useCallback(
       (id: string) => {
@@ -26,11 +22,17 @@ export const MenuCvList = React.memo(
       },
       [setCurrentCvId]
     );
-    const onDelete = (id: string) => onDeleteItem(id);
-    const onCreateFromThis = (id: string) =>
-      createNewCv({
-        variables: { templateId: id },
-      });
+
+    const menuOptions = React.useMemo(
+      () => [
+        {
+          label: 'Use as template',
+          action: (id: string) => openDialog(id),
+        },
+        { label: 'Delete', action: onDeleteItem },
+      ],
+      [openDialog, onDeleteItem]
+    );
 
     return (
       <List>
@@ -39,10 +41,7 @@ export const MenuCvList = React.memo(
             key={item._id}
             item={item}
             onSelect={handleSelectCv}
-            menuOptions={[
-              { label: 'Use as template', action: onCreateFromThis },
-              { label: 'Delete', action: onDelete },
-            ]}
+            menuOptions={menuOptions}
           />
         ))}
       </List>

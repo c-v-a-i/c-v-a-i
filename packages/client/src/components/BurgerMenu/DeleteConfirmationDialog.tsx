@@ -1,5 +1,12 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 
 type DeleteConfirmationDialogProps = {
   open: boolean;
@@ -7,13 +14,15 @@ type DeleteConfirmationDialogProps = {
   onCancel: () => void;
 };
 
-export const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = React.memo(
-  ({ open, onConfirm, onCancel }) => {
+export const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> =
+  React.memo(({ open, onConfirm, onCancel }) => {
     return (
       <Dialog open={open} onClose={onCancel}>
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
-          <DialogContentText>Are you sure you want to delete this item?</DialogContentText>
+          <DialogContentText>
+            Are you sure you want to delete this item?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel} color="primary">
@@ -25,5 +34,4 @@ export const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> =
         </DialogActions>
       </Dialog>
     );
-  }
-);
+  });
