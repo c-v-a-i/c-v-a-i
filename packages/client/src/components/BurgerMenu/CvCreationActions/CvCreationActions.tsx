@@ -1,21 +1,26 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Box, Button, styled } from '@mui/material';
 import { ImportPdfDialog } from '../../ImportCvDialog';
+import { CvCreationDialog } from '../../CreateCvFlow';
 
 export const CvCreationActions = () => {
   const [importDialogOpen, setImportDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const openDialog = useCallback(() => setIsDialogOpen(true), []);
+  const closeDialog = useCallback(() => setIsDialogOpen(false), []);
 
   return (
     <>
-      <RowContainer justifyContent={'space-evenly'} gap={4} padding={2}>
+      <RowContainer justifyContent="space-evenly" gap={4} padding={2}>
         <FullWidthButton
-          variant={'contained'}
+          variant="contained"
           onClick={() => setImportDialogOpen(true)}
         >
           Import PDF
         </FullWidthButton>
 
-        <FullWidthButton variant={'contained'} disabled>
+        <FullWidthButton variant="contained" onClick={() => openDialog()}>
           Create with LLM
         </FullWidthButton>
       </RowContainer>
@@ -24,6 +29,8 @@ export const CvCreationActions = () => {
         open={importDialogOpen}
         onClose={() => setImportDialogOpen(false)}
       />
+
+      <CvCreationDialog open={isDialogOpen} onClose={closeDialog} />
     </>
   );
 };

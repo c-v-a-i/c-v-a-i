@@ -26,6 +26,7 @@ const customPalette = {
   },
 };
 
+// TODO: define spacings
 export const theme = createTheme({
   palette: {
     ...customPalette,
@@ -35,6 +36,13 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: '32px',
+        },
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: {
