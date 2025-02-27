@@ -40,6 +40,16 @@ export const theme = createTheme({
       styleOverrides: {
         paper: {
           borderRadius: '32px',
+          background: alpha(customPalette.background.paper, 0.9),
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)', // For Safari support
+        },
+      },
+    },
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          backgroundColor: alpha('#000', 0.2), // Lighter backdrop for better blur visibility
         },
       },
     },
@@ -68,7 +78,6 @@ export const theme = createTheme({
       },
     },
     MuiButton: {
-      // on hover, text color should be brighter
       variants: [
         {
           props: { variant: 'contained' },
@@ -93,7 +102,6 @@ export const theme = createTheme({
           },
         },
       ],
-
       styleOverrides: {
         root: {
           borderRadius: '16px',
