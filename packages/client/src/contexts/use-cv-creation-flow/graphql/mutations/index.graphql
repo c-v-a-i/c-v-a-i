@@ -1,0 +1,14 @@
+mutation transformCv(
+  $templateId: String!
+  $message: String!
+) {
+  transformCv (
+    templateId: $templateId
+    message: $message
+  ) {
+    comment
+    cv {
+      _id
+    }
+  }
+}

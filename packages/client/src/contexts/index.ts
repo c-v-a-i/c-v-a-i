@@ -4,4 +4,4 @@ export * from './use-current-cv';
 export * from './use-preview-mode';
 export * from './use-user';
 export * from './use-dialog';
-export * from './use-cv-creation-flow';
+export * from './use-cv-creation-flow/use-cv-creation-flow';

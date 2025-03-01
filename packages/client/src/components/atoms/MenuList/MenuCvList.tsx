@@ -11,7 +11,7 @@ type MenuListProps = {
 
 export const MenuCvList = React.memo(
   ({ items, onDeleteItem }: MenuListProps) => {
-    const { setCurrentCvId } = useCurrentCv();
+    const { setCurrentCvId, currentCvId } = useCurrentCv();
     const { open: openDialog } = useDialog();
     const { setTemplateId } = useCvCreationFlow();
 
@@ -33,7 +33,7 @@ export const MenuCvList = React.memo(
         },
         { label: 'Delete', action: onDeleteItem },
       ],
-      [openDialog, onDeleteItem]
+      [onDeleteItem, setTemplateId, openDialog]
     );
 
     return (
@@ -44,6 +44,7 @@ export const MenuCvList = React.memo(
             item={item}
             onSelect={handleSelectCv}
             menuOptions={menuOptions}
+            isSelected={currentCvId === item._id}
           />
         ))}
       </List>

@@ -17,10 +17,11 @@ type MenuItemProps = {
   item: ListItemType;
   menuOptions: OptionsMenuProps['options'];
   onSelect: (id: string) => void;
+  isSelected?: boolean;
 };
 
 export const MenuItem = React.memo(
-  ({ item, menuOptions, onSelect }: MenuItemProps) => {
+  ({ item, menuOptions, onSelect, isSelected }: MenuItemProps) => {
     const [updateCv] = useUpdateCvMutation({
       refetchQueries: [],
     });
@@ -73,6 +74,7 @@ export const MenuItem = React.memo(
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}
+        selected={isSelected}
       >
         <ListItemText>
           <TypographyWithOverflow sx={{ width: '90%' }}>

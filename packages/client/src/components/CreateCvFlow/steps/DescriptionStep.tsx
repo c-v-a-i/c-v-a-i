@@ -15,10 +15,6 @@ import { useCvCreationFlow } from '../../../contexts';
 export const DescriptionStep = () => {
   const { templateCvSummarization, prompt, setPrompt } = useCvCreationFlow();
 
-  // TODO: add jobDescription to data provided by the context somehow
-  // data.jobDescription
-
-  // TODO: maybe use formik
   return (
     <Box display="flex" flexDirection="column" gap={3} height="100%">
       <Accordion>

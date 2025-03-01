@@ -3,7 +3,7 @@ import { grey } from '@mui/material/colors';
 
 const customPalette = {
   primary: {
-    light: '#dadef2',
+    light: '#d6d6dc',
     main: '#bfbfc4',
     dark: '#7d7d81',
     contrastText: '#17171a',
@@ -26,6 +26,44 @@ const customPalette = {
   },
 };
 
+const outlinedInputStyles = {
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '14px',
+  },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'transparent',
+  },
+  '&:hover .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'transparent',
+  },
+  '&:not(:hover) .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'transparent',
+  },
+  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'transparent',
+  },
+};
+const inputStyles = {
+  background: customPalette.secondary.light,
+  borderRadius: '14px',
+};
+const variantsWithNoBorders = (['outlined', 'filled', 'standard'] as const).map(
+  (variant) => ({
+    props: { variant },
+    style: outlinedInputStyles,
+  })
+);
+
+const containedStyle = {
+  color: customPalette.primary.contrastText,
+  backgroundColor: customPalette.primary.light,
+  '&:hover': {
+    backgroundColor: alpha(customPalette.primary.light, 0.8),
+    color: customPalette.primary.contrastText,
+    boxShadow: '0px 0px',
+  },
+};
+
 // TODO: define spacings
 export const theme = createTheme({
   palette: {
@@ -36,6 +74,13 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          '&.Mui-selected': containedStyle,
+        },
+      },
+    },
     MuiSvgIcon: {
       styleOverrides: {
         root: {
@@ -71,10 +116,22 @@ export const theme = createTheme({
     },
     MuiTextField: {
       styleOverrides: {
+        root: inputStyles,
+      },
+      variants: variantsWithNoBorders,
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: inputStyles,
+      },
+      variants: variantsWithNoBorders,
+    },
+    MuiAccordion: {
+      styleOverrides: {
         root: {
+          borderRadius: '12px',
+          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
           background: customPalette.secondary.light,
-          borderRadius: '10px',
-          padding: '2px',
         },
       },
     },
@@ -97,15 +154,7 @@ export const theme = createTheme({
       variants: [
         {
           props: { variant: 'contained' },
-          style: {
-            color: customPalette.primary.contrastText,
-            backgroundColor: customPalette.primary.main,
-            '&:hover': {
-              backgroundColor: alpha(customPalette.primary.main, 0.8),
-              color: customPalette.primary.contrastText,
-              boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.25)',
-            },
-          },
+          style: containedStyle,
         },
         {
           props: { variant: 'outlined' },

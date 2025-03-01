@@ -3,7 +3,7 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 import { Exclude } from 'class-transformer';
 
 @ArgsType()
-export class ConvertPdfInput {
+export class ConvertPdfInputType {
   @Exclude()
   @Field(() => GraphQLUpload)
   readonly file!: Promise<FileUpload>;

@@ -1,6 +1,7 @@
-import { Box, Stepper, Step, StepLabel, Button } from '@mui/material';
+import { Button, Step, StepLabel, Stepper } from '@mui/material';
 import { useStepper } from '../../hooks/use-stepper';
 import type { StepperProps } from './types';
+import { Box } from '../atoms';
 
 export const CvStepper = ({
   steps,
@@ -28,7 +29,7 @@ export const CvStepper = ({
         ))}
       </Stepper>
 
-      <Box flex={1} p={3} overflow="auto">
+      <Box flex={1} p={3}>
         <CurrentStep />
       </Box>
 

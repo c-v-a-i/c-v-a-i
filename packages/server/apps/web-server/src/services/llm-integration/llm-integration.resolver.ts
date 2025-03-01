@@ -6,10 +6,15 @@ import { LlmIntegrationService } from './llm-integration.service';
 import { GqlAuthGuard } from '../../auth/guards/gql-auth/gql-auth.guard';
 import { CurrentUser } from '../../common/decorators';
 import { DecodedUserObjectType } from '../../auth/dto';
-import { ReviewCvOutput } from './dto';
+import {
+  ConvertPdfInputType,
+  ConvertPdfToCvObjectType,
+  ReviewCvOutput,
+  TransformCvInputType,
+  TransformCvObjectType,
+} from './dto';
 import { ReviewStatusType } from '../../common/enums';
-import { ConvertPdfToCvObjectType } from './dto/convert-pdf-to-cv.object-type';
-import { ConvertPdfInput } from './dto/convert-pdf-to-cv.input-type';
+import { convertCvToObjectType } from '../cv/dto';
 
 @UseGuards(GqlAuthGuard)
 @Resolver()
@@ -45,7 +50,7 @@ export class LlmIntegrationResolver {
   @Mutation(() => ConvertPdfToCvObjectType)
   async convertPdfToCv(
     @CurrentUser() { client_id: userId }: DecodedUserObjectType,
-    @Args() { file }: ConvertPdfInput
+    @Args() { file }: ConvertPdfInputType
   ): Promise<ConvertPdfToCvObjectType> {
     const { createReadStream, mimetype } = await file;
 
@@ -63,9 +68,31 @@ export class LlmIntegrationResolver {
 
     const pdfBase64 = pdfBuffer.toString('base64');
 
-    return this.llmIntegrationService.convertPdfToCv({
+    const { cv, ...rest } = await this.llmIntegrationService.convertPdfToCv({
       userId,
       pdfBase64,
     });
+
+    return {
+      ...rest,
+      cv: cv && convertCvToObjectType(cv),
+    };
+  }
+
+  @Mutation(() => TransformCvObjectType)
+  async transformCv(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args() { message, templateId }: TransformCvInputType
+  ): Promise<TransformCvObjectType> {
+    const { cv, ...rest } = await this.llmIntegrationService.transformCv({
+      userId,
+      message,
+      templateId,
+    });
+
+    return {
+      ...rest,
+      cv: convertCvToObjectType(cv),
+    };
   }
 }
