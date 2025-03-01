@@ -1,31 +1,33 @@
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Box,
-  Typography,
-} from '@mui/material';
-import type { CvState, StepComponentProps } from '../types';
+import { Box, Typography } from '@mui/material';
+import { useGetCvsQuery } from '../../../generated/graphql';
+import { useMemo } from 'react';
+import { SelectList } from '../../atoms';
+import { useCvCreationFlow } from '../../../contexts';
 
-type TemplateStepProps = StepComponentProps<Pick<CvState, 'templateId'>>;
+// TODO: add loading and error states. maybe
+export const TemplateStep = () => {
+  const { data: { getCvs: _resumeList = [] } = {} } = useGetCvsQuery({
+    fetchPolicy: 'cache-only',
+  });
+  const { templateId, setTemplateId } = useCvCreationFlow();
 
-export const TemplateStep = ({ data, updateData }: TemplateStepProps) => (
-  <Box display="flex" flexDirection="column" gap={3}>
-    <FormControl fullWidth>
-      <InputLabel>CV Template</InputLabel>
-      <Select
-        value={data.templateId ?? ''}
-        onChange={(e) => updateData({ templateId: e.target.value })}
-        label="CV Template"
-      >
-        <MenuItem value="1">Developer Template</MenuItem>
-        <MenuItem value="2">Designer Template</MenuItem>
-      </Select>
-    </FormControl>
+  const resumeList = useMemo(
+    () => _resumeList.map(({ _id, name }) => ({ id: _id, label: name })),
+    [_resumeList]
+  );
 
-    <Typography variant="body2" color="text.secondary">
-      Creating from scratch is currently unavailable
-    </Typography>
-  </Box>
-);
+  return (
+    <Box display="flex" flexDirection="column" gap={3}>
+      <SelectList
+        label={'CV Template'}
+        items={resumeList}
+        onSelect={setTemplateId}
+        defaultState={templateId}
+      />
+
+      <Typography variant="body2" color="text.secondary">
+        Creating from scratch is currently unavailable
+      </Typography>
+    </Box>
+  );
+};

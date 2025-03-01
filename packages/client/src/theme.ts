@@ -36,6 +36,22 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          color: customPalette.primary.dark,
+        },
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          background: alpha(customPalette.background.paper, 0.9),
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)', // For Safari support
+        },
+      },
+    },
     MuiDialog: {
       styleOverrides: {
         paper: {

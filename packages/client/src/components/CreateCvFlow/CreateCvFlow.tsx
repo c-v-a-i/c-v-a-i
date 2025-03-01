@@ -1,40 +1,41 @@
 import { Dialog } from '@mui/material';
 import { CvGenerationStep, DescriptionStep, TemplateStep } from './steps';
 import { CvStepper } from './CvStepper';
-import type { CvState, StepComponentProps } from './types';
+import { useCvCreationFlow, useDialog } from '../../contexts';
+import { useCallback } from 'react';
 
-export const CvCreationDialog = ({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) => {
-  const steps = [
-    {
-      component: TemplateStep,
-      validate: (data: CvState) => !!data.templateId,
-      nextLabel: 'Use Template',
-    },
-    {
-      component: DescriptionStep,
-      validate: (data: CvState) => data.jobDescription.trim().length > 0,
-      nextLabel: 'Generate CV',
-    },
-    {
-      component: (data: StepComponentProps<CvState>) =>
-        CvGenerationStep({ open, ...data }),
-      nextLabel: 'View CV',
-    },
-  ];
+const steps = [
+  {
+    component: TemplateStep,
+    nextLabel: 'Use Template',
+  },
+  {
+    component: DescriptionStep,
+    nextLabel: 'Generate CV',
+  },
+  {
+    component: CvGenerationStep,
+    nextLabel: 'View CV',
+  },
+];
+
+export const CvCreationDialog = () => {
+  const { isOpen, close } = useDialog();
+  const { templateId, clearForm } = useCvCreationFlow();
+  const initialStep = templateId ? 1 : 0;
+
+  const handleClose = useCallback(() => {
+    close();
+    clearForm();
+  }, [clearForm, close]);
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <CvStepper<CvState>
+    <Dialog open={isOpen} onClose={handleClose} fullWidth maxWidth="md">
+      <CvStepper
         steps={steps}
-        initialData={{ jobDescription: '', progress: 0 }}
-        onCancel={onClose}
-        onComplete={onClose}
+        onCancel={close}
+        onComplete={close}
+        initialStep={initialStep}
       />
     </Dialog>
   );

@@ -1,14 +1,11 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Box, Button, styled } from '@mui/material';
 import { ImportPdfDialog } from '../../ImportCvDialog';
-import { CvCreationDialog } from '../../CreateCvFlow';
+import { useDialog } from '../../../contexts';
 
 export const CvCreationActions = () => {
   const [importDialogOpen, setImportDialogOpen] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const openDialog = useCallback(() => setIsDialogOpen(true), []);
-  const closeDialog = useCallback(() => setIsDialogOpen(false), []);
+  const { open: openDialog } = useDialog();
 
   return (
     <>
@@ -29,8 +26,6 @@ export const CvCreationActions = () => {
         open={importDialogOpen}
         onClose={() => setImportDialogOpen(false)}
       />
-
-      <CvCreationDialog open={isDialogOpen} onClose={closeDialog} />
     </>
   );
 };

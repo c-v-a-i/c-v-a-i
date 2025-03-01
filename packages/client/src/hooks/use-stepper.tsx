@@ -1,38 +1,25 @@
 import { useState, useEffect, useCallback } from 'react';
+import type { StepConfig } from '../components/CreateCvFlow';
 
-type StepConfig<T> = {
-  component: React.FC<{ data: T; updateData: (update: Partial<T>) => void }>;
-  validate?: (data: T) => boolean;
-  nextLabel?: string;
-};
-
-export const useStepper = <T extends object>(
-  steps: StepConfig<T>[],
-  initialData: T
-) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [data, setData] = useState<T>(initialData);
+// TODO: ideally, this should contain the logic for step validation.
+// something like 'setStepValid(true | false)' provided by useStepper hook
+export const useStepper = (steps: StepConfig[], initialStep: number = 0) => {
+  const [currentStep, setCurrentStep] = useState(() => initialStep);
   const [isValid, setIsValid] = useState(false);
 
   const validateCurrentStep = useCallback(() => {
     const validator = steps[currentStep]?.validate;
-    setIsValid(validator ? validator(data) : true);
-  }, [currentStep, data, steps]);
+    setIsValid(validator?.() ?? true);
+  }, [currentStep, steps]);
 
-  useEffect(
-    () => validateCurrentStep(),
-    [currentStep, data, validateCurrentStep]
-  );
+  useEffect(() => validateCurrentStep(), [currentStep, validateCurrentStep]);
 
   return {
     currentStep,
-    data,
     isValid,
     totalSteps: steps.length,
     nextStep: () => setCurrentStep((s) => Math.min(s + 1, steps.length - 1)),
     prevStep: () => setCurrentStep((s) => Math.max(s - 1, 0)),
-    updateData: (update: Partial<T>) =>
-      setData((prev) => ({ ...prev, ...update })),
     CurrentStep: steps[currentStep].component,
     stepConfig: steps[currentStep],
   };

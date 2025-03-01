@@ -7,9 +7,12 @@ import { CenteredBox } from './atoms';
 import {
   CurrentCvProvider,
   CurrentUserProvider,
+  CvCreationFlowProvider,
+  DialogProvider,
   PreviewModeProvider,
   useAuth,
 } from '../contexts';
+import { CvCreationDialog } from './CreateCvFlow';
 
 export const LoginButton: React.FC = () => {
   const handleLogin = useCallback(() => {
@@ -38,13 +41,19 @@ export const IndexPage = () => {
   return (
     <CurrentUserProvider user={user} logout={logout}>
       <CurrentCvProvider>
-        <PreviewModeProvider>
-          <Box sx={{ display: 'flex' }}>
-            <BurgerMenu>
-              <CurrentCvPreview />
-            </BurgerMenu>
-          </Box>
-        </PreviewModeProvider>
+        <DialogProvider>
+          <CvCreationFlowProvider>
+            <PreviewModeProvider>
+              <Box sx={{ display: 'flex' }}>
+                <BurgerMenu>
+                  <CurrentCvPreview />
+                </BurgerMenu>
+              </Box>
+            </PreviewModeProvider>
+
+            <CvCreationDialog />
+          </CvCreationFlowProvider>
+        </DialogProvider>
       </CurrentCvProvider>
     </CurrentUserProvider>
   );

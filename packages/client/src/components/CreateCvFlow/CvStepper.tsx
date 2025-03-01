@@ -2,23 +2,21 @@ import { Box, Stepper, Step, StepLabel, Button } from '@mui/material';
 import { useStepper } from '../../hooks/use-stepper';
 import type { StepperProps } from './types';
 
-export const CvStepper = <T extends object>({
+export const CvStepper = ({
   steps,
-  initialData,
   onComplete,
   onCancel,
-}: StepperProps<T>) => {
+  initialStep,
+}: StepperProps) => {
   const {
     currentStep,
-    data,
     isValid,
     totalSteps,
     nextStep,
     prevStep,
-    updateData,
     CurrentStep,
     stepConfig,
-  } = useStepper<T>(steps, initialData);
+  } = useStepper(steps, initialStep);
 
   return (
     <Box display="flex" flexDirection="column" height="500px">
@@ -31,7 +29,7 @@ export const CvStepper = <T extends object>({
       </Stepper>
 
       <Box flex={1} p={3} overflow="auto">
-        <CurrentStep data={data} updateData={updateData} />
+        <CurrentStep />
       </Box>
 
       <Box display="flex" justifyContent="space-between" p={3}>

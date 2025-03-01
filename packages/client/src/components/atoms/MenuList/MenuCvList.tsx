@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { List } from '@mui/material';
 import { MenuItem } from './MenuItem';
 import type { ListItem } from './types';
-import { useCurrentCv } from '../../../contexts';
+import { useCurrentCv, useCvCreationFlow, useDialog } from '../../../contexts';
 
 type MenuListProps = {
   items: ListItem[];
@@ -12,9 +12,8 @@ type MenuListProps = {
 export const MenuCvList = React.memo(
   ({ items, onDeleteItem }: MenuListProps) => {
     const { setCurrentCvId } = useCurrentCv();
-    const [isDialogOpen, setIsOpenDialog] = useState(false);
-
-    const openDialog = useCallback((id: string) => setIsOpenDialog(true), []);
+    const { open: openDialog } = useDialog();
+    const { setTemplateId } = useCvCreationFlow();
 
     const handleSelectCv = useCallback(
       (id: string) => {
@@ -27,7 +26,10 @@ export const MenuCvList = React.memo(
       () => [
         {
           label: 'Use as template',
-          action: (id: string) => openDialog(id),
+          action: (id: string) => {
+            setTemplateId(id);
+            openDialog();
+          },
         },
         { label: 'Delete', action: onDeleteItem },
       ],

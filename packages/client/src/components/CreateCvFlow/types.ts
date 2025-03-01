@@ -4,24 +4,15 @@ export type CvState = {
   progress: number;
 };
 
-export type StepComponentProps<T extends object> = {
-  data: T;
-  updateData: (update: Partial<T>) => void;
-};
-
-export type StepConfig<T extends object> = {
-  component: React.FC<StepComponentProps<T>>;
-  validate?: (data: T) => boolean;
+export type StepConfig = {
+  component: React.FC;
+  validate?: () => boolean;
   nextLabel?: string;
 };
 
-export type StepperProps<T extends object> = {
-  steps: StepConfig<T>[];
-  initialData: T;
+export type StepperProps = {
+  initialStep: number;
+  steps: StepConfig[];
   onComplete: () => void;
   onCancel: () => void;
 };
-
-export type StepValidator<T extends keyof CvState> = (
-  data: Pick<CvState, T>
-) => boolean;
