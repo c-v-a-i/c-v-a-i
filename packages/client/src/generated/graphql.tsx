@@ -90,6 +90,7 @@ export type Mutation = {
   generateNewEntryItem: CvObjectType;
   logout: Scalars['Boolean']['output'];
   reviewCv: ReviewCvOutput;
+  transformCv: TransformCvObjectType;
   updateCv: CvObjectType;
 };
 
@@ -131,6 +132,12 @@ export type MutationGenerateNewEntryItemArgs = {
 
 export type MutationReviewCvArgs = {
   cvId: Scalars['ID']['input'];
+};
+
+
+export type MutationTransformCvArgs = {
+  message: Scalars['String']['input'];
+  templateId: Scalars['String']['input'];
 };
 
 
@@ -189,6 +196,12 @@ export type Skill = {
   category: Scalars['String']['output'];
   positionIndex: Scalars['Int']['output'];
   skills: Array<Scalars['String']['output']>;
+};
+
+export type TransformCvObjectType = {
+  __typename?: 'TransformCvObjectType';
+  comment: Scalars['String']['output'];
+  cv: CvObjectType;
 };
 
 export type UpdateAboutMeInput = {
@@ -418,6 +431,14 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, googleId: string, createdAt: any, deletedAt?: any | null } };
+
+export type TransformCvMutationVariables = Exact<{
+  templateId: Scalars['String']['input'];
+  message: Scalars['String']['input'];
+}>;
+
+
+export type TransformCvMutation = { __typename?: 'Mutation', transformCv: { __typename?: 'TransformCvObjectType', comment: string, cv: { __typename?: 'CvObjectType', _id: string } } };
 
 export const AboutMeFragmentDoc = gql`
     fragment AboutMeFragment on AboutMe {
@@ -1370,3 +1391,46 @@ export type GetCurrentUserQueryResult = Apollo.QueryResult<GetCurrentUserQuery, 
 export function refetchGetCurrentUserQuery(variables?: GetCurrentUserQueryVariables) {
       return { query: GetCurrentUserDocument, variables: variables }
     }
+export const TransformCvDocument = gql`
+    mutation transformCv($templateId: String!, $message: String!) {
+  transformCv(templateId: $templateId, message: $message) {
+    comment
+    cv {
+      _id
+    }
+  }
+}
+    `;
+export type TransformCvMutationFn = Apollo.MutationFunction<TransformCvMutation, TransformCvMutationVariables>;
+export type TransformCvComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<TransformCvMutation, TransformCvMutationVariables>, 'mutation'>;
+
+    export const TransformCvComponent = (props: TransformCvComponentProps) => (
+      <ApolloReactComponents.Mutation<TransformCvMutation, TransformCvMutationVariables> mutation={TransformCvDocument} {...props} />
+    );
+    
+
+/**
+ * __useTransformCvMutation__
+ *
+ * To run a mutation, you first call `useTransformCvMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTransformCvMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [transformCvMutation, { data, loading, error }] = useTransformCvMutation({
+ *   variables: {
+ *      templateId: // value for 'templateId'
+ *      message: // value for 'message'
+ *   },
+ * });
+ */
+export function useTransformCvMutation(baseOptions?: Apollo.MutationHookOptions<TransformCvMutation, TransformCvMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TransformCvMutation, TransformCvMutationVariables>(TransformCvDocument, options);
+      }
+export type TransformCvMutationHookResult = ReturnType<typeof useTransformCvMutation>;
+export type TransformCvMutationResult = Apollo.MutationResult<TransformCvMutation>;
+export type TransformCvMutationOptions = Apollo.BaseMutationOptions<TransformCvMutation, TransformCvMutationVariables>;

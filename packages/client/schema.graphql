@@ -63,6 +63,7 @@ type Mutation {
   generateNewEntryItem(cvId: ID!, entryType: CvEntryType!): CvObjectType!
   logout: Boolean!
   reviewCv(cvId: ID!): ReviewCvOutput!
+  transformCv(message: String!, templateId: String!): TransformCvObjectType!
   updateCv(cvId: ID!, data: UpdateCvInput!): CvObjectType!
 }
 
@@ -101,6 +102,11 @@ type Skill {
   category: String!
   positionIndex: Int!
   skills: [String!]!
+}
+
+type TransformCvObjectType {
+  comment: String!
+  cv: CvObjectType!
 }
 
 input UpdateAboutMeInput {

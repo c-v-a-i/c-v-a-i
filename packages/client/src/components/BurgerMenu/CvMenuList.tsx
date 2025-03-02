@@ -14,6 +14,7 @@ export const CvMenuList = () => {
     loading: cvQueryLoading,
     error: cvsQueryError,
   } = useGetCvsQuery();
+
   const [deleteCv] = useDeleteCvMutation({
     refetchQueries: [refetchGetCvsQuery()],
   });

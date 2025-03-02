@@ -2,11 +2,7 @@ import React, { useCallback } from 'react';
 import { List } from '@mui/material';
 import { MenuItem } from './MenuItem';
 import type { ListItem } from './types';
-import { useCurrentCv } from '../../../contexts';
-import {
-  refetchGetCvsQuery,
-  useCreateCvMutation,
-} from '../../../generated/graphql';
+import { useCurrentCv, useCvCreationFlow, useDialog } from '../../../contexts';
 
 type MenuListProps = {
   items: ListItem[];
@@ -15,10 +11,9 @@ type MenuListProps = {
 
 export const MenuCvList = React.memo(
   ({ items, onDeleteItem }: MenuListProps) => {
-    const { setCurrentCvId } = useCurrentCv();
-    const [createNewCv] = useCreateCvMutation({
-      refetchQueries: [refetchGetCvsQuery()],
-    });
+    const { setCurrentCvId, currentCvId } = useCurrentCv();
+    const { open: openDialog } = useDialog();
+    const { setTemplateId } = useCvCreationFlow();
 
     const handleSelectCv = useCallback(
       (id: string) => {
@@ -26,11 +21,20 @@ export const MenuCvList = React.memo(
       },
       [setCurrentCvId]
     );
-    const onDelete = (id: string) => onDeleteItem(id);
-    const onCreateFromThis = (id: string) =>
-      createNewCv({
-        variables: { templateId: id },
-      });
+
+    const menuOptions = React.useMemo(
+      () => [
+        {
+          label: 'Use as template',
+          action: (id: string) => {
+            setTemplateId(id);
+            openDialog();
+          },
+        },
+        { label: 'Delete', action: onDeleteItem },
+      ],
+      [onDeleteItem, setTemplateId, openDialog]
+    );
 
     return (
       <List>
@@ -39,10 +43,8 @@ export const MenuCvList = React.memo(
             key={item._id}
             item={item}
             onSelect={handleSelectCv}
-            menuOptions={[
-              { label: 'Use as template', action: onCreateFromThis },
-              { label: 'Delete', action: onDelete },
-            ]}
+            menuOptions={menuOptions}
+            isSelected={currentCvId === item._id}
           />
         ))}
       </List>
