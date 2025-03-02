@@ -53,7 +53,7 @@ export class LlmIntegrationService {
           text: 'Extract structured CV information from this document and DONT LOST ANY INFORMATION',
         },
       ],
-      model: 'gpt-4o',
+      model: 'gpt-4o-mini',
     };
     const { comment, createdCv: createCvPayload } =
       await this.llmService.createStructuredResponse(
@@ -111,14 +111,13 @@ export class LlmIntegrationService {
   }: TransformCvInputType & WithUserId) {
     const cv = await this.cvService.getCv({ cvId: templateId, userId });
 
+    const text = [message, CvFormatter.cvToJsonCodeBlock(cv)].join('\n');
     const completionParams = {
       systemPrompt: this.transformCvSystemPrompt,
-      userContent: [
-        { type: 'text' as const, text: CvFormatter.cvToJsonCodeBlock(cv) },
-        { type: 'text' as const, text: message },
-      ],
+      userContent: [{ type: 'text' as const, text }],
       model: 'o3-mini',
     };
+
     const { cv: newCv, comment } =
       await this.llmService.createStructuredResponse(completionParams, {
         transformCvResponseFormat,

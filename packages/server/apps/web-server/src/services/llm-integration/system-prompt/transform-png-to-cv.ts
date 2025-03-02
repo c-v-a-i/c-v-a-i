@@ -123,7 +123,7 @@ export const transformPngToCvFormatSystemPrompt = `
   ];
 
   export const exampleProjectEntries = [
-      {
+    {
       name: 'Various Coding Projects',
       description: ${'```'}
         Developed a compiler for Lua in C; a diagram editor in C++/Qt.

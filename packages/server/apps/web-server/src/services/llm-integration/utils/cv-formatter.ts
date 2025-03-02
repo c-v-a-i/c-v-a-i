@@ -1,9 +1,17 @@
 import type { CvDocument } from '../../../../../../libs/schemas';
+import type { ToObjectOptions } from 'mongoose';
+import yaml from 'js-yaml';
 
 export class CvFormatter {
   static cvToJsonCodeBlock(cv: CvDocument): string {
-    return ['```json', JSON.stringify(cv.toObject(), null, 2), '```'].join(
-      '\n'
-    );
+    const options: ToObjectOptions = {
+      flattenMaps: true,
+    };
+    return [
+      '```yaml',
+      yaml.dump(cv.toObject(options)),
+      // cv.toObject(options),
+      '```',
+    ].join('\n');
   }
 }

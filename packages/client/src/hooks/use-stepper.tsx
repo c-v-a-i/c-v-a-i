@@ -20,7 +20,6 @@ export const useStepper = (steps: StepConfig[], initialStep: number = 0) => {
     totalSteps: steps.length,
     nextStep: () => setCurrentStep((s) => Math.min(s + 1, steps.length - 1)),
     prevStep: () => setCurrentStep((s) => Math.max(s - 1, 0)),
-    CurrentStep: steps[currentStep].component,
     stepConfig: steps[currentStep],
   };
 };

@@ -105,8 +105,8 @@ export const CvCreationFlowProvider: React.FC<{
       },
       refetchQueries: [refetchGetCvsQuery()],
     }).finally(() => {
-      // setTemplateId(undefined);
-      // setPrompt(undefined);
+      setTemplateId(undefined);
+      setPrompt(undefined);
     });
   }, [prompt, templateId, transformCvMutation]);
 

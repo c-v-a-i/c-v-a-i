@@ -10,9 +10,9 @@ const customPalette = {
   },
   secondary: {
     light: alpha('#d7d7d7', 0.2),
-    main: '#b468d5',
-    dark: '#9254ad',
-    contrastText: '#603772',
+    main: '#7d7d81',
+    dark: '#17171a',
+    contrastText: '#000',
   },
   error: {
     light: '#c47686',
@@ -74,6 +74,13 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: '12px',
+        },
+      },
+    },
     MuiListItem: {
       styleOverrides: {
         root: {
@@ -100,7 +107,7 @@ export const theme = createTheme({
     MuiDialog: {
       styleOverrides: {
         paper: {
-          borderRadius: '32px',
+          borderRadius: '16px',
           background: alpha(customPalette.background.paper, 0.9),
           backdropFilter: 'blur(4px)',
           WebkitBackdropFilter: 'blur(4px)', // For Safari support

@@ -2,6 +2,7 @@ import { Button, Step, StepLabel, Stepper } from '@mui/material';
 import { useStepper } from '../../hooks/use-stepper';
 import type { StepperProps } from './types';
 import { Box } from '../atoms';
+import { useCallback } from 'react';
 
 export const CvStepper = ({
   steps,
@@ -15,9 +16,16 @@ export const CvStepper = ({
     totalSteps,
     nextStep,
     prevStep,
-    CurrentStep,
-    stepConfig,
+    stepConfig: { component: CurrentStepComponent, onSubmit, ...stepConfig },
   } = useStepper(steps, initialStep);
+
+  const handleNextStep = useCallback(() => {
+    onSubmit?.();
+    if (currentStep === totalSteps - 1) {
+      onComplete();
+    }
+    nextStep();
+  }, [currentStep, nextStep, onComplete, onSubmit, totalSteps]);
 
   return (
     <Box display="flex" flexDirection="column" height="500px">
@@ -30,7 +38,7 @@ export const CvStepper = ({
       </Stepper>
 
       <Box flex={1} p={3}>
-        <CurrentStep />
+        <CurrentStepComponent />
       </Box>
 
       <Box display="flex" justifyContent="space-between" p={3}>
@@ -42,7 +50,7 @@ export const CvStepper = ({
           <Button
             variant="contained"
             disabled={!isValid}
-            onClick={currentStep === totalSteps - 1 ? onComplete : nextStep}
+            onClick={handleNextStep}
           >
             {stepConfig.nextLabel ??
               (currentStep === totalSteps - 1 ? 'Complete' : 'Next')}

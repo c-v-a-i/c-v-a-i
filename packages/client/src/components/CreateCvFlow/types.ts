@@ -8,6 +8,7 @@ export type StepConfig = {
   component: React.FC;
   validate?: () => boolean;
   nextLabel?: string;
+  onSubmit?: () => void;
 };
 
 export type StepperProps = {
