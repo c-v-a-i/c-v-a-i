@@ -1,14 +1,15 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import pick from 'lodash/pick';
 import {
   AboutMe,
   ContactInfo,
   Cv,
+  CvVersion,
   Education,
   Project,
   Skill,
   WorkExperience,
 } from '../../../../../../libs/schemas';
+import { mapToArray } from '../utils';
 
 @ObjectType()
 export class CvObjectType {
@@ -38,9 +39,36 @@ export class CvObjectType {
 
   @Field(() => [ContactInfo], { nullable: true })
   contactInfoEntries?: ContactInfo[];
+
+  @Field(() => ID)
+  versionId!: string;
+
+  @Field(() => Number)
+  versionNumber!: number;
+
+  @Field(() => Date)
+  versionCreatedAt!: Date;
 }
 
-// convert for getCv-like resolvers, all other fields are fetched on-demand
-export function convertCvToObjectType(cv: Cv): CvObjectType {
-  return pick(cv, ['_id', 'title', 'userId']);
-}
+export const createObjectType = ({
+  cv,
+  cvVersion,
+}: {
+  cv: Cv;
+  cvVersion: CvVersion;
+}): CvObjectType => {
+  return {
+    _id: String(cv._id),
+    userId: cv.userId,
+    title: cvVersion.data.title,
+    aboutMe: cvVersion.data.aboutMe,
+    educationEntries: mapToArray(cvVersion.data.educationEntries),
+    workExperienceEntries: mapToArray(cvVersion.data.workExperienceEntries),
+    projectEntries: mapToArray(cvVersion.data.projectEntries),
+    skillEntries: mapToArray(cvVersion.data.skillEntries),
+    contactInfoEntries: mapToArray(cvVersion.data.contactInfoEntries),
+    versionId: cvVersion._id.toString(),
+    versionNumber: cvVersion.versionNumber,
+    versionCreatedAt: cvVersion.createdAt,
+  };
+};

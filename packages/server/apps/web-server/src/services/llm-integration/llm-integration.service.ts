@@ -69,7 +69,7 @@ export class LlmIntegrationService {
     }
 
     const cv = await this.cvService.createCv(userId, createCvPayload);
-    this.logger.log(`Created CV with ID: ${cv.id}`);
+    this.logger.log(`Created CV with ID: ${cv._id}`);
 
     return {
       comment,

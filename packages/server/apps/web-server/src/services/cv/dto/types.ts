@@ -2,7 +2,7 @@ import type { UpdateCvInput } from './update-cv.input-type';
 import type { AreTypesEqual, MapValues } from '@server/common/types';
 import type { CvObjectType } from './cv.object-type';
 import { CvEntryType } from './index';
-import type { Cv } from '../../../../../../libs/schemas';
+import type { Cv, CvData } from '../../../../../../libs/schemas';
 
 export const cvKeys = {
   itemizedEntries: [
@@ -32,16 +32,6 @@ export const isCvObjectTypeKeyForItemizedEntries = (
     key as (typeof cvKeys)['itemizedEntries'][number]
   );
 
-export const isCvPropertyItemizedEntry = (
-  property: Cv[keyof Cv]
-): property is Cv[(typeof cvKeys.itemizedEntries)[number]] =>
-  property instanceof Map;
-
-export const isCvKeyForPrimitiveValue = (key: string) =>
-  cvKeys.primitiveEntries.includes(
-    key as (typeof cvKeys)['primitiveEntries'][number]
-  );
-
 export const cvEntryTypeToCvEntryNameMap: Record<
   CvEntryType,
   (typeof cvKeys.itemizedEntries)[number]
@@ -65,5 +55,9 @@ const _cvCompatibleWithCvObjectType: AreTypesEqual<
   keyof Omit<CvObjectType, '_id'>
 > = true;
 
-export type ItemizedEntryItemMap = Cv[(typeof cvKeys.itemizedEntries)[number]];
-export type ItemizedEntryItem = MapValues<ItemizedEntryItemMap>;
+export type ItemizedEntriesNames = typeof cvKeys.itemizedEntries;
+export type ItemizedEntryItemMap<T extends ItemizedEntriesNames[number]> =
+  CvData[T];
+export type ItemizedEntryItem = MapValues<
+  ItemizedEntryItemMap<ItemizedEntriesNames[number]>
+>;
