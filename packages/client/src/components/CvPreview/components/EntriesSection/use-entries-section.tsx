@@ -64,7 +64,7 @@ export function useCvEntries<T extends CvEntryArrayFieldName>(
     refetchQueries,
   });
   const [generateNewEntryItemMutation] = useGenerateNewEntryItemMutation({
-    refetchQueries: [],
+    refetchQueries,
   });
 
   useEffect(() => {
