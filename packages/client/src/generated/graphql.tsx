@@ -26,7 +26,6 @@ export type Scalars = {
 
 export type AboutMe = {
   __typename?: 'AboutMe';
-  _id: Scalars['ID']['output'];
   description: Scalars['String']['output'];
   fieldName: Scalars['String']['output'];
   name: Scalars['String']['output'];
@@ -64,6 +63,9 @@ export type CvObjectType = {
   skillEntries?: Maybe<Array<Skill>>;
   title: Scalars['String']['output'];
   userId: Scalars['String']['output'];
+  versionCreatedAt: Scalars['Date']['output'];
+  versionId: Scalars['ID']['output'];
+  versionNumber: Scalars['Float']['output'];
   workExperienceEntries?: Maybe<Array<WorkExperience>>;
 };
 
@@ -80,6 +82,15 @@ export type Education = {
   type?: Maybe<Scalars['String']['output']>;
 };
 
+export type GenerateNewEntryItemObjectType = {
+  __typename?: 'GenerateNewEntryItemObjectType';
+  contactInfoEntries?: Maybe<Array<ContactInfo>>;
+  educationEntries?: Maybe<Array<Education>>;
+  projectEntries?: Maybe<Array<Project>>;
+  skillEntries?: Maybe<Array<Skill>>;
+  workExperienceEntries?: Maybe<Array<WorkExperience>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   convertPdfToCv: ConvertPdfToCvObjectType;
@@ -87,7 +98,7 @@ export type Mutation = {
   deleteCv: Scalars['Boolean']['output'];
   deleteCvEntryItem: Scalars['Boolean']['output'];
   deleteEntryItem: Scalars['Boolean']['output'];
-  generateNewEntryItem: CvObjectType;
+  generateNewEntryItem: GenerateNewEntryItemObjectType;
   logout: Scalars['Boolean']['output'];
   reviewCv: ReviewCvOutput;
   transformCv: TransformCvObjectType;
@@ -112,21 +123,21 @@ export type MutationDeleteCvArgs = {
 
 export type MutationDeleteCvEntryItemArgs = {
   cvId: Scalars['ID']['input'];
+  entryFieldName: CvEntryType;
   entryItemId: Scalars['ID']['input'];
-  entryType: CvEntryType;
 };
 
 
 export type MutationDeleteEntryItemArgs = {
   cvId: Scalars['ID']['input'];
+  entryFieldName: CvEntryType;
   entryItemId: Scalars['ID']['input'];
-  entryType: CvEntryType;
 };
 
 
 export type MutationGenerateNewEntryItemArgs = {
   cvId: Scalars['ID']['input'];
-  entryType: CvEntryType;
+  entryFieldName: CvEntryType;
 };
 
 
@@ -205,7 +216,6 @@ export type TransformCvObjectType = {
 };
 
 export type UpdateAboutMeInput = {
-  _id?: InputMaybe<Scalars['ID']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   fieldName?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -306,11 +316,11 @@ export type GetCvsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCvsQuery = { __typename?: 'Query', getCvs: Array<{ __typename?: 'CvObjectType', _id: string, name: string }> };
 
-export type CvFragment = { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null };
+export type CvFragment = { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null };
 
-export type AboutMeFragment = { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string };
+export type AboutMeFragment = { __typename?: 'AboutMe', name: string, fieldName: string, description: string };
 
-export type ContactInfoFragment = { __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string };
+export type ContactInfoFragment = { __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string };
 
 export type WorkExperienceFragment = { __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number };
 
@@ -326,7 +336,7 @@ export type UpdateCvMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCvMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
+export type UpdateCvMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
 
 export type GenerateNewEntryItemMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -334,7 +344,7 @@ export type GenerateNewEntryItemMutationVariables = Exact<{
 }>;
 
 
-export type GenerateNewEntryItemMutation = { __typename?: 'Mutation', generateNewEntryItem: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
+export type GenerateNewEntryItemMutation = { __typename?: 'Mutation', generateNewEntryItem: { __typename?: 'GenerateNewEntryItemObjectType', contactInfoEntries?: Array<{ __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null } };
 
 export type DeleteEntryItemMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -364,21 +374,21 @@ export type GetCvQueryVariables = Exact<{
 }>;
 
 
-export type GetCvQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
+export type GetCvQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
 
 export type GetContactInfoEntriesQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
 }>;
 
 
-export type GetContactInfoEntriesQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null } };
+export type GetContactInfoEntriesQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', contactInfoEntries?: Array<{ __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string }> | null } };
 
 export type GetAboutMeQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
 }>;
 
 
-export type GetAboutMeQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', aboutMe?: { __typename?: 'AboutMe', _id: string, name: string, fieldName: string, description: string } | null } };
+export type GetAboutMeQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null } };
 
 export type GetWorkExperienceEntriesQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -442,7 +452,6 @@ export type TransformCvMutation = { __typename?: 'Mutation', transformCv: { __ty
 
 export const AboutMeFragmentDoc = gql`
     fragment AboutMeFragment on AboutMe {
-  _id
   name
   fieldName
   description
@@ -450,7 +459,6 @@ export const AboutMeFragmentDoc = gql`
     `;
 export const ContactInfoFragmentDoc = gql`
     fragment ContactInfoFragment on ContactInfo {
-  _id
   linkName
   positionIndex
   link
@@ -695,11 +703,29 @@ export type UpdateCvMutationResult = Apollo.MutationResult<UpdateCvMutation>;
 export type UpdateCvMutationOptions = Apollo.BaseMutationOptions<UpdateCvMutation, UpdateCvMutationVariables>;
 export const GenerateNewEntryItemDocument = gql`
     mutation GenerateNewEntryItem($cvId: ID!, $entryType: CvEntryType!) {
-  generateNewEntryItem(cvId: $cvId, entryType: $entryType) {
-    ...CvFragment
+  generateNewEntryItem(cvId: $cvId, entryFieldName: $entryType) {
+    contactInfoEntries {
+      ...ContactInfoFragment
+    }
+    educationEntries {
+      ...EducationFragment
+    }
+    projectEntries {
+      ...ProjectFragment
+    }
+    skillEntries {
+      ...SkillFragment
+    }
+    workExperienceEntries {
+      ...WorkExperienceFragment
+    }
   }
 }
-    ${CvFragmentDoc}`;
+    ${ContactInfoFragmentDoc}
+${EducationFragmentDoc}
+${ProjectFragmentDoc}
+${SkillFragmentDoc}
+${WorkExperienceFragmentDoc}`;
 export type GenerateNewEntryItemMutationFn = Apollo.MutationFunction<GenerateNewEntryItemMutation, GenerateNewEntryItemMutationVariables>;
 export type GenerateNewEntryItemComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<GenerateNewEntryItemMutation, GenerateNewEntryItemMutationVariables>, 'mutation'>;
 
@@ -735,7 +761,11 @@ export type GenerateNewEntryItemMutationResult = Apollo.MutationResult<GenerateN
 export type GenerateNewEntryItemMutationOptions = Apollo.BaseMutationOptions<GenerateNewEntryItemMutation, GenerateNewEntryItemMutationVariables>;
 export const DeleteEntryItemDocument = gql`
     mutation DeleteEntryItem($cvId: ID!, $entryType: CvEntryType!, $entryItemId: ID!) {
-  deleteEntryItem(cvId: $cvId, entryType: $entryType, entryItemId: $entryItemId)
+  deleteEntryItem(
+    cvId: $cvId
+    entryFieldName: $entryType
+    entryItemId: $entryItemId
+  )
 }
     `;
 export type DeleteEntryItemMutationFn = Apollo.MutationFunction<DeleteEntryItemMutation, DeleteEntryItemMutationVariables>;

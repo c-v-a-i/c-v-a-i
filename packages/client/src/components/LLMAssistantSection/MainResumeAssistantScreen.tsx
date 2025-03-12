@@ -1,6 +1,7 @@
 import type { BoxProps } from '@mui/material';
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { MessageBubble } from './MessageBubble';
+import { Box } from '../atoms';
 
 type MainResumeAssistantScreenProps = BoxProps & {
   reviewMessages?: string[];

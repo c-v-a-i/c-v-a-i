@@ -1,7 +1,8 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { MainResumeAssistantScreen } from './MainResumeAssistantScreen';
 import { useCurrentCv } from '../../contexts';
 import { useCvReview } from '../../hooks';
+import { Box } from '../atoms';
 
 type ResumeAssistantSectionInnerProps = {
   cvId: string;
@@ -20,15 +21,12 @@ const ResumeAssistantSectionInner = ({
 
   return (
     <Box
-      sx={({ palette }) => ({
+      sx={({}) => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
         width: '100%',
-        height: '60%',
-        borderTop: `1px solid`,
-        borderRadius: '10px',
-        borderColor: palette.primary.main,
+        height: '100%',
       })}
     >
       <Box display={'flex'} padding={1}>

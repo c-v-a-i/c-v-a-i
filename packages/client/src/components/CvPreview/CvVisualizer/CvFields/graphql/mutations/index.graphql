@@ -10,9 +10,23 @@ mutation GenerateNewEntryItem(
 ) {
   generateNewEntryItem(
     cvId: $cvId
-    entryType: $entryType
+    entryFieldName: $entryType
   ) {
-    ...CvFragment
+    contactInfoEntries {
+      ...ContactInfoFragment
+    }
+    educationEntries {
+      ...EducationFragment
+    }
+    projectEntries {
+      ...ProjectFragment
+    }
+    skillEntries {
+      ...SkillFragment
+    }
+    workExperienceEntries {
+      ...WorkExperienceFragment
+    }
   }
 }
 
@@ -24,7 +38,7 @@ mutation DeleteEntryItem (
 ) {
   deleteEntryItem(
     cvId: $cvId
-    entryType: $entryType
+    entryFieldName: $entryType
     entryItemId: $entryItemId
   )
 }

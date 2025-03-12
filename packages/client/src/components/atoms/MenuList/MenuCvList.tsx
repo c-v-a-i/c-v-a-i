@@ -7,10 +7,11 @@ import { useCurrentCv, useCvCreationFlow, useDialog } from '../../../contexts';
 type MenuListProps = {
   items: ListItem[];
   onDeleteItem: (itemId: string) => void;
+  onDuplicateItem: (itemId: string) => void;
 };
 
 export const MenuCvList = React.memo(
-  ({ items, onDeleteItem }: MenuListProps) => {
+  ({ items, onDeleteItem, onDuplicateItem }: MenuListProps) => {
     const { setCurrentCvId, currentCvId } = useCurrentCv();
     const { open: openDialog } = useDialog();
     const { setTemplateId } = useCvCreationFlow();
@@ -32,8 +33,9 @@ export const MenuCvList = React.memo(
           },
         },
         { label: 'Delete', action: onDeleteItem },
+        { label: 'Duplicate', action: onDuplicateItem },
       ],
-      [onDeleteItem, setTemplateId, openDialog]
+      [onDeleteItem, onDuplicateItem, setTemplateId, openDialog]
     );
 
     return (

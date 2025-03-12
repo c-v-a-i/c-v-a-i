@@ -22,14 +22,12 @@ fragment CvFragment on CvObjectType {
 }
 
 fragment AboutMeFragment on AboutMe {
-  _id
   name
   fieldName
   description
 }
 
 fragment ContactInfoFragment on ContactInfo {
-  _id
   linkName
   positionIndex
   link

@@ -1,43 +1,49 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
-import { AboutMeDocument, AboutMeSchema } from './about-me.schema';
-import { EducationDocument, EducationSchema } from './education.schema';
-import {
-  WorkExperienceDocument,
-  WorkExperienceSchema,
-} from './work-experience.schema';
-import { ProjectDocument, ProjectSchema } from './project.schema';
-import { SkillDocument, SkillSchema } from './skill.schema';
-import { ContactInfoDocument, ContactInfoSchema } from './contact-info.schema';
+import { Types } from 'mongoose';
+import { AboutMe } from './about-me.schema';
+import { Education } from './education.schema';
+import { ContactInfo } from './contact-info.schema';
+import { WorkExperience } from './work-experience.schema';
+import { Skill } from './skill.schema';
+import { Project } from './project.schema';
+
+export type CvData = {
+  title: string;
+  aboutMe?: AboutMe;
+  educationEntries: Record<string, Education>;
+  workExperienceEntries: Record<string, WorkExperience>;
+  projectEntries: Record<string, Project>;
+  skillEntries: Record<string, Skill>;
+  contactInfoEntries: Record<string, ContactInfo>;
+};
+
+export type CvVersion = {
+  _id: string;
+  data: CvData;
+  versionNumber: number;
+  createdAt: Date;
+  // diff?: SomeRfcJsonDiffFormat; // TODO: should we store diffs? if so, why? what's the use case?
+};
 
 @Schema({ timestamps: true })
 export class Cv {
-  @Prop({ type: String, default: () => new Types.ObjectId().toString() })
-  _id!: string;
-
-  @Prop({ required: true })
-  title!: string;
+  @Prop({ type: Types.ObjectId, default: () => new Types.ObjectId() })
+  _id!: Types.ObjectId;
 
   @Prop({ required: true })
   userId!: string;
 
-  @Prop({ type: AboutMeSchema })
-  aboutMe?: AboutMeDocument;
+  @Prop({ required: true })
+  currentVersionId!: string; // Just the string ID, references internal versions array
 
-  @Prop({ type: Map, of: EducationSchema })
-  educationEntries!: Map<string, EducationDocument>;
+  @Prop({ type: [Object], required: true })
+  versions!: Array<CvVersion>;
 
-  @Prop({ type: Map, of: WorkExperienceSchema })
-  workExperienceEntries!: Map<string, WorkExperienceDocument>;
+  @Prop({ required: true })
+  currentTitle!: string;
 
-  @Prop({ type: Map, of: ProjectSchema })
-  projectEntries!: Map<string, ProjectDocument>;
-
-  @Prop({ type: Map, of: SkillSchema })
-  skillEntries!: Map<string, SkillDocument>;
-
-  @Prop({ type: Map, of: ContactInfoSchema })
-  contactInfoEntries!: Map<string, ContactInfoDocument>;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type CvDocument = Cv & Document;

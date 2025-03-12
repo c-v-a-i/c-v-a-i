@@ -14,7 +14,6 @@ import {
   TransformCvObjectType,
 } from './dto';
 import { ReviewStatusType } from '../../common/enums';
-import { convertCvToObjectType } from '../cv/dto';
 
 @UseGuards(GqlAuthGuard)
 @Resolver()
@@ -75,7 +74,7 @@ export class LlmIntegrationResolver {
 
     return {
       ...rest,
-      cv: cv && convertCvToObjectType(cv),
+      cv,
     };
   }
 
@@ -92,7 +91,7 @@ export class LlmIntegrationResolver {
 
     return {
       ...rest,
-      cv: convertCvToObjectType(cv),
+      cv,
     };
   }
 }

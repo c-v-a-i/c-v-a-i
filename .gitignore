@@ -9,7 +9,7 @@
 
 /packages/*/lib
 /packages/*/dist
-/packages/*/tsconfig.tsbuildinfo
+/packages/**/tsconfig.tsbuildinfo
 
 # testing
 /coverage
@@ -33,3 +33,4 @@ yarn-error.log*
 .idea
 node_modules
 **/node_modules
+tsconfig.tsbuildinfo
