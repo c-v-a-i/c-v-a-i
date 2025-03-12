@@ -1,7 +1,6 @@
 directive @connection(filter: [String]!, key: String!) on FIELD
 
 type AboutMe {
-  _id: ID!
   description: String!
   fieldName: String!
   name: String!
@@ -36,6 +35,9 @@ type CvObjectType {
   skillEntries: [Skill!]
   title: String!
   userId: String!
+  versionCreatedAt: Date!
+  versionId: ID!
+  versionNumber: Float!
   workExperienceEntries: [WorkExperience!]
 }
 
@@ -54,13 +56,21 @@ type Education {
   type: String
 }
 
+type GenerateNewEntryItemObjectType {
+  contactInfoEntries: [ContactInfo!]
+  educationEntries: [Education!]
+  projectEntries: [Project!]
+  skillEntries: [Skill!]
+  workExperienceEntries: [WorkExperience!]
+}
+
 type Mutation {
   convertPdfToCv(file: Upload!): ConvertPdfToCvObjectType!
   createNewCv(templateId: ID!): CvObjectType!
   deleteCv(cvId: ID!): Boolean!
-  deleteCvEntryItem(cvId: ID!, entryItemId: ID!, entryType: CvEntryType!): Boolean!
-  deleteEntryItem(cvId: ID!, entryItemId: ID!, entryType: CvEntryType!): Boolean!
-  generateNewEntryItem(cvId: ID!, entryType: CvEntryType!): CvObjectType!
+  deleteCvEntryItem(cvId: ID!, entryFieldName: CvEntryType!, entryItemId: ID!): Boolean!
+  deleteEntryItem(cvId: ID!, entryFieldName: CvEntryType!, entryItemId: ID!): Boolean!
+  generateNewEntryItem(cvId: ID!, entryFieldName: CvEntryType!): GenerateNewEntryItemObjectType!
   logout: Boolean!
   reviewCv(cvId: ID!): ReviewCvOutput!
   transformCv(message: String!, templateId: String!): TransformCvObjectType!
@@ -110,7 +120,6 @@ type TransformCvObjectType {
 }
 
 input UpdateAboutMeInput {
-  _id: ID
   description: String
   fieldName: String
   name: String
