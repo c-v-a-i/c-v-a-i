@@ -58,6 +58,11 @@ export const CvMenuList = () => {
     cleanupDeleteDialog();
   }, [deleteCv, selectedItemId, cleanupDeleteDialog]);
 
+  const handleDuplicateCv = useCallback((templateId: string) => {
+    void templateId;
+    alert('TODO: duplicate CV');
+  }, []);
+
   if (cvsQueryError) {
     return <div>cv menu list error</div>;
   }
@@ -71,6 +76,7 @@ export const CvMenuList = () => {
       <MenuCvList
         items={memoizedItems}
         onDeleteItem={(id) => toggleDeleteDialog(id)}
+        onDuplicateItem={handleDuplicateCv}
         // onAddNewItem={handleGenerateNewCv}
       />
       <DeleteConfirmationDialog
