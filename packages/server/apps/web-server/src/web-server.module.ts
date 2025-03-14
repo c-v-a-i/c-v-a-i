@@ -3,7 +3,6 @@ import { AuthModule } from './auth/auth.module';
 import { CoreModule } from './core/core.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DateScalar } from '@server/common/graphql/scalars';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { typeormConfig } from '../../../config/typeorm/typeorm.config';
 import { UserModule } from './entity-modules/user/user.module';
@@ -32,6 +31,6 @@ import { LlmIntegrationModule } from './services/llm-integration/llm-integration
     CvModule,
     LlmIntegrationModule,
   ],
-  providers: [DateScalar],
+  providers: [],
 })
 export class WebServerModule {}

@@ -28,6 +28,7 @@ fragment AboutMeFragment on AboutMe {
 }
 
 fragment ContactInfoFragment on ContactInfo {
+  _id
   linkName
   positionIndex
   link
