@@ -26,9 +26,16 @@ const customPalette = {
   },
 };
 
+const radius = {
+  small: '12px',
+  medium: '16px',
+  large: '24px',
+  full: '9999px',
+};
+
 const outlinedInputStyles = {
   '& .MuiOutlinedInput-root': {
-    borderRadius: '14px',
+    borderRadius: radius.small,
   },
   '& .MuiOutlinedInput-notchedOutline': {
     borderColor: 'transparent',
@@ -45,7 +52,7 @@ const outlinedInputStyles = {
 };
 const inputStyles = {
   background: customPalette.secondary.light,
-  borderRadius: '14px',
+  borderRadius: radius.small,
 };
 const variantsWithNoBorders = (['outlined', 'filled', 'standard'] as const).map(
   (variant) => ({
@@ -64,6 +71,12 @@ const containedStyle = {
   },
 };
 
+export const backgroundWithBackdrop = {
+  background: alpha(customPalette.background.paper, 0.9),
+  backdropFilter: 'blur(4px)',
+  WebkitBackdropFilter: 'blur(4px)', // For Safari support
+};
+
 // TODO: define spacings
 export const theme = createTheme({
   palette: {
@@ -74,10 +87,17 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: radius.small,
+        },
+      },
+    },
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: '12px',
+          borderRadius: radius.small,
         },
       },
     },
@@ -98,19 +118,15 @@ export const theme = createTheme({
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          background: alpha(customPalette.background.paper, 0.9),
-          backdropFilter: 'blur(4px)',
-          WebkitBackdropFilter: 'blur(4px)', // For Safari support
+          ...backgroundWithBackdrop,
         },
       },
     },
     MuiDialog: {
       styleOverrides: {
         paper: {
-          borderRadius: '16px',
-          background: alpha(customPalette.background.paper, 0.9),
-          backdropFilter: 'blur(4px)',
-          WebkitBackdropFilter: 'blur(4px)', // For Safari support
+          borderRadius: radius.medium,
+          ...backgroundWithBackdrop,
         },
       },
     },
@@ -136,7 +152,7 @@ export const theme = createTheme({
     MuiAccordion: {
       styleOverrides: {
         root: {
-          borderRadius: '12px',
+          borderRadius: radius.small,
           boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
           background: customPalette.secondary.light,
         },
@@ -176,7 +192,7 @@ export const theme = createTheme({
       ],
       styleOverrides: {
         root: {
-          borderRadius: '16px',
+          borderRadius: radius.medium,
           boxShadow: 'none',
         },
       },

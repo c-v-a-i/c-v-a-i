@@ -1,0 +1,16 @@
+query GetCvVersionHistory($cvId: ID!, $page: Int!, $limit: Int!) {
+  getCvVersionHistory(cvId: $cvId, page: $page, limit: $limit) {
+    items {
+      _id
+      versionNumber
+      createdAt
+      isCurrentVersion
+    }
+    paginationMetadata {
+      totalItems
+      currentPage
+      pageSize
+      totalPages
+    }
+  }
+}

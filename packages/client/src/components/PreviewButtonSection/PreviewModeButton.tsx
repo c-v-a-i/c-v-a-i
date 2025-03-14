@@ -1,7 +1,7 @@
-import { IconButton, Tooltip } from '@mui/material';
 import Preview from '@mui/icons-material/Preview';
 import { usePreviewMode } from '../../contexts';
 import { usePreviewEffects } from '../../hooks';
+import { IconButton } from '../atoms/IconButton';
 
 export const PreviewModeButton = ({}) => {
   const { togglePreviewMode, isPreviewing } = usePreviewMode();
@@ -12,10 +12,8 @@ export const PreviewModeButton = ({}) => {
     return null;
   }
   return (
-    <Tooltip title={'Preview'}>
-      <IconButton onClick={togglePreviewMode}>
-        <Preview />
-      </IconButton>
-    </Tooltip>
+    <IconButton onClick={togglePreviewMode} title={'Preview'}>
+      <Preview />
+    </IconButton>
   );
 };

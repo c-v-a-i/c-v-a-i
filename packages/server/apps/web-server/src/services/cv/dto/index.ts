@@ -3,3 +3,4 @@ export * from './cv.object-type';
 export * from './types';
 export * from './update-cv.input-type';
 export * from './generate-new-entry-item.object-type';
+export * from './paginated-cv-version-history-object-type';

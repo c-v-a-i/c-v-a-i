@@ -1,5 +1,5 @@
 import type { IconButtonProps } from '@mui/material';
-import { IconButton, Tooltip, Box } from '@mui/material';
+import { IconButton, Tooltip, Box, Typography } from '@mui/material';
 import React from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
 
@@ -13,7 +13,13 @@ export const RemoveEntryButton = ({ onClick }: IconButtonProps) => {
       width={'36px'}
       // sx={{ background: 'pink' }}
     >
-      <Tooltip title="Remove entry">
+      <Tooltip
+        title={
+          <Typography color="black" variant={'caption'}>
+            Remove entry
+          </Typography>
+        }
+      >
         <IconButton
           onClick={onClick}
           // display={'flex'}
