@@ -40,7 +40,6 @@ export const ImportPdfDialog = ({ open, onClose }: ImportPdfDialogProps) => {
       .then(({ data }) => {
         const comment = data?.convertPdfToCv.comment;
         // TODO: add the logic (e.g notifications or modal text) for displaying the comment
-        console.log(comment);
         if (comment) {
           toast.success(comment);
         }

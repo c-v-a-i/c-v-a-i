@@ -1,0 +1,18 @@
+mutation UndoCvVersion($cvId: ID!) {
+  undoCvVersion(cvId: $cvId) {
+    ...CvFragment
+  }
+}
+
+mutation RedoCvVersion($cvId: ID!) {
+  redoCvVersion(cvId: $cvId) {
+    ...CvFragment
+  }
+}
+
+mutation CreateCvFromVersion($cvId: ID!, $versionId: ID!) {
+  createCvFromVersion(cvId: $cvId, versionId: $versionId) {
+    ...CvFragment
+  }
+}
+

@@ -7,9 +7,13 @@ interface UserContextInterface {
   logout(): Promise<void>;
 }
 
-const UserContext = createContext<UserContextInterface>({} as UserContextInterface);
+const UserContext = createContext<UserContextInterface>(
+  {} as UserContextInterface
+);
 
-export const CurrentUserProvider: FC<PropsWithChildren<UserContextInterface>> = ({ children, ...context }) => (
+export const CurrentUserProvider: FC<
+  PropsWithChildren<UserContextInterface>
+> = ({ children, ...context }) => (
   <UserContext.Provider value={context}>{children}</UserContext.Provider>
 );
 

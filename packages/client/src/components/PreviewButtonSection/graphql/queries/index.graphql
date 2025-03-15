@@ -1,5 +1,5 @@
-query GetCvVersionHistory($cvId: ID!, $page: Int!, $limit: Int!) {
-  getCvVersionHistory(cvId: $cvId, page: $page, limit: $limit) {
+query GetCvVersionHistory($cvId: ID!) {
+  getCvVersionHistory(cvId: $cvId) {
     items {
       _id
       versionNumber
@@ -12,5 +12,28 @@ query GetCvVersionHistory($cvId: ID!, $page: Int!, $limit: Int!) {
       pageSize
       totalPages
     }
+  }
+}
+query CompareVersions($cvId: ID!, $sourceVersionId: ID!, $targetVersionId: ID) {
+  compareVersions(
+    cvId: $cvId,
+    sourceVersionId: $sourceVersionId,
+    targetVersionId: $targetVersionId
+  ) {
+    sourceVersionId
+    targetVersionId
+    operations {
+      op
+      path
+      value
+      from
+    }
+  }
+}
+
+query GetVersioningActionsMetadata($cvId: ID!) {
+  getVersioningActionsMetadata(cvId: $cvId) {
+    canUndo
+    canRedo
   }
 }

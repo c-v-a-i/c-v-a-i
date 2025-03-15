@@ -6,9 +6,12 @@ export const IconButton = ({
   title,
   ...iconButtonProps
 }: React.PropsWithChildren & { title: string } & IconButtonProps) => {
+  // TODO: tooltip doesn't work correctly :(
   return (
     <Tooltip title={title}>
-      <MuiIconButton {...iconButtonProps}>{children}</MuiIconButton>
+      <MuiIconButton title={title} {...iconButtonProps}>
+        {children}
+      </MuiIconButton>
     </Tooltip>
   );
 };

@@ -38,11 +38,11 @@ export class CvVersion {
 
   @Field(() => Date)
   createdAt!: Date;
+
   // diff?: SomeRfcJsonDiffFormat; // TODO: should we store diffs? if so, why? what's the use case?
 }
 
 @Schema({ timestamps: true })
-// @ObjectType() // TODO: now, we use CvObjectType for that. But, it's not needed.
 export class Cv {
   @Prop({ type: Types.ObjectId, default: () => new Types.ObjectId() })
   _id!: Types.ObjectId;
@@ -52,6 +52,9 @@ export class Cv {
 
   @Prop({ required: true })
   currentVersionId!: string; // Just the string ID, references internal versions array
+
+  @Prop({ type: Number, required: true, default: 0 })
+  versionCursor!: number;
 
   @Prop({ type: [Object], required: true })
   versions!: Array<CvVersion>;

@@ -12,7 +12,14 @@ export const EditableTypographyLight = ({
   isEditing: defaultIsEditing,
   ...typographyProps
 }: EditableTypographyProps) => {
-  const { isEditing, startEditing, tempValue, setTempValue, handleSave, handleCancel } = useEditableTypographyBase({
+  const {
+    isEditing,
+    startEditing,
+    tempValue,
+    setTempValue,
+    handleSave,
+    handleCancel,
+  } = useEditableTypographyBase({
     value,
     onSave,
   });

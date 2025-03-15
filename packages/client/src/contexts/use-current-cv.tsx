@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+} from 'react';
 
 type CurrentCvContextType = {
   currentCvId: string | null;
@@ -7,9 +14,13 @@ type CurrentCvContextType = {
 
 export const CURRENT_CV_KEY = 'currentCvId';
 
-const CurrentCvContext = createContext<CurrentCvContextType | undefined>(undefined);
+const CurrentCvContext = createContext<CurrentCvContextType | undefined>(
+  undefined
+);
 
-export const CurrentCvProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const CurrentCvProvider: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => {
   const [currentCvId, setCurrentCvIdState] = useState<string | null>(() => {
     if (!!window) {
       try {
@@ -37,9 +48,12 @@ export const CurrentCvProvider: React.FC<React.PropsWithChildren> = ({ children 
     }
   }, [currentCvId]);
 
-  const setCurrentCvId = useCallback((setStateAction: React.SetStateAction<string | null>) => {
-    setCurrentCvIdState(setStateAction);
-  }, []);
+  const setCurrentCvId = useCallback(
+    (setStateAction: React.SetStateAction<string | null>) => {
+      setCurrentCvIdState(setStateAction);
+    },
+    []
+  );
 
   const value = useMemo(
     () => ({
@@ -49,7 +63,11 @@ export const CurrentCvProvider: React.FC<React.PropsWithChildren> = ({ children 
     [currentCvId, setCurrentCvId]
   );
 
-  return <CurrentCvContext.Provider value={value}>{children}</CurrentCvContext.Provider>;
+  return (
+    <CurrentCvContext.Provider value={value}>
+      {children}
+    </CurrentCvContext.Provider>
+  );
 };
 
 export const useCurrentCv = (): CurrentCvContextType => {

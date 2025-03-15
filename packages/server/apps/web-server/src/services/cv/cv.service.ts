@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import {
@@ -40,8 +44,12 @@ import {
   exampleSkillEntries,
   exampleWorkExperienceEntries,
 } from './example-cv-data';
-import { arrayToMap } from './utils';
+import { arrayToMap, createJsonPathOperation } from './utils';
 import { CreateCvParams } from './create-cv-params';
+import { VersionDiff } from './dto/cv-version-diff.object-type';
+import { compare } from 'fast-json-patch';
+
+type VersionDirection = 'previous' | 'next';
 
 @Injectable()
 export class CvService {
@@ -50,44 +58,48 @@ export class CvService {
     private readonly cvModel: Model<CvDocument>
   ) {}
 
+  async getVersioningActionsMetadata({ cvId, userId }: CvManagerMethodProps) {
+    const cv = await this.validateUserOwnership(cvId, userId);
+
+    const canUndo = cv.versionCursor > 0;
+    const canRedo = cv.versionCursor < cv.versions.length - 1;
+
+    return {
+      canUndo,
+      canRedo,
+    };
+  }
+
   async getCvVersionHistory({
     userId,
     cvId,
-    page = 1,
-    limit = 10,
-  }: CvManagerMethodProps & {
-    page?: number;
-    limit?: number;
-  }): Promise<PaginatedCvVersionHistoryObjectType> {
+  }: CvManagerMethodProps): Promise<PaginatedCvVersionHistoryObjectType> {
     const cv = await this.validateUserOwnership(cvId, userId);
 
     const totalCount = cv.versions.length;
-
-    const startIndex = (page - 1) * limit;
-    const endIndex = Math.min(startIndex + limit, totalCount);
 
     const sortedVersions = cv.versions.sort(
       (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
     );
 
-    const paginatedVersions = sortedVersions
-      .slice(startIndex, endIndex)
-      .map((version): CvVersionHistoryEntry => {
+    const paginatedVersions = sortedVersions.map(
+      (version): CvVersionHistoryEntry => {
         return {
           _id: version._id,
           versionNumber: version.versionNumber,
           createdAt: version.createdAt,
           isCurrentVersion: version._id === cv.currentVersionId,
         };
-      });
+      }
+    );
 
     return {
       items: paginatedVersions,
       paginationMetadata: {
         totalItems: totalCount,
-        currentPage: page,
-        pageSize: limit,
-        totalPages: Math.ceil(totalCount / limit),
+        currentPage: 1,
+        pageSize: totalCount,
+        totalPages: 1,
       },
     };
   }
@@ -174,6 +186,8 @@ export class CvService {
       });
     });
   }
+
+  // methods that modify the CV in any way.
 
   async generateNewEntryItem({
     entryFieldName,
@@ -386,7 +400,6 @@ export class CvService {
     const cv = await this.validateUserOwnership(cvId, userId);
 
     const currentVersion = this.getCurrentVersionFromCv(cv);
-
     const newData = this.applyUpdatesToVersionData(currentVersion.data, data);
 
     const newVersionId = new Types.ObjectId().toString();
@@ -397,11 +410,15 @@ export class CvService {
       createdAt: new Date(),
     };
 
+    const newVersions = cv.versions.slice(0, cv.versionCursor + 1);
+    newVersions.push(newVersion);
+
     await this.cvModel
       .findByIdAndUpdate(cvId, {
-        $push: { versions: newVersion },
         $set: {
+          versions: newVersions,
           currentVersionId: newVersionId,
+          versionCursor: newVersions.length - 1,
         },
       })
       .exec();
@@ -467,24 +484,116 @@ export class CvService {
     return this.createNewCvWithVersion(userId, templateVersion.data);
   }
 
-  async getTopLevelProperty<T extends keyof CvData>(
-    cvId: string,
-    propertyName: T
-  ): Promise<CvData[T] | undefined> {
+  async createCvFromVersion({
+    userId,
+    cvId,
+    versionId,
+  }: {
+    userId: string;
+    cvId: string;
+    versionId: string;
+  }): Promise<CvObjectType> {
+    // Get the CV
     const cv = await this.cvModel.findById(cvId).exec();
     if (!cv) {
       throw new NotFoundException('CV not found');
     }
 
-    const currentVersion = this.getCurrentVersionFromCv(cv);
-    const dataValue = currentVersion.data[propertyName];
+    // Find the specified version
+    const version = cv.versions.find((v) => v._id === versionId);
+    if (!version) {
+      throw new NotFoundException('Version not found');
+    }
 
-    if (dataValue === undefined) {
+    // Create a new CV based on this version
+    return this.createNewCvWithVersion(userId, version.data);
+  }
+
+  async navigateVersion(
+    { cvId, userId }: CvManagerMethodProps,
+    direction: VersionDirection
+  ): Promise<CvObjectType> {
+    const cv = await this.validateUserOwnership(cvId, userId);
+    const { versions, versionCursor } = cv;
+
+    // Determine new cursor position based on direction
+    const newCursor =
+      direction === 'previous' ? versionCursor - 1 : versionCursor + 1;
+
+    // Validate cursor bounds
+    if (newCursor < 0) {
+      throw new BadRequestException('Cannot undo: already at oldest version');
+    }
+
+    if (newCursor >= versions.length) {
+      throw new BadRequestException('Cannot redo: already at newest version');
+    }
+
+    const targetVersionId = versions[newCursor]._id;
+
+    // Update the CV document
+    await this.cvModel
+      .findByIdAndUpdate(cvId, {
+        $set: {
+          currentVersionId: targetVersionId,
+          versionCursor: newCursor,
+        },
+      })
+      .exec();
+
+    return this.getCv({ cvId, userId });
+  }
+
+  async undoCvVersion(props: CvManagerMethodProps): Promise<CvObjectType> {
+    return this.navigateVersion(props, 'previous');
+  }
+
+  async redoCvVersion(props: CvManagerMethodProps): Promise<CvObjectType> {
+    return this.navigateVersion(props, 'next');
+  }
+
+  async compareVersions({
+    cvId,
+    userId,
+    sourceVersionId,
+    targetVersionId,
+  }: CvManagerMethodProps & {
+    sourceVersionId: string;
+    targetVersionId?: string;
+  }): Promise<VersionDiff> {
+    const cv = await this.validateUserOwnership(cvId, userId);
+
+    const sourceVersionIndex = cv.versions.findIndex(
+      (v) => v._id === sourceVersionId
+    );
+    if (sourceVersionIndex === -1) {
+      throw new NotFoundException('Source version not found');
+    }
+
+    const targetVersionObj = targetVersionId
+      ? cv.versions.find((v) => v._id === targetVersionId)
+      : sourceVersionIndex < cv.versions.length - 1
+        ? cv.versions[sourceVersionIndex + 1]
+        : null;
+
+    if (!targetVersionObj) {
       throw new NotFoundException(
-        `Property '${String(propertyName)}' not found in CV data`
+        targetVersionId
+          ? 'Target version not found'
+          : 'No next version available for comparison'
       );
     }
 
-    return dataValue;
+    const sourceVersion = cv.versions[sourceVersionIndex];
+
+    const patchOperations = compare(sourceVersion.data, targetVersionObj.data);
+
+    const operations = createJsonPathOperation(patchOperations);
+
+    return {
+      sourceVersionId: sourceVersion._id,
+      targetVersionId: targetVersionObj._id,
+      operations,
+    };
   }
 }

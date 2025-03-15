@@ -1,4 +1,4 @@
-import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../../auth/guards/gql-auth/gql-auth.guard';
 import { CurrentUser } from '../../common/decorators';
@@ -11,6 +11,8 @@ import {
   PaginatedCvVersionHistoryObjectType,
   UpdateCvInput,
 } from './dto';
+import { VersionDiff } from './dto/cv-version-diff.object-type';
+import { VersioningActionsMetadataObjectType } from './dto/versioning-actions-metadata.object-type';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => CvObjectType)
@@ -32,18 +34,22 @@ export class CvResolver {
     return this.cvService.getCv({ cvId, userId });
   }
 
+  @Query(() => VersioningActionsMetadataObjectType)
+  async getVersioningActionsMetadata(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args('cvId', { type: () => ID }) cvId: string
+  ) {
+    return this.cvService.getVersioningActionsMetadata({ cvId, userId });
+  }
+
   @Query(() => PaginatedCvVersionHistoryObjectType)
   async getCvVersionHistory(
     @CurrentUser() { client_id: userId }: DecodedUserObjectType,
-    @Args('cvId', { type: () => ID }) cvId: string,
-    @Args('page', { type: () => Int, defaultValue: 1 }) page: number,
-    @Args('limit', { type: () => Int, defaultValue: 20 }) limit: number
+    @Args('cvId', { type: () => ID }) cvId: string
   ): Promise<PaginatedCvVersionHistoryObjectType> {
     return this.cvService.getCvVersionHistory({
       userId,
       cvId,
-      page,
-      limit,
     });
   }
 
@@ -134,5 +140,49 @@ export class CvResolver {
       entryItemId,
     });
     return true;
+  }
+
+  @Mutation(() => CvObjectType)
+  async undoCvVersion(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args('cvId', { type: () => ID }) cvId: string
+  ): Promise<CvObjectType> {
+    return this.cvService.undoCvVersion({ cvId, userId });
+  }
+
+  @Mutation(() => CvObjectType)
+  async redoCvVersion(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args('cvId', { type: () => ID }) cvId: string
+  ): Promise<CvObjectType> {
+    return this.cvService.redoCvVersion({ cvId, userId });
+  }
+
+  @Query(() => VersionDiff)
+  async compareVersions(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args('cvId', { type: () => ID }) cvId: string,
+    @Args('sourceVersionId', { type: () => ID }) sourceVersionId: string,
+    @Args('targetVersionId', { type: () => ID, nullable: true })
+    targetVersionId?: string
+  ): Promise<VersionDiff> {
+    return this.cvService.compareVersions({
+      cvId,
+      userId,
+      sourceVersionId,
+      targetVersionId,
+    });
+  }
+  @Mutation(() => CvObjectType)
+  async createCvFromVersion(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args('cvId', { type: () => ID }) cvId: string,
+    @Args('versionId', { type: () => ID }) versionId: string
+  ): Promise<CvObjectType> {
+    return this.cvService.createCvFromVersion({
+      userId,
+      cvId,
+      versionId,
+    });
   }
 }

@@ -1,5 +1,9 @@
 import { Types } from 'mongoose';
 import values from 'lodash/values';
+import type { Operation } from 'fast-json-patch';
+import type { JsonPatchOperation } from './dto/cv-version-diff.object-type';
+import { match } from 'ts-pattern';
+import { JsonDiffOperationType } from '../../common/enums';
 
 /**
  * Generates a unique `_id` string.
@@ -34,3 +38,49 @@ export const mapToArray = <T>(
   map: Map<string, T> | Record<string, T> | undefined
 ): T[] =>
   map ? Array.from(map instanceof Map ? map.values() : values(map)) : [];
+
+export const createJsonPathOperation = (
+  operations: Operation[]
+): JsonPatchOperation[] => {
+  return operations.flatMap(({ op: opName, path, ...rest }) => {
+    return match(opName)
+      .returnType<[JsonPatchOperation] | []>()
+      .with('_get', () => [])
+      .with('test', () => [])
+      .with('add', () => [
+        {
+          op: JsonDiffOperationType.ADD,
+          path,
+          value: rest['value'],
+        },
+      ])
+      .with('remove', () => [
+        {
+          op: JsonDiffOperationType.REMOVE,
+          path,
+        },
+      ])
+      .with('replace', () => [
+        {
+          op: JsonDiffOperationType.REPLACE,
+          path,
+          value: rest['value'],
+        },
+      ])
+      .with('move', () => [
+        {
+          op: JsonDiffOperationType.MOVE,
+          path,
+          from: rest['from'],
+        },
+      ])
+      .with('copy', () => [
+        {
+          op: JsonDiffOperationType.COPY,
+          path,
+          from: rest['from'],
+        },
+      ])
+      .exhaustive();
+  });
+};

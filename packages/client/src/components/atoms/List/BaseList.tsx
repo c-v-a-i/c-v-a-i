@@ -9,11 +9,10 @@ import {
 } from '@mui/material';
 import type { BaseListProps } from './types';
 
-const ListContentContainer = styled(Box)(({ theme }) => ({
+const ListContentContainer = styled(Box)(() => ({
   flex: 1,
   overflowY: 'auto',
   minHeight: 0,
-  paddingBottom: 16,
 }));
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
@@ -84,7 +83,13 @@ export function BaseList<T extends { _id: string }>({
       width="100%"
       sx={containerSx}
     >
-      <ListContentContainer>{renderContent()}</ListContentContainer>
+      <ListContentContainer
+        sx={{
+          paddingBottom: pagination ? '16px' : 0,
+        }}
+      >
+        {renderContent()}
+      </ListContentContainer>
 
       {pagination && pagination.totalPages > 1 && (
         <PaginationContainer>

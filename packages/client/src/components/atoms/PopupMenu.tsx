@@ -8,7 +8,11 @@ export type OptionsMenuProps = IconButtonProps & {
   options: { label: string; action: (id: string) => void }[];
 };
 
-export const PopupMenu: React.FC<OptionsMenuProps> = ({ options, id, ...props }) => {
+export const PopupMenu: React.FC<OptionsMenuProps> = ({
+  options,
+  id,
+  ...props
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -26,7 +30,12 @@ export const PopupMenu: React.FC<OptionsMenuProps> = ({ options, id, ...props })
 
   return (
     <>
-      <IconButton edge="end" aria-label="options" onClick={handleMenuOpen} {...props}>
+      <IconButton
+        edge="end"
+        aria-label="options"
+        onClick={handleMenuOpen}
+        {...props}
+      >
         <MoreVertIcon />
       </IconButton>
       <Menu
@@ -39,7 +48,10 @@ export const PopupMenu: React.FC<OptionsMenuProps> = ({ options, id, ...props })
         // }}
       >
         {options.map((option, index) => (
-          <MenuItem key={index} onClick={() => handleOptionClick(() => option.action(id))}>
+          <MenuItem
+            key={index}
+            onClick={() => handleOptionClick(() => option.action(id))}
+          >
             {option.label}
           </MenuItem>
         ))}

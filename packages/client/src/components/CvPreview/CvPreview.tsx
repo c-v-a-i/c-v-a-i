@@ -8,6 +8,7 @@ import {
   PreviewModeButton,
   VersionHistoryButton,
 } from '../PreviewButtonSection';
+import { VersionControlButtons } from '../PreviewButtonSection/VersionControlButtons';
 
 export const CurrentCvPreview: React.FC = () => {
   const { currentCvId } = useCurrentCv();
@@ -50,6 +51,7 @@ export const CurrentCvPreview: React.FC = () => {
     >
       <CvVisualizer cvId={data.getCv._id} />
       <ActionButtonsContainer>
+        <VersionControlButtons />
         <VersionHistoryButton />
         <PreviewModeButton />
       </ActionButtonsContainer>

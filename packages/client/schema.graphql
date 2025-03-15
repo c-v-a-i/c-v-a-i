@@ -73,16 +73,35 @@ type GenerateNewEntryItemObjectType {
   workExperienceEntries: [WorkExperience!]
 }
 
+enum JsonDiffOperationType {
+  ADD
+  COPY
+  MOVE
+  REMOVE
+  REPLACE
+  TEST
+}
+
+type JsonPatchOperation {
+  from: String
+  op: JsonDiffOperationType!
+  path: String!
+  value: String
+}
+
 type Mutation {
   convertPdfToCv(file: Upload!): ConvertPdfToCvObjectType!
+  createCvFromVersion(cvId: ID!, versionId: ID!): CvObjectType!
   createNewCv(templateId: ID!): CvObjectType!
   deleteCv(cvId: ID!): Boolean!
   deleteCvEntryItem(cvId: ID!, entryFieldName: CvEntryType!, entryItemId: ID!): Boolean!
   deleteEntryItem(cvId: ID!, entryFieldName: CvEntryType!, entryItemId: ID!): Boolean!
   generateNewEntryItem(cvId: ID!, entryFieldName: CvEntryType!): GenerateNewEntryItemObjectType!
   logout: Boolean!
+  redoCvVersion(cvId: ID!): CvObjectType!
   reviewCv(cvId: ID!): ReviewCvOutput!
   transformCv(message: String!, templateId: String!): TransformCvObjectType!
+  undoCvVersion(cvId: ID!): CvObjectType!
   updateCv(cvId: ID!, data: UpdateCvInput!): CvObjectType!
 }
 
@@ -107,11 +126,13 @@ type Project {
 }
 
 type Query {
+  compareVersions(cvId: ID!, sourceVersionId: ID!, targetVersionId: ID): VersionDiff!
   currentUser: User!
   getCv(cvId: ID!): CvObjectType!
-  getCvVersionHistory(cvId: ID!, limit: Int! = 20, page: Int! = 1): PaginatedCvVersionHistoryObjectType!
+  getCvVersionHistory(cvId: ID!): PaginatedCvVersionHistoryObjectType!
   getCvs: [CvObjectType!]!
   getReviewStatus(cvId: ID!): ReviewStatusType!
+  getVersioningActionsMetadata(cvId: ID!): VersioningActionsMetadataObjectType!
 }
 
 type ReviewCvOutput {
@@ -210,6 +231,17 @@ type User {
   googleId: String!
   id: ID!
   lastName: String!
+}
+
+type VersionDiff {
+  operations: [JsonPatchOperation!]!
+  sourceVersionId: String!
+  targetVersionId: String!
+}
+
+type VersioningActionsMetadataObjectType {
+  canRedo: Boolean!
+  canUndo: Boolean!
 }
 
 type WorkExperience {
