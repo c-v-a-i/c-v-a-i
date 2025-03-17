@@ -77,12 +77,13 @@ export function useCvEntries<T extends CvEntryArrayFieldName>(
       fieldName,
       value,
     }: UpdateItemizedFieldProps<typeof entryFieldName>) => {
+      const updateData = {
+        [entryFieldName]: [{ _id, [fieldName]: value }],
+      };
       await updateCv({
         variables: {
           cvId,
-          data: {
-            [entryFieldName]: [{ _id, [fieldName]: value }],
-          },
+          data: updateData,
         },
       });
     },

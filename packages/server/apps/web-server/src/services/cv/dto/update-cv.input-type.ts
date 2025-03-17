@@ -67,7 +67,7 @@ export class UpdateCvInput {
   @Field(() => UpdateAboutMeInput, { nullable: true })
   aboutMe?: UpdateAboutMeInput;
 
-  @Field(() => UpdateContactInfoInput, { nullable: true })
+  @Field(() => [UpdateContactInfoInput], { nullable: true })
   contactInfoEntries?: UpdateContactInfoInput[];
 
   @Field(() => [UpdateEducationInput], { nullable: true })

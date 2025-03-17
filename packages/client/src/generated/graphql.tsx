@@ -18,8 +18,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** Date custom scalar type */
-  Date: { input: any; output: any; }
+  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
+  DateTime: { input: any; output: any; }
   /** The `Upload` scalar type represents a file upload. */
   Upload: { input: any; output: any; }
 };
@@ -63,10 +63,18 @@ export type CvObjectType = {
   skillEntries?: Maybe<Array<Skill>>;
   title: Scalars['String']['output'];
   userId: Scalars['String']['output'];
-  versionCreatedAt: Scalars['Date']['output'];
+  versionCreatedAt: Scalars['DateTime']['output'];
   versionId: Scalars['ID']['output'];
   versionNumber: Scalars['Float']['output'];
   workExperienceEntries?: Maybe<Array<WorkExperience>>;
+};
+
+export type CvVersionHistoryEntryObjectType = {
+  __typename?: 'CvVersionHistoryEntryObjectType';
+  _id: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  isCurrentVersion: Scalars['Boolean']['output'];
+  versionNumber: Scalars['Float']['output'];
 };
 
 export type Education = {
@@ -94,20 +102,29 @@ export type GenerateNewEntryItemObjectType = {
 export type Mutation = {
   __typename?: 'Mutation';
   convertPdfToCv: ConvertPdfToCvObjectType;
+  createCvFromVersion: CvObjectType;
   createNewCv: CvObjectType;
   deleteCv: Scalars['Boolean']['output'];
   deleteCvEntryItem: Scalars['Boolean']['output'];
   deleteEntryItem: Scalars['Boolean']['output'];
   generateNewEntryItem: GenerateNewEntryItemObjectType;
   logout: Scalars['Boolean']['output'];
+  redoCvVersion: CvObjectType;
   reviewCv: ReviewCvOutput;
   transformCv: TransformCvObjectType;
+  undoCvVersion: CvObjectType;
   updateCv: CvObjectType;
 };
 
 
 export type MutationConvertPdfToCvArgs = {
   file: Scalars['Upload']['input'];
+};
+
+
+export type MutationCreateCvFromVersionArgs = {
+  cvId: Scalars['ID']['input'];
+  versionId: Scalars['ID']['input'];
 };
 
 
@@ -141,6 +158,11 @@ export type MutationGenerateNewEntryItemArgs = {
 };
 
 
+export type MutationRedoCvVersionArgs = {
+  cvId: Scalars['ID']['input'];
+};
+
+
 export type MutationReviewCvArgs = {
   cvId: Scalars['ID']['input'];
 };
@@ -152,9 +174,28 @@ export type MutationTransformCvArgs = {
 };
 
 
+export type MutationUndoCvVersionArgs = {
+  cvId: Scalars['ID']['input'];
+};
+
+
 export type MutationUpdateCvArgs = {
   cvId: Scalars['ID']['input'];
   data: UpdateCvInput;
+};
+
+export type PaginatedCvVersionHistoryObjectType = {
+  __typename?: 'PaginatedCvVersionHistoryObjectType';
+  items: Array<CvVersionHistoryEntryObjectType>;
+  paginationMetadata: PaginationMetadataObjectType;
+};
+
+export type PaginationMetadataObjectType = {
+  __typename?: 'PaginationMetadataObjectType';
+  currentPage: Scalars['Int']['output'];
+  pageSize: Scalars['Int']['output'];
+  totalItems: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
 };
 
 export type Project = {
@@ -170,17 +211,30 @@ export type Query = {
   __typename?: 'Query';
   currentUser: User;
   getCv: CvObjectType;
+  getCvVersionHistory: PaginatedCvVersionHistoryObjectType;
   getCvs: Array<CvObjectType>;
   getReviewStatus: ReviewStatusType;
+  getVersioningActionsMetadata: VersioningActionsMetadataObjectType;
 };
 
 
 export type QueryGetCvArgs = {
   cvId: Scalars['ID']['input'];
+  versionId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryGetCvVersionHistoryArgs = {
+  cvId: Scalars['ID']['input'];
 };
 
 
 export type QueryGetReviewStatusArgs = {
+  cvId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetVersioningActionsMetadataArgs = {
   cvId: Scalars['ID']['input'];
 };
 
@@ -229,7 +283,7 @@ export type UpdateContactInfoInput = {
 
 export type UpdateCvInput = {
   aboutMe?: InputMaybe<UpdateAboutMeInput>;
-  contactInfoEntries?: InputMaybe<UpdateContactInfoInput>;
+  contactInfoEntries?: InputMaybe<Array<UpdateContactInfoInput>>;
   educationEntries?: InputMaybe<Array<UpdateEducationInput>>;
   projectEntries?: InputMaybe<Array<UpdateProjectInput>>;
   skillEntries?: InputMaybe<Array<UpdateSkillInput>>;
@@ -275,13 +329,19 @@ export type UpdateWorkExperienceInput = {
 
 export type User = {
   __typename?: 'User';
-  createdAt: Scalars['Date']['output'];
-  deletedAt?: Maybe<Scalars['Date']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   googleId: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
+};
+
+export type VersioningActionsMetadataObjectType = {
+  __typename?: 'VersioningActionsMetadataObjectType';
+  canRedo: Scalars['Boolean']['output'];
+  canUndo: Scalars['Boolean']['output'];
 };
 
 export type WorkExperience = {
@@ -316,11 +376,11 @@ export type GetCvsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCvsQuery = { __typename?: 'Query', getCvs: Array<{ __typename?: 'CvObjectType', _id: string, name: string }> };
 
-export type CvFragment = { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null };
+export type CvFragment = { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null };
 
 export type AboutMeFragment = { __typename?: 'AboutMe', name: string, fieldName: string, description: string };
 
-export type ContactInfoFragment = { __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string };
+export type ContactInfoFragment = { __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string };
 
 export type WorkExperienceFragment = { __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number };
 
@@ -336,7 +396,7 @@ export type UpdateCvMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCvMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
+export type UpdateCvMutation = { __typename?: 'Mutation', updateCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
 
 export type GenerateNewEntryItemMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -344,7 +404,7 @@ export type GenerateNewEntryItemMutationVariables = Exact<{
 }>;
 
 
-export type GenerateNewEntryItemMutation = { __typename?: 'Mutation', generateNewEntryItem: { __typename?: 'GenerateNewEntryItemObjectType', contactInfoEntries?: Array<{ __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null } };
+export type GenerateNewEntryItemMutation = { __typename?: 'Mutation', generateNewEntryItem: { __typename?: 'GenerateNewEntryItemObjectType', contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null } };
 
 export type DeleteEntryItemMutationVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -371,17 +431,18 @@ export type GetEducationEntriesQuery = { __typename?: 'Query', getCv: { __typena
 
 export type GetCvQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
+  versionId?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
 
-export type GetCvQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
+export type GetCvQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
 
 export type GetContactInfoEntriesQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
 }>;
 
 
-export type GetContactInfoEntriesQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', contactInfoEntries?: Array<{ __typename?: 'ContactInfo', linkName: string, positionIndex: number, link: string }> | null } };
+export type GetContactInfoEntriesQuery = { __typename?: 'Query', getCv: { __typename?: 'CvObjectType', contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null } };
 
 export type GetAboutMeQueryVariables = Exact<{
   cvId: Scalars['ID']['input'];
@@ -432,6 +493,42 @@ export type ReviewCvMutationVariables = Exact<{
 
 export type ReviewCvMutation = { __typename?: 'Mutation', reviewCv: { __typename?: 'ReviewCvOutput', messages: Array<string> } };
 
+export type UndoCvVersionMutationVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+}>;
+
+
+export type UndoCvVersionMutation = { __typename?: 'Mutation', undoCvVersion: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
+
+export type RedoCvVersionMutationVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+}>;
+
+
+export type RedoCvVersionMutation = { __typename?: 'Mutation', redoCvVersion: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
+
+export type CreateCvFromVersionMutationVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+  versionId: Scalars['ID']['input'];
+}>;
+
+
+export type CreateCvFromVersionMutation = { __typename?: 'Mutation', createCvFromVersion: { __typename?: 'CvObjectType', _id: string, title: string, aboutMe?: { __typename?: 'AboutMe', name: string, fieldName: string, description: string } | null, contactInfoEntries?: Array<{ __typename?: 'ContactInfo', _id: string, linkName: string, positionIndex: number, link: string }> | null, workExperienceEntries?: Array<{ __typename?: 'WorkExperience', _id: string, name: string, position: string, duration?: string | null, location?: string | null, type?: string | null, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, projectEntries?: Array<{ __typename?: 'Project', _id: string, name: string, description?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, educationEntries?: Array<{ __typename?: 'Education', _id: string, name: string, description?: string | null, degree: string, location?: string | null, duration?: string | null, skills?: Array<string> | null, positionIndex: number }> | null, skillEntries?: Array<{ __typename?: 'Skill', _id: string, category: string, skills: Array<string>, positionIndex: number }> | null } };
+
+export type GetCvVersionHistoryQueryVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+}>;
+
+
+export type GetCvVersionHistoryQuery = { __typename?: 'Query', getCvVersionHistory: { __typename?: 'PaginatedCvVersionHistoryObjectType', items: Array<{ __typename?: 'CvVersionHistoryEntryObjectType', _id: string, versionNumber: number, isCurrentVersion: boolean, createdAt: any }>, paginationMetadata: { __typename?: 'PaginationMetadataObjectType', totalItems: number, currentPage: number, pageSize: number, totalPages: number } } };
+
+export type GetVersioningActionsMetadataQueryVariables = Exact<{
+  cvId: Scalars['ID']['input'];
+}>;
+
+
+export type GetVersioningActionsMetadataQuery = { __typename?: 'Query', getVersioningActionsMetadata: { __typename?: 'VersioningActionsMetadataObjectType', canUndo: boolean, canRedo: boolean } };
+
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -459,6 +556,7 @@ export const AboutMeFragmentDoc = gql`
     `;
 export const ContactInfoFragmentDoc = gql`
     fragment ContactInfoFragment on ContactInfo {
+  _id
   linkName
   positionIndex
   link
@@ -905,8 +1003,8 @@ export function refetchGetEducationEntriesQuery(variables: GetEducationEntriesQu
       return { query: GetEducationEntriesDocument, variables: variables }
     }
 export const GetCvDocument = gql`
-    query GetCv($cvId: ID!) {
-  getCv(cvId: $cvId) {
+    query GetCv($cvId: ID!, $versionId: ID) {
+  getCv(cvId: $cvId, versionId: $versionId) {
     ...CvFragment
   }
 }
@@ -931,6 +1029,7 @@ export type GetCvComponentProps = Omit<ApolloReactComponents.QueryComponentOptio
  * const { data, loading, error } = useGetCvQuery({
  *   variables: {
  *      cvId: // value for 'cvId'
+ *      versionId: // value for 'versionId'
  *   },
  * });
  */
@@ -1331,6 +1430,234 @@ export function useReviewCvMutation(baseOptions?: Apollo.MutationHookOptions<Rev
 export type ReviewCvMutationHookResult = ReturnType<typeof useReviewCvMutation>;
 export type ReviewCvMutationResult = Apollo.MutationResult<ReviewCvMutation>;
 export type ReviewCvMutationOptions = Apollo.BaseMutationOptions<ReviewCvMutation, ReviewCvMutationVariables>;
+export const UndoCvVersionDocument = gql`
+    mutation UndoCvVersion($cvId: ID!) {
+  undoCvVersion(cvId: $cvId) {
+    ...CvFragment
+  }
+}
+    ${CvFragmentDoc}`;
+export type UndoCvVersionMutationFn = Apollo.MutationFunction<UndoCvVersionMutation, UndoCvVersionMutationVariables>;
+export type UndoCvVersionComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UndoCvVersionMutation, UndoCvVersionMutationVariables>, 'mutation'>;
+
+    export const UndoCvVersionComponent = (props: UndoCvVersionComponentProps) => (
+      <ApolloReactComponents.Mutation<UndoCvVersionMutation, UndoCvVersionMutationVariables> mutation={UndoCvVersionDocument} {...props} />
+    );
+    
+
+/**
+ * __useUndoCvVersionMutation__
+ *
+ * To run a mutation, you first call `useUndoCvVersionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUndoCvVersionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [undoCvVersionMutation, { data, loading, error }] = useUndoCvVersionMutation({
+ *   variables: {
+ *      cvId: // value for 'cvId'
+ *   },
+ * });
+ */
+export function useUndoCvVersionMutation(baseOptions?: Apollo.MutationHookOptions<UndoCvVersionMutation, UndoCvVersionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UndoCvVersionMutation, UndoCvVersionMutationVariables>(UndoCvVersionDocument, options);
+      }
+export type UndoCvVersionMutationHookResult = ReturnType<typeof useUndoCvVersionMutation>;
+export type UndoCvVersionMutationResult = Apollo.MutationResult<UndoCvVersionMutation>;
+export type UndoCvVersionMutationOptions = Apollo.BaseMutationOptions<UndoCvVersionMutation, UndoCvVersionMutationVariables>;
+export const RedoCvVersionDocument = gql`
+    mutation RedoCvVersion($cvId: ID!) {
+  redoCvVersion(cvId: $cvId) {
+    ...CvFragment
+  }
+}
+    ${CvFragmentDoc}`;
+export type RedoCvVersionMutationFn = Apollo.MutationFunction<RedoCvVersionMutation, RedoCvVersionMutationVariables>;
+export type RedoCvVersionComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<RedoCvVersionMutation, RedoCvVersionMutationVariables>, 'mutation'>;
+
+    export const RedoCvVersionComponent = (props: RedoCvVersionComponentProps) => (
+      <ApolloReactComponents.Mutation<RedoCvVersionMutation, RedoCvVersionMutationVariables> mutation={RedoCvVersionDocument} {...props} />
+    );
+    
+
+/**
+ * __useRedoCvVersionMutation__
+ *
+ * To run a mutation, you first call `useRedoCvVersionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRedoCvVersionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [redoCvVersionMutation, { data, loading, error }] = useRedoCvVersionMutation({
+ *   variables: {
+ *      cvId: // value for 'cvId'
+ *   },
+ * });
+ */
+export function useRedoCvVersionMutation(baseOptions?: Apollo.MutationHookOptions<RedoCvVersionMutation, RedoCvVersionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RedoCvVersionMutation, RedoCvVersionMutationVariables>(RedoCvVersionDocument, options);
+      }
+export type RedoCvVersionMutationHookResult = ReturnType<typeof useRedoCvVersionMutation>;
+export type RedoCvVersionMutationResult = Apollo.MutationResult<RedoCvVersionMutation>;
+export type RedoCvVersionMutationOptions = Apollo.BaseMutationOptions<RedoCvVersionMutation, RedoCvVersionMutationVariables>;
+export const CreateCvFromVersionDocument = gql`
+    mutation CreateCvFromVersion($cvId: ID!, $versionId: ID!) {
+  createCvFromVersion(cvId: $cvId, versionId: $versionId) {
+    ...CvFragment
+  }
+}
+    ${CvFragmentDoc}`;
+export type CreateCvFromVersionMutationFn = Apollo.MutationFunction<CreateCvFromVersionMutation, CreateCvFromVersionMutationVariables>;
+export type CreateCvFromVersionComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<CreateCvFromVersionMutation, CreateCvFromVersionMutationVariables>, 'mutation'>;
+
+    export const CreateCvFromVersionComponent = (props: CreateCvFromVersionComponentProps) => (
+      <ApolloReactComponents.Mutation<CreateCvFromVersionMutation, CreateCvFromVersionMutationVariables> mutation={CreateCvFromVersionDocument} {...props} />
+    );
+    
+
+/**
+ * __useCreateCvFromVersionMutation__
+ *
+ * To run a mutation, you first call `useCreateCvFromVersionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCvFromVersionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCvFromVersionMutation, { data, loading, error }] = useCreateCvFromVersionMutation({
+ *   variables: {
+ *      cvId: // value for 'cvId'
+ *      versionId: // value for 'versionId'
+ *   },
+ * });
+ */
+export function useCreateCvFromVersionMutation(baseOptions?: Apollo.MutationHookOptions<CreateCvFromVersionMutation, CreateCvFromVersionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCvFromVersionMutation, CreateCvFromVersionMutationVariables>(CreateCvFromVersionDocument, options);
+      }
+export type CreateCvFromVersionMutationHookResult = ReturnType<typeof useCreateCvFromVersionMutation>;
+export type CreateCvFromVersionMutationResult = Apollo.MutationResult<CreateCvFromVersionMutation>;
+export type CreateCvFromVersionMutationOptions = Apollo.BaseMutationOptions<CreateCvFromVersionMutation, CreateCvFromVersionMutationVariables>;
+export const GetCvVersionHistoryDocument = gql`
+    query GetCvVersionHistory($cvId: ID!) {
+  getCvVersionHistory(cvId: $cvId) {
+    items {
+      _id
+      versionNumber
+      isCurrentVersion
+      createdAt
+    }
+    paginationMetadata {
+      totalItems
+      currentPage
+      pageSize
+      totalPages
+    }
+  }
+}
+    `;
+export type GetCvVersionHistoryComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetCvVersionHistoryQuery, GetCvVersionHistoryQueryVariables>, 'query'> & ({ variables: GetCvVersionHistoryQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const GetCvVersionHistoryComponent = (props: GetCvVersionHistoryComponentProps) => (
+      <ApolloReactComponents.Query<GetCvVersionHistoryQuery, GetCvVersionHistoryQueryVariables> query={GetCvVersionHistoryDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetCvVersionHistoryQuery__
+ *
+ * To run a query within a React component, call `useGetCvVersionHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCvVersionHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCvVersionHistoryQuery({
+ *   variables: {
+ *      cvId: // value for 'cvId'
+ *   },
+ * });
+ */
+export function useGetCvVersionHistoryQuery(baseOptions: Apollo.QueryHookOptions<GetCvVersionHistoryQuery, GetCvVersionHistoryQueryVariables> & ({ variables: GetCvVersionHistoryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCvVersionHistoryQuery, GetCvVersionHistoryQueryVariables>(GetCvVersionHistoryDocument, options);
+      }
+export function useGetCvVersionHistoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCvVersionHistoryQuery, GetCvVersionHistoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCvVersionHistoryQuery, GetCvVersionHistoryQueryVariables>(GetCvVersionHistoryDocument, options);
+        }
+export function useGetCvVersionHistorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCvVersionHistoryQuery, GetCvVersionHistoryQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCvVersionHistoryQuery, GetCvVersionHistoryQueryVariables>(GetCvVersionHistoryDocument, options);
+        }
+export type GetCvVersionHistoryQueryHookResult = ReturnType<typeof useGetCvVersionHistoryQuery>;
+export type GetCvVersionHistoryLazyQueryHookResult = ReturnType<typeof useGetCvVersionHistoryLazyQuery>;
+export type GetCvVersionHistorySuspenseQueryHookResult = ReturnType<typeof useGetCvVersionHistorySuspenseQuery>;
+export type GetCvVersionHistoryQueryResult = Apollo.QueryResult<GetCvVersionHistoryQuery, GetCvVersionHistoryQueryVariables>;
+export function refetchGetCvVersionHistoryQuery(variables: GetCvVersionHistoryQueryVariables) {
+      return { query: GetCvVersionHistoryDocument, variables: variables }
+    }
+export const GetVersioningActionsMetadataDocument = gql`
+    query GetVersioningActionsMetadata($cvId: ID!) {
+  getVersioningActionsMetadata(cvId: $cvId) {
+    canUndo
+    canRedo
+  }
+}
+    `;
+export type GetVersioningActionsMetadataComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetVersioningActionsMetadataQuery, GetVersioningActionsMetadataQueryVariables>, 'query'> & ({ variables: GetVersioningActionsMetadataQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const GetVersioningActionsMetadataComponent = (props: GetVersioningActionsMetadataComponentProps) => (
+      <ApolloReactComponents.Query<GetVersioningActionsMetadataQuery, GetVersioningActionsMetadataQueryVariables> query={GetVersioningActionsMetadataDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetVersioningActionsMetadataQuery__
+ *
+ * To run a query within a React component, call `useGetVersioningActionsMetadataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetVersioningActionsMetadataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetVersioningActionsMetadataQuery({
+ *   variables: {
+ *      cvId: // value for 'cvId'
+ *   },
+ * });
+ */
+export function useGetVersioningActionsMetadataQuery(baseOptions: Apollo.QueryHookOptions<GetVersioningActionsMetadataQuery, GetVersioningActionsMetadataQueryVariables> & ({ variables: GetVersioningActionsMetadataQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetVersioningActionsMetadataQuery, GetVersioningActionsMetadataQueryVariables>(GetVersioningActionsMetadataDocument, options);
+      }
+export function useGetVersioningActionsMetadataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetVersioningActionsMetadataQuery, GetVersioningActionsMetadataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetVersioningActionsMetadataQuery, GetVersioningActionsMetadataQueryVariables>(GetVersioningActionsMetadataDocument, options);
+        }
+export function useGetVersioningActionsMetadataSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetVersioningActionsMetadataQuery, GetVersioningActionsMetadataQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetVersioningActionsMetadataQuery, GetVersioningActionsMetadataQueryVariables>(GetVersioningActionsMetadataDocument, options);
+        }
+export type GetVersioningActionsMetadataQueryHookResult = ReturnType<typeof useGetVersioningActionsMetadataQuery>;
+export type GetVersioningActionsMetadataLazyQueryHookResult = ReturnType<typeof useGetVersioningActionsMetadataLazyQuery>;
+export type GetVersioningActionsMetadataSuspenseQueryHookResult = ReturnType<typeof useGetVersioningActionsMetadataSuspenseQuery>;
+export type GetVersioningActionsMetadataQueryResult = Apollo.QueryResult<GetVersioningActionsMetadataQuery, GetVersioningActionsMetadataQueryVariables>;
+export function refetchGetVersioningActionsMetadataQuery(variables: GetVersioningActionsMetadataQueryVariables) {
+      return { query: GetVersioningActionsMetadataDocument, variables: variables }
+    }
 export const LogoutDocument = gql`
     mutation Logout {
   logout

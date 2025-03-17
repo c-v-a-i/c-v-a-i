@@ -1,0 +1,49 @@
+#fragment CvDataFragment on CvVersionDataObjectType {
+#  title
+#  aboutMe {
+#    ...AboutMeFragment
+#  }
+#  educationEntries {
+#    ...EducationFragment
+#  }
+#  workExperienceEntries {
+#    ...WorkExperienceFragment
+#  }
+#  projectEntries {
+#    ...ProjectFragment
+#  }
+#  skillEntries {
+#    ...SkillFragment
+#  }
+#  contactInfoEntries {
+#    ...ContactInfoFragment
+#  }
+#}
+
+query GetCvVersionHistory($cvId: ID!) {
+  getCvVersionHistory(cvId: $cvId) {
+    items {
+      _id
+      versionNumber
+      isCurrentVersion
+      createdAt
+#      data {
+#        ...CvDataFragment
+#      }
+    }
+    paginationMetadata {
+      totalItems
+      currentPage
+      pageSize
+      totalPages
+    }
+  }
+}
+
+
+query GetVersioningActionsMetadata($cvId: ID!) {
+  getVersioningActionsMetadata(cvId: $cvId) {
+    canUndo
+    canRedo
+  }
+}

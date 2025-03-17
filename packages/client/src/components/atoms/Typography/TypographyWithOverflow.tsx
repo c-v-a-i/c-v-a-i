@@ -27,11 +27,17 @@ export const TypographyWithOverflow = ({
   );
 
   useEffect(() => {
-    const hasOverflow = !!ref.current && ref.current.scrollWidth > ref.current.clientWidth;
+    const hasOverflow =
+      !!ref.current && ref.current.scrollWidth > ref.current.clientWidth;
     setIsOverflow(hasOverflow);
   }, [children]);
 
-  const renderTooltip = !disableTooltip && isOverflow && typeof children === 'string';
+  const renderTooltip =
+    !disableTooltip && isOverflow && typeof children === 'string';
 
-  return renderTooltip ? <Tooltip title={children}>{component}</Tooltip> : component;
+  return renderTooltip ? (
+    <Tooltip title={children}>{component}</Tooltip>
+  ) : (
+    component
+  );
 };

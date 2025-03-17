@@ -1,8 +1,7 @@
-// useTypographyActionsPortal.ts
 import { useEffect, useRef, useState } from 'react';
 import type { Root } from 'react-dom/client';
 import { createRoot } from 'react-dom/client';
-import { Box, IconButton, Tooltip } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 
 interface UseTypographyActionsPortalOptions {
@@ -65,17 +64,15 @@ export const useTypographyActionsPortal = (
           zIndex: 9999,
         }}
       >
-        <Tooltip title="Edit">
-          <IconButton
-            size="small"
-            onClick={() => {
-              onEdit();
-              triggerPortal(false);
-            }}
-          >
-            <EditIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
+        <IconButton
+          size="small"
+          onClick={() => {
+            onEdit();
+            triggerPortal(false);
+          }}
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
       </Box>
     );
 

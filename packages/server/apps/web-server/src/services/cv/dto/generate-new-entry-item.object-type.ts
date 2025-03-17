@@ -4,5 +4,5 @@ import { cvKeys } from './types';
 
 @ObjectType()
 export class GenerateNewEntryItemObjectType extends PartialType(
-  PickType(CvObjectType, cvKeys.itemizedEntries)
+  PickType(CvObjectType, cvKeys.mappedEntries)
 ) {}

@@ -3,6 +3,7 @@ import type { CvEntryComponentProps, UpdateFieldProps } from '../types';
 import {
   GetAboutMeComponent,
   refetchGetAboutMeQuery,
+  refetchGetCvVersionHistoryQuery,
   useUpdateCvMutation,
 } from '../../../../generated/graphql';
 import { Box, Typography } from '@mui/material';
@@ -12,6 +13,9 @@ export const AboutMe = ({ cvId }: CvEntryComponentProps) => {
   const [updateAboutMe] = useUpdateCvMutation({
     refetchQueries: [
       refetchGetAboutMeQuery({
+        cvId,
+      }),
+      refetchGetCvVersionHistoryQuery({
         cvId,
       }),
     ],
@@ -47,7 +51,7 @@ export const AboutMe = ({ cvId }: CvEntryComponentProps) => {
         return (
           <Box>
             <EditableTypography
-              id={`about-me-name-${aboutMe._id}`}
+              id={`about-me-name`}
               value={aboutMe.name}
               onSave={(value) =>
                 updateField({
@@ -60,7 +64,7 @@ export const AboutMe = ({ cvId }: CvEntryComponentProps) => {
             />
 
             <EditableTypography
-              id={`about-me-fieldName-${aboutMe._id}`}
+              id={`about-me-fieldName`}
               value={aboutMe.fieldName}
               onSave={(value) =>
                 updateField({
@@ -73,7 +77,7 @@ export const AboutMe = ({ cvId }: CvEntryComponentProps) => {
             />
 
             <EditableTypography
-              id={`about-me-description-${aboutMe._id}`}
+              id={`about-me-description`}
               value={aboutMe.description}
               onSave={(value) =>
                 updateField({

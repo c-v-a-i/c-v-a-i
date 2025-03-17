@@ -4,7 +4,8 @@ import { useCurrentCv } from '../../contexts';
 import { CvVisualizer } from './CvVisualizer';
 import { CenteredBox } from '../atoms';
 import { useCheckCvLazyQuery } from '../../generated/graphql';
-import { PreviewModeButton } from '../atoms/PreviewModeButton';
+import { PreviewModeButton } from '../PreviewButtonSection';
+import { VersionControlButtons } from '../PreviewButtonSection/VersionControlButtons';
 
 export const CurrentCvPreview: React.FC = () => {
   const { currentCvId } = useCurrentCv();
@@ -45,19 +46,21 @@ export const CurrentCvPreview: React.FC = () => {
         padding: 2,
       }}
     >
+      <CvVisualizer cvId={data.getCv._id} />
+
       <ActionButtonsContainer>
+        <VersionControlButtons />
         <PreviewModeButton />
       </ActionButtonsContainer>
-      <CvVisualizer cvId={data.getCv._id} />
     </Box>
   );
 };
 
-const ActionButtonsContainer = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  right: 48px;
-  top: 48px;
-  z-index: 1000;
-`;
+const ActionButtonsContainer = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'row',
+  position: 'fixed',
+  right: '48px',
+  top: '48px',
+  zIndex: 1000,
+}));

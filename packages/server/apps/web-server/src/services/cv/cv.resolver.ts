@@ -7,24 +7,16 @@ import { CvService } from './cv.service';
 import {
   CvEntryType,
   CvObjectType,
-  UpdateCvInput,
   GenerateNewEntryItemObjectType,
+  PaginatedCvVersionHistoryObjectType,
+  UpdateCvInput,
 } from './dto';
-
-// type EntryResolverConfig = {
-//   fieldName: keyof CvObjectType;
-//   returnType: ReturnTypeFunc; // () => ItemizedEntryItem[];
-//   propertyName: keyof CvData;
-// };
+import { VersioningActionsMetadataObjectType } from './dto/versioning-actions-metadata.object-type';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => CvObjectType)
 export class CvResolver {
-  constructor(private readonly cvService: CvService) {
-    // CvResolver.entryResolvers.forEach((config) => {
-    //   this.createEntryResolver(config);
-    // });
-  }
+  constructor(private readonly cvService: CvService) {}
 
   @Query(() => [CvObjectType])
   async getCvs(
@@ -36,89 +28,30 @@ export class CvResolver {
   @Query(() => CvObjectType)
   async getCv(
     @CurrentUser() { client_id: userId }: DecodedUserObjectType,
-    @Args('cvId', { type: () => ID }) cvId: string
+    @Args('cvId', { type: () => ID }) cvId: string,
+    @Args('versionId', { type: () => ID, nullable: true }) versionId?: string
   ): Promise<CvObjectType> {
-    return this.cvService.getCv({ cvId, userId });
+    return this.cvService.getCv({ cvId, userId, versionId });
   }
 
-  // private async getEntries<T extends keyof CvData>(
-  //   cvId: string,
-  //   propertyName: T
-  // ) {
-  //   const entries = await this.cvService.getTopLevelProperty(
-  //     cvId,
-  //     propertyName
-  //   );
-  //   if (!entries) {
-  //     return undefined;
-  //   }
-  //   return entries;
-  // }
+  @Query(() => VersioningActionsMetadataObjectType)
+  async getVersioningActionsMetadata(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args('cvId', { type: () => ID }) cvId: string
+  ) {
+    return this.cvService.getVersioningActionsMetadata({ cvId, userId });
+  }
 
-  // private static readonly entryResolvers: EntryResolverConfig[] = [
-  //   {
-  //     fieldName: 'contactInfoEntries',
-  //     returnType: () => [ContactInfo],
-  //     propertyName: 'contactInfoEntries',
-  //   },
-  //   {
-  //     fieldName: 'workExperienceEntries',
-  //     returnType: () => [WorkExperience],
-  //     propertyName: 'workExperienceEntries',
-  //   },
-  //   {
-  //     fieldName: 'projectEntries',
-  //     returnType: () => [Project],
-  //     propertyName: 'projectEntries',
-  //   },
-  //   {
-  //     fieldName: 'educationEntries',
-  //     returnType: () => [Education],
-  //     propertyName: 'educationEntries',
-  //   },
-  //   {
-  //     fieldName: 'skillEntries',
-  //     returnType: () => [Skill],
-  //     propertyName: 'skillEntries',
-  //   },
-  // ];
-
-  // private createEntryResolver(config: EntryResolverConfig) {
-  //   const resolver = async (parent: CvObjectType) => {
-  //     return this.getEntries(parent._id, config.propertyName);
-  //   };
-  //
-  //   Object.defineProperty(this, config.fieldName, {
-  //     value: resolver,
-  //     writable: true,
-  //     configurable: true,
-  //   });
-  //
-  //   // Apply decorator metadata
-  //   Reflect.defineMetadata(
-  //     'graphql:resolver_type',
-  //     config.returnType,
-  //     this,
-  //     config.fieldName
-  //   );
-  //   Reflect.defineMetadata(
-  //     'graphql:resolver_options',
-  //     { nullable: true },
-  //     this,
-  //     config.fieldName
-  //   );
-  // }
-
-  // @ResolveField(() => AboutMe, { nullable: true })
-  // async aboutMe(
-  //   @Parent() { _id, aboutMe }: CvObjectType
-  // ): Promise<AboutMe | undefined> {
-  //   console.log(
-  //     `resolve field aboutMe for cvId: ${_id}. so far about me: ${aboutMe}`
-  //   );
-  //   // todo
-  //   return this.cvService.getTopLevelProperty(_id, 'aboutMe');
-  // }
+  @Query(() => PaginatedCvVersionHistoryObjectType)
+  async getCvVersionHistory(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args('cvId', { type: () => ID }) cvId: string
+  ): Promise<PaginatedCvVersionHistoryObjectType> {
+    return this.cvService.getCvVersionHistory({
+      userId,
+      cvId,
+    });
+  }
 
   @Mutation(() => CvObjectType)
   async createNewCv(
@@ -154,8 +87,6 @@ export class CvResolver {
       cvId,
       userId,
     });
-
-    console.log(`new entryItem: ${JSON.stringify(entryItem, null, 2)}`);
 
     return {
       [entryFieldName]: entryItem,
@@ -209,5 +140,34 @@ export class CvResolver {
       entryItemId,
     });
     return true;
+  }
+
+  @Mutation(() => CvObjectType)
+  async undoCvVersion(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args('cvId', { type: () => ID }) cvId: string
+  ): Promise<CvObjectType> {
+    return this.cvService.undoCvVersion({ cvId, userId });
+  }
+
+  @Mutation(() => CvObjectType)
+  async redoCvVersion(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args('cvId', { type: () => ID }) cvId: string
+  ): Promise<CvObjectType> {
+    return this.cvService.redoCvVersion({ cvId, userId });
+  }
+
+  @Mutation(() => CvObjectType)
+  async createCvFromVersion(
+    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
+    @Args('cvId', { type: () => ID }) cvId: string,
+    @Args('versionId', { type: () => ID }) versionId: string
+  ): Promise<CvObjectType> {
+    return this.cvService.createCvFromVersion({
+      userId,
+      cvId,
+      versionId,
+    });
   }
 }

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { MenuCvList } from '../atoms';
 import { DeleteConfirmationDialog } from './DeleteConfirmationDialog';
 import {
   useGetCvsQuery,
@@ -7,6 +6,7 @@ import {
   refetchGetCvsQuery,
 } from '../../generated/graphql';
 import { useCurrentCv } from '../../contexts';
+import { CvList } from './CvList';
 
 export const CvMenuList = () => {
   const {
@@ -73,7 +73,7 @@ export const CvMenuList = () => {
 
   return (
     <>
-      <MenuCvList
+      <CvList
         items={memoizedItems}
         onDeleteItem={(id) => toggleDeleteDialog(id)}
         onDuplicateItem={handleDuplicateCv}

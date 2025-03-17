@@ -7,23 +7,22 @@ import { WorkExperience } from './work-experience.schema';
 import { Skill } from './skill.schema';
 import { Project } from './project.schema';
 
-export type CvData = {
-  title: string;
+export class CvData {
+  title!: string;
   aboutMe?: AboutMe;
-  educationEntries: Record<string, Education>;
-  workExperienceEntries: Record<string, WorkExperience>;
-  projectEntries: Record<string, Project>;
-  skillEntries: Record<string, Skill>;
-  contactInfoEntries: Record<string, ContactInfo>;
-};
+  educationEntries!: Record<string, Education>;
+  workExperienceEntries!: Record<string, WorkExperience>;
+  projectEntries!: Record<string, Project>;
+  skillEntries!: Record<string, Skill>;
+  contactInfoEntries!: Record<string, ContactInfo>;
+}
 
-export type CvVersion = {
-  _id: string;
-  data: CvData;
-  versionNumber: number;
-  createdAt: Date;
-  // diff?: SomeRfcJsonDiffFormat; // TODO: should we store diffs? if so, why? what's the use case?
-};
+export class CvVersion {
+  _id!: string;
+  data!: CvData;
+  versionNumber!: number;
+  createdAt!: Date;
+}
 
 @Schema({ timestamps: true })
 export class Cv {
@@ -36,11 +35,11 @@ export class Cv {
   @Prop({ required: true })
   currentVersionId!: string; // Just the string ID, references internal versions array
 
+  @Prop({ type: Number, required: true, default: 0 })
+  versionCursor!: number;
+
   @Prop({ type: [Object], required: true })
   versions!: Array<CvVersion>;
-
-  @Prop({ required: true })
-  currentTitle!: string;
 
   createdAt?: Date;
   updatedAt?: Date;
