@@ -15,3 +15,13 @@ export const CenteredBox = styled(Box)({
   justifyContent: 'center',
   height: '100%',
 });
+
+export const Row = styled(Box)({
+  display: 'flex',
+  flexDirection: 'row',
+});
+
+export const Column = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+});

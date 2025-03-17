@@ -1,17 +1,15 @@
 import type { IconButtonProps } from '@mui/material';
-import { IconButton as MuiIconButton, Tooltip } from '@mui/material';
+import { IconButton as MuiIconButton } from '@mui/material';
+import { Tooltip } from './Tooltip';
 
 export const IconButton = ({
   children,
   title,
   ...iconButtonProps
 }: React.PropsWithChildren & { title: string } & IconButtonProps) => {
-  // TODO: tooltip doesn't work correctly :(
   return (
     <Tooltip title={title}>
-      <MuiIconButton title={title} {...iconButtonProps}>
-        {children}
-      </MuiIconButton>
+      <MuiIconButton {...iconButtonProps}>{children}</MuiIconButton>
     </Tooltip>
   );
 };

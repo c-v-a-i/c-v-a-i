@@ -8,9 +8,10 @@ import {
   useRedoCvVersionMutation,
   useUndoCvVersionMutation,
 } from '../../generated/graphql';
-import { IconButton } from '../atoms';
 import { toast } from 'react-toastify';
-import { useCurrentCv } from '../../contexts';
+import { useCurrentCv, usePreviewMode } from '../../contexts';
+import { IconButton } from '../atoms';
+import { VersionHistoryButton } from './VersionHistoryButton';
 
 const VersionControlButtonsInner = ({ cvId }: { cvId: string }) => {
   const {
@@ -20,6 +21,8 @@ const VersionControlButtonsInner = ({ cvId }: { cvId: string }) => {
   } = useGetVersioningActionsMetadataQuery({
     variables: { cvId },
   });
+
+  const { isPreviewing } = usePreviewMode();
 
   const refetchUndoRedoQueries = useMemo(
     () => [refetchGetVersioningActionsMetadataQuery({ cvId })],
@@ -36,10 +39,12 @@ const VersionControlButtonsInner = ({ cvId }: { cvId: string }) => {
     refetchQueries: refetchUndoRedoQueries,
   });
 
+  if (isPreviewing) return null;
+
   return (
     <Box sx={{ display: 'flex', gap: 1 }}>
       <IconButton
-        title="Undo to previous version"
+        title="Undo"
         onClick={() => undoVersion({ variables: { cvId } })}
         disabled={!canUndo || undoLoading}
       >
@@ -47,12 +52,14 @@ const VersionControlButtonsInner = ({ cvId }: { cvId: string }) => {
       </IconButton>
 
       <IconButton
-        title="Redo to next version"
+        title="Redo"
         onClick={() => redoVersion({ variables: { cvId } })}
         disabled={!canRedo || redoLoading}
       >
         <RedoIcon />
       </IconButton>
+
+      <VersionHistoryButton />
     </Box>
   );
 };

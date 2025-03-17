@@ -39,6 +39,12 @@ export const mapToArray = <T>(
 ): T[] =>
   map ? Array.from(map instanceof Map ? map.values() : values(map)) : [];
 
+//  TODO:
+//   example value: {"_id":"67d2040f5ff517acaa0896e7","name":"New Company","position":"Developer","positionIndex":4}
+// now, it's transported as string.
+// however, there should be a more sophisticated ts-compatible (and graphql-compatible) way to transport the changes.
+// so far though, we should just go with object -> string -> object way. even if it's not the best one.
+
 export const createJsonPathOperation = (
   operations: Operation[]
 ): JsonPatchOperation[] => {
@@ -51,27 +57,30 @@ export const createJsonPathOperation = (
         {
           op: JsonDiffOperationType.ADD,
           path,
-          value: rest['value'],
+          // TODO: fix this. it should be represented with different operations and payloads somehow
+          value: JSON.stringify(rest['value']),
         },
       ])
       .with('remove', () => [
         {
           op: JsonDiffOperationType.REMOVE,
           path,
+          value: JSON.stringify(rest['value']),
         },
       ])
       .with('replace', () => [
         {
           op: JsonDiffOperationType.REPLACE,
           path,
-          value: rest['value'],
+          value: JSON.stringify(rest['value']),
         },
       ])
       .with('move', () => [
         {
           op: JsonDiffOperationType.MOVE,
           path,
-          from: rest['from'],
+          from: JSON.stringify(rest['from']),
+          value: JSON.stringify(rest['value']),
         },
       ])
       .with('copy', () => [
@@ -79,6 +88,7 @@ export const createJsonPathOperation = (
           op: JsonDiffOperationType.COPY,
           path,
           from: rest['from'],
+          value: JSON.stringify(rest['value']),
         },
       ])
       .exhaustive();

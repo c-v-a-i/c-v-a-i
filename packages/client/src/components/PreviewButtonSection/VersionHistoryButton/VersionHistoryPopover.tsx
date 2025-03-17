@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Popover, Typography, styled } from '@mui/material';
 import type { CvVersionHistoryEntry } from '../../../generated/graphql';
 import {
@@ -10,6 +10,7 @@ import { Box } from '../../atoms';
 import { backgroundWithBackdrop } from '../../../theme';
 import { BaseList, ListContainer } from '../../atoms/List';
 import { VersionHistoryItem } from './VersionHistoryItem';
+import { VersionComparisonDialog } from './VersionComparisonDialog';
 
 interface VersionHistoryPopoverProps {
   open: boolean;
@@ -31,10 +32,10 @@ export const VersionHistoryPopover: React.FC<VersionHistoryPopoverProps> = ({
   cvId,
 }) => {
   // TODO: there should be a version comparison dialog showing the changes
-  // const [selectedVersionId, setSelectedVersionId] = useState<string | null>(
-  //   null
-  // );
-  // const [compareDialogOpen, setCompareDialogOpen] = useState(false);
+  const [selectedVersionId, setSelectedVersionId] = useState<string | null>(
+    null
+  );
+  const [compareDialogOpen, setCompareDialogOpen] = useState(false);
 
   const [fetchVersionHistory, { loading, error, data }] =
     useGetCvVersionHistoryLazyQuery();
@@ -66,10 +67,10 @@ export const VersionHistoryPopover: React.FC<VersionHistoryPopoverProps> = ({
     fetchData();
   }, [fetchData]);
 
-  // const handleCompareClick = useCallback((versionId: string) => {
-  //   setSelectedVersionId(versionId);
-  //   setCompareDialogOpen(true);
-  // }, []);
+  const handleCompareClick = useCallback((versionId: string) => {
+    setSelectedVersionId(versionId);
+    setCompareDialogOpen(true);
+  }, []);
 
   const handleCreateFromClick = useCallback(
     (versionId: string) => {
@@ -83,16 +84,16 @@ export const VersionHistoryPopover: React.FC<VersionHistoryPopoverProps> = ({
     [createCvFromVersion, cvId]
   );
 
-  // const handleCloseCompareDialog = () => {
-  //   setCompareDialogOpen(false);
-  //   setSelectedVersionId(null);
-  // };
+  const handleCloseCompareDialog = () => {
+    setCompareDialogOpen(false);
+    setSelectedVersionId(null);
+  };
 
   const renderVersionItem = useCallback(
     (version: CvVersionHistoryEntry) => (
       <VersionHistoryItem
         version={version}
-        // onCompareClick={handleCompareClick}
+        onCompareClick={handleCompareClick}
         onCreateFromClick={handleCreateFromClick}
       />
     ),
@@ -127,14 +128,14 @@ export const VersionHistoryPopover: React.FC<VersionHistoryPopoverProps> = ({
         </VersionHistoryPopoverContainer>
       </Popover>
 
-      {/* {selectedVersionId && (*/}
-      {/*  <VersionComparisonDialog*/}
-      {/*    open={compareDialogOpen}*/}
-      {/*    onClose={handleCloseCompareDialog}*/}
-      {/*    cvId={cvId}*/}
-      {/*    versionId={selectedVersionId}*/}
-      {/*  />*/}
-      {/* )}*/}
+      {selectedVersionId && (
+        <VersionComparisonDialog
+          open={compareDialogOpen}
+          onClose={handleCloseCompareDialog}
+          cvId={cvId}
+          versionId={selectedVersionId}
+        />
+      )}
     </>
   );
 };

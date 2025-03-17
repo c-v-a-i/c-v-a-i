@@ -4,10 +4,7 @@ import { useCurrentCv } from '../../contexts';
 import { CvVisualizer } from './CvVisualizer';
 import { CenteredBox } from '../atoms';
 import { useCheckCvLazyQuery } from '../../generated/graphql';
-import {
-  PreviewModeButton,
-  VersionHistoryButton,
-} from '../PreviewButtonSection';
+import { PreviewModeButton } from '../PreviewButtonSection';
 import { VersionControlButtons } from '../PreviewButtonSection/VersionControlButtons';
 
 export const CurrentCvPreview: React.FC = () => {
@@ -50,9 +47,9 @@ export const CurrentCvPreview: React.FC = () => {
       }}
     >
       <CvVisualizer cvId={data.getCv._id} />
+
       <ActionButtonsContainer>
         <VersionControlButtons />
-        <VersionHistoryButton />
         <PreviewModeButton />
       </ActionButtonsContainer>
     </Box>
