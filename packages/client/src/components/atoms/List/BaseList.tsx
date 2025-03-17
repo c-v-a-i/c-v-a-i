@@ -2,12 +2,12 @@ import React from 'react';
 import {
   CircularProgress,
   List,
-  Box,
   Pagination,
   Typography,
   styled,
 } from '@mui/material';
 import type { BaseListProps } from './types';
+import { Box } from '../Box';
 
 const ListContentContainer = styled(Box)(() => ({
   flex: 1,
