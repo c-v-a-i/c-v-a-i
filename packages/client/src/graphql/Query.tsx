@@ -17,8 +17,8 @@ interface ChildrenProps<
   loading?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface QueryProps<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TData = any,
   TVariables extends OperationVariables = OperationVariables,
 > extends Omit<QueryDataOptions<TData, TVariables>, 'children'>,

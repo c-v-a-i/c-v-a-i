@@ -41,11 +41,11 @@ type CvObjectType {
   workExperienceEntries: [WorkExperience!]
 }
 
-type CvVersionHistoryEntry {
+type CvVersionHistoryEntryObjectType {
   _id: String!
   createdAt: DateTime!
   isCurrentVersion: Boolean!
-  versionNumber: Int!
+  versionNumber: Float!
 }
 
 """
@@ -73,22 +73,6 @@ type GenerateNewEntryItemObjectType {
   workExperienceEntries: [WorkExperience!]
 }
 
-enum JsonDiffOperationType {
-  ADD
-  COPY
-  MOVE
-  REMOVE
-  REPLACE
-  TEST
-}
-
-type JsonPatchOperation {
-  from: String
-  op: JsonDiffOperationType!
-  path: String!
-  value: String
-}
-
 type Mutation {
   convertPdfToCv(file: Upload!): ConvertPdfToCvObjectType!
   createCvFromVersion(cvId: ID!, versionId: ID!): CvObjectType!
@@ -106,7 +90,7 @@ type Mutation {
 }
 
 type PaginatedCvVersionHistoryObjectType {
-  items: [CvVersionHistoryEntry!]!
+  items: [CvVersionHistoryEntryObjectType!]!
   paginationMetadata: PaginationMetadataObjectType!
 }
 
@@ -126,9 +110,8 @@ type Project {
 }
 
 type Query {
-  compareVersions(cvId: ID!, sourceVersionId: ID!, targetVersionId: ID): VersionDiff!
   currentUser: User!
-  getCv(cvId: ID!): CvObjectType!
+  getCv(cvId: ID!, versionId: ID): CvObjectType!
   getCvVersionHistory(cvId: ID!): PaginatedCvVersionHistoryObjectType!
   getCvs: [CvObjectType!]!
   getReviewStatus(cvId: ID!): ReviewStatusType!
@@ -231,12 +214,6 @@ type User {
   googleId: String!
   id: ID!
   lastName: String!
-}
-
-type VersionDiff {
-  operations: [JsonPatchOperation!]!
-  sourceVersionId: String!
-  targetVersionId: String!
 }
 
 type VersioningActionsMetadataObjectType {

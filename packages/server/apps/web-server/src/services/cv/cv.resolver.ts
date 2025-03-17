@@ -11,7 +11,6 @@ import {
   PaginatedCvVersionHistoryObjectType,
   UpdateCvInput,
 } from './dto';
-import { VersionDiff } from './dto/cv-version-diff.object-type';
 import { VersioningActionsMetadataObjectType } from './dto/versioning-actions-metadata.object-type';
 
 @UseGuards(GqlAuthGuard)
@@ -29,9 +28,10 @@ export class CvResolver {
   @Query(() => CvObjectType)
   async getCv(
     @CurrentUser() { client_id: userId }: DecodedUserObjectType,
-    @Args('cvId', { type: () => ID }) cvId: string
+    @Args('cvId', { type: () => ID }) cvId: string,
+    @Args('versionId', { type: () => ID, nullable: true }) versionId?: string
   ): Promise<CvObjectType> {
-    return this.cvService.getCv({ cvId, userId });
+    return this.cvService.getCv({ cvId, userId, versionId });
   }
 
   @Query(() => VersioningActionsMetadataObjectType)
@@ -158,21 +158,6 @@ export class CvResolver {
     return this.cvService.redoCvVersion({ cvId, userId });
   }
 
-  @Query(() => VersionDiff)
-  async compareVersions(
-    @CurrentUser() { client_id: userId }: DecodedUserObjectType,
-    @Args('cvId', { type: () => ID }) cvId: string,
-    @Args('sourceVersionId', { type: () => ID }) sourceVersionId: string,
-    @Args('targetVersionId', { type: () => ID, nullable: true })
-    targetVersionId?: string
-  ): Promise<VersionDiff> {
-    return this.cvService.compareVersions({
-      cvId,
-      userId,
-      sourceVersionId,
-      targetVersionId,
-    });
-  }
   @Mutation(() => CvObjectType)
   async createCvFromVersion(
     @CurrentUser() { client_id: userId }: DecodedUserObjectType,

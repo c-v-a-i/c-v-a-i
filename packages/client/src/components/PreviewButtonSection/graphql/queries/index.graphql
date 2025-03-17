@@ -1,10 +1,35 @@
+#fragment CvDataFragment on CvVersionDataObjectType {
+#  title
+#  aboutMe {
+#    ...AboutMeFragment
+#  }
+#  educationEntries {
+#    ...EducationFragment
+#  }
+#  workExperienceEntries {
+#    ...WorkExperienceFragment
+#  }
+#  projectEntries {
+#    ...ProjectFragment
+#  }
+#  skillEntries {
+#    ...SkillFragment
+#  }
+#  contactInfoEntries {
+#    ...ContactInfoFragment
+#  }
+#}
+
 query GetCvVersionHistory($cvId: ID!) {
   getCvVersionHistory(cvId: $cvId) {
     items {
       _id
       versionNumber
-      createdAt
       isCurrentVersion
+      createdAt
+#      data {
+#        ...CvDataFragment
+#      }
     }
     paginationMetadata {
       totalItems
@@ -14,22 +39,7 @@ query GetCvVersionHistory($cvId: ID!) {
     }
   }
 }
-query CompareVersions($cvId: ID!, $sourceVersionId: ID!, $targetVersionId: ID) {
-  compareVersions(
-    cvId: $cvId,
-    sourceVersionId: $sourceVersionId,
-    targetVersionId: $targetVersionId
-  ) {
-    sourceVersionId
-    targetVersionId
-    operations {
-      op
-      path
-      value
-      from
-    }
-  }
-}
+
 
 query GetVersioningActionsMetadata($cvId: ID!) {
   getVersioningActionsMetadata(cvId: $cvId) {

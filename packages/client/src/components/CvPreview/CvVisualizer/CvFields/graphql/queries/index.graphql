@@ -18,8 +18,14 @@ query GetEducationEntries (
   }
 }
 
-query GetCv ($cvId: ID!) {
-  getCv(cvId: $cvId) {
+query GetCv (
+  $cvId: ID!
+  $versionId: ID
+) {
+  getCv(
+    cvId: $cvId
+    versionId: $versionId
+  ) {
     ...CvFragment
   }
 }

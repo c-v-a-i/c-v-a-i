@@ -10,7 +10,7 @@ import {
   CvEntryType,
   cvEntryTypeToCvEntryNameMap,
   CvObjectType,
-  CvVersionHistoryEntry,
+  CvVersionHistoryEntryObjectType,
   isCvObjectTypeKeyForItemizedEntries,
   PaginatedCvVersionHistoryObjectType,
   UpdateCvInput,
@@ -42,10 +42,8 @@ import {
   exampleSkillEntries,
   exampleWorkExperienceEntries,
 } from './example-cv-data';
-import { arrayToMap, createJsonPathOperation } from './utils';
+import { arrayToMap } from './utils';
 import { CreateCvParams } from './create-cv-params';
-import { VersionDiff } from './dto/cv-version-diff.object-type';
-import { compare } from 'fast-json-patch';
 import { entries, keys } from '@server/common/utils';
 import { ConvertOrTypeToAndType } from '@server/common/types';
 
@@ -83,12 +81,19 @@ export class CvService {
     );
 
     const paginatedVersions = sortedVersions.map(
-      (version): CvVersionHistoryEntry => {
+      (version): CvVersionHistoryEntryObjectType => {
+        // don't need to fetch data here, because when we wanna compare versions, we fetch the version to compare with through getCv with versionId parameter
+        // const data: CvVersionDataObjectType = {
+        //   title: version.data.title,
+        //   aboutMe: version.data.aboutMe,
+        //   ...convertMappedEntriesToItemizedEntries(version.data),
+        // };
         return {
+          // data,
           _id: version._id,
           versionNumber: version.versionNumber,
-          createdAt: version.createdAt,
           isCurrentVersion: version._id === cv.currentVersionId,
+          createdAt: version.createdAt,
         };
       }
     );
@@ -262,7 +267,6 @@ export class CvService {
         data: newVersion.data,
         versionNumber: newVersion.versionNumber,
         createdAt: newVersion.createdAt,
-        // cvId,
       },
     });
   }
@@ -564,49 +568,5 @@ export class CvService {
 
   async redoCvVersion(props: CvManagerMethodProps): Promise<CvObjectType> {
     return this.navigateVersion(props, 'next');
-  }
-
-  async compareVersions({
-    cvId,
-    userId,
-    sourceVersionId,
-    targetVersionId,
-  }: CvManagerMethodProps & {
-    sourceVersionId: string;
-    targetVersionId?: string;
-  }): Promise<VersionDiff> {
-    const cv = await this.validateUserOwnership(cvId, userId);
-
-    const sourceVersionIndex = cv.versions.findIndex(
-      (v) => v._id === sourceVersionId
-    );
-    if (sourceVersionIndex === -1) {
-      throw new NotFoundException('Source version not found');
-    }
-
-    const targetVersionObj = targetVersionId
-      ? cv.versions.find((v) => v._id === targetVersionId)
-      : sourceVersionIndex < cv.versions.length - 1
-        ? cv.versions[sourceVersionIndex + 1]
-        : null;
-
-    if (!targetVersionObj) {
-      throw new NotFoundException(
-        targetVersionId
-          ? 'Target version not found'
-          : 'No next version available for comparison'
-      );
-    }
-
-    const sourceVersion = cv.versions[sourceVersionIndex];
-
-    const patchOperations = compare(sourceVersion.data, targetVersionObj.data);
-    const operations = createJsonPathOperation(patchOperations);
-
-    return {
-      sourceVersionId: sourceVersion._id,
-      targetVersionId: targetVersionObj._id,
-      operations,
-    };
   }
 }

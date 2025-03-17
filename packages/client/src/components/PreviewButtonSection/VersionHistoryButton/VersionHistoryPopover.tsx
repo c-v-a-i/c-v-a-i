@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Popover, Typography, styled } from '@mui/material';
-import type { CvVersionHistoryEntry } from '../../../generated/graphql';
+import React, { useCallback, useState } from 'react';
+import { Popover, styled, Typography } from '@mui/material';
+import type { CvVersionHistoryEntryObjectType } from '../../../generated/graphql';
 import {
-  useGetCvVersionHistoryLazyQuery,
   useCreateCvFromVersionMutation,
+  useGetCvVersionHistoryQuery,
 } from '../../../generated/graphql';
 import { toast } from 'react-toastify';
 import { Box } from '../../atoms';
@@ -37,8 +37,9 @@ export const VersionHistoryPopover: React.FC<VersionHistoryPopoverProps> = ({
   );
   const [compareDialogOpen, setCompareDialogOpen] = useState(false);
 
-  const [fetchVersionHistory, { loading, error, data }] =
-    useGetCvVersionHistoryLazyQuery();
+  const { loading, error, data } = useGetCvVersionHistoryQuery({
+    variables: { cvId },
+  });
 
   const [createCvFromVersion] = useCreateCvFromVersionMutation({
     onCompleted: (data) => {
@@ -50,22 +51,6 @@ export const VersionHistoryPopover: React.FC<VersionHistoryPopoverProps> = ({
     onError: (err) => toast.error(`Failed to create CV: ${err.message}`),
     refetchQueries: ['GetCvs'],
   });
-
-  const fetchData = useCallback(() => {
-    if (!open) return;
-
-    fetchVersionHistory({
-      variables: {
-        cvId,
-      },
-    }).catch((e: Error) => {
-      toast.error(e.message);
-    });
-  }, [open, cvId, fetchVersionHistory]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
   const handleCompareClick = useCallback((versionId: string) => {
     setSelectedVersionId(versionId);
@@ -90,14 +75,14 @@ export const VersionHistoryPopover: React.FC<VersionHistoryPopoverProps> = ({
   };
 
   const renderVersionItem = useCallback(
-    (version: CvVersionHistoryEntry) => (
+    (version: CvVersionHistoryEntryObjectType) => (
       <VersionHistoryItem
         version={version}
         onCompareClick={handleCompareClick}
         onCreateFromClick={handleCreateFromClick}
       />
     ),
-    [handleCreateFromClick]
+    [handleCompareClick, handleCreateFromClick]
   );
 
   return (
@@ -132,8 +117,8 @@ export const VersionHistoryPopover: React.FC<VersionHistoryPopoverProps> = ({
         <VersionComparisonDialog
           open={compareDialogOpen}
           onClose={handleCloseCompareDialog}
-          cvId={cvId}
           versionId={selectedVersionId}
+          cvId={cvId}
         />
       )}
     </>

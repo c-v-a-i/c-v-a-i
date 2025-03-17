@@ -6,18 +6,10 @@ import { ContactInfo } from './contact-info.schema';
 import { WorkExperience } from './work-experience.schema';
 import { Skill } from './skill.schema';
 import { Project } from './project.schema';
-import { Field, Int, ObjectType } from '@nestjs/graphql';
 
-// TODO: is a record gonna be serialized correctly if used as ObjectType() ?
-@ObjectType()
 export class CvData {
-  @Field(() => String)
   title!: string;
-
-  @Field(() => String, { nullable: true })
   aboutMe?: AboutMe;
-
-  // TODO: we need to annotate it as map or record for graphql
   educationEntries!: Record<string, Education>;
   workExperienceEntries!: Record<string, WorkExperience>;
   projectEntries!: Record<string, Project>;
@@ -25,21 +17,11 @@ export class CvData {
   contactInfoEntries!: Record<string, ContactInfo>;
 }
 
-@ObjectType()
 export class CvVersion {
-  @Field(() => String)
   _id!: string;
-
-  @Field(() => String)
   data!: CvData;
-
-  @Field(() => Int)
   versionNumber!: number;
-
-  @Field(() => Date)
   createdAt!: Date;
-
-  // diff?: SomeRfcJsonDiffFormat; // TODO: should we store diffs? if so, why? what's the use case?
 }
 
 @Schema({ timestamps: true })

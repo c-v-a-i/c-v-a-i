@@ -3,6 +3,7 @@ import {
   AboutMe,
   ContactInfo,
   Cv,
+  CvData,
   CvVersion,
   Education,
   Project,
@@ -10,6 +11,7 @@ import {
   WorkExperience,
 } from '../../../../../../libs/schemas';
 import { mapToArray } from '../utils';
+import { cvKeys } from './types';
 
 @ObjectType()
 export class CvObjectType {
@@ -50,6 +52,16 @@ export class CvObjectType {
   versionCreatedAt!: Date;
 }
 
+export const convertMappedEntriesToItemizedEntries = (
+  mappedEntries: Pick<CvData, (typeof cvKeys.mappedEntries)[number]>
+) => ({
+  educationEntries: mapToArray(mappedEntries.educationEntries),
+  workExperienceEntries: mapToArray(mappedEntries.workExperienceEntries),
+  projectEntries: mapToArray(mappedEntries.projectEntries),
+  skillEntries: mapToArray(mappedEntries.skillEntries),
+  contactInfoEntries: mapToArray(mappedEntries.contactInfoEntries),
+});
+
 export const createObjectType = ({
   cv,
   cvVersion,
@@ -62,13 +74,9 @@ export const createObjectType = ({
     userId: cv.userId,
     title: cvVersion.data.title,
     aboutMe: cvVersion.data.aboutMe,
-    educationEntries: mapToArray(cvVersion.data.educationEntries),
-    workExperienceEntries: mapToArray(cvVersion.data.workExperienceEntries),
-    projectEntries: mapToArray(cvVersion.data.projectEntries),
-    skillEntries: mapToArray(cvVersion.data.skillEntries),
-    contactInfoEntries: mapToArray(cvVersion.data.contactInfoEntries),
     versionId: cvVersion._id.toString(),
     versionNumber: cvVersion.versionNumber,
     versionCreatedAt: cvVersion.createdAt,
+    ...convertMappedEntriesToItemizedEntries(cvVersion.data),
   };
 };
