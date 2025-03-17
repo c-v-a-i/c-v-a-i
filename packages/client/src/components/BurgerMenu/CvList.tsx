@@ -1,7 +1,9 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { PopupMenu } from '../atoms';
 import { useCurrentCv, useCvCreationFlow, useDialog } from '../../contexts';
 import { BaseList, ListContainer, StandardListItem } from '../atoms/List';
+import { useUpdateCvMutation } from '../../generated/graphql';
+import { RenameDialog } from '../RenameDialog';
 
 export type ListItem = {
   _id: string;
@@ -20,6 +22,39 @@ export const CvList = React.memo(
     const { open: openDialog } = useDialog();
     const { setTemplateId } = useCvCreationFlow();
 
+    // State for rename dialog
+    const [renameDialogOpen, setRenameDialogOpen] = useState(false);
+    const [cvToRename, setCvToRename] = useState<ListItem | null>(null);
+
+    const [updateCv, { loading }] = useUpdateCvMutation();
+
+    const handleRename = useCallback(
+      (cvId: string) => {
+        const cvItem = items.find((item) => item._id === cvId);
+        if (cvItem) {
+          setCvToRename(cvItem);
+          setRenameDialogOpen(true);
+        }
+      },
+      [items]
+    );
+
+    const handleRenameSubmit = useCallback(
+      (newName: string) => {
+        if (cvToRename) {
+          updateCv({
+            variables: {
+              cvId: cvToRename._id,
+              data: {
+                title: newName,
+              },
+            },
+          });
+        }
+      },
+      [cvToRename, updateCv]
+    );
+
     const handleSelectCv = useCallback(
       (id: string) => {
         setCurrentCvId(id);
@@ -36,10 +71,14 @@ export const CvList = React.memo(
             openDialog();
           },
         },
+        {
+          label: 'Rename',
+          action: handleRename,
+        },
         { label: 'Delete', action: onDeleteItem },
         { label: 'Duplicate', action: onDuplicateItem },
       ],
-      [onDeleteItem, onDuplicateItem, setTemplateId, openDialog]
+      [onDeleteItem, onDuplicateItem, setTemplateId, openDialog, handleRename]
     );
 
     const renderCvItem = useCallback(
@@ -58,13 +97,27 @@ export const CvList = React.memo(
     );
 
     return (
-      <ListContainer>
-        <BaseList
-          items={items}
-          renderItem={renderCvItem}
-          emptyMessage="No CVs available. Create your first CV!"
-        />
-      </ListContainer>
+      <>
+        <ListContainer>
+          <BaseList
+            items={items}
+            renderItem={renderCvItem}
+            emptyMessage="No CVs available. Create your first CV!"
+          />
+        </ListContainer>
+
+        {cvToRename && (
+          <RenameDialog
+            open={renameDialogOpen}
+            onClose={() => {
+              setRenameDialogOpen(false);
+              setCvToRename(null);
+            }}
+            initialName={cvToRename.name}
+            onRename={handleRenameSubmit}
+          />
+        )}
+      </>
     );
   }
 );
