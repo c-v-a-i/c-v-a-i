@@ -33,8 +33,6 @@ import {
   CvEntryItemManagerProps,
   CvManagerMethodProps,
 } from './types';
-import { keys } from '@server/common/utils';
-import { ConvertOrTypeToAndType } from '@c-v-a-i/common/lib';
 import { match } from 'ts-pattern';
 import {
   exampleAboutMe,
@@ -48,6 +46,8 @@ import { arrayToMap, createJsonPathOperation } from './utils';
 import { CreateCvParams } from './create-cv-params';
 import { VersionDiff } from './dto/cv-version-diff.object-type';
 import { compare } from 'fast-json-patch';
+import { entries, keys } from '@server/common/utils';
+import { ConvertOrTypeToAndType } from '@server/common/types';
 
 type VersionDirection = 'previous' | 'next';
 
@@ -432,19 +432,33 @@ export class CvService {
   ): CvData {
     const newData = cloneDeep(baseData);
 
-    for (const [key, value] of Object.entries(updates)) {
-      if (key === 'title') {
-        newData.title = value as string;
-      } else if (isCvObjectTypeKeyForItemizedEntries(key)) {
-        const updates = value as Array<{ _id: string }>;
-        updates.forEach((update) => {
-          const entry = newData[key][update._id];
-          if (!entry) {
-            throw new NotFoundException(`Entry ${update._id} not found`);
-          }
-          Object.assign(entry, update);
+    for (const [key, value] of entries(updates)) {
+      match(key)
+        .with('title', () => {
+          newData.title = value as string;
+        })
+        .with('aboutMe', () => {
+          // FIXME: make it better. it's shit now.
+          newData.aboutMe = {
+            ...newData.aboutMe,
+            ...(value as typeof newData.aboutMe),
+          } as typeof newData.aboutMe;
+        })
+        .when(isCvObjectTypeKeyForItemizedEntries, () => {
+          const entryMapKey =
+            cvEntryTypeToCvEntryNameMap[
+              key as keyof typeof cvEntryTypeToCvEntryNameMap
+            ];
+          const updates = value as Array<{ _id: string }>;
+
+          updates.forEach((update) => {
+            const entry = newData[entryMapKey][update._id];
+            if (!entry) {
+              throw new NotFoundException(`Entry ${update._id} not found`);
+            }
+            Object.assign(entry, update);
+          });
         });
-      }
     }
 
     return newData;
@@ -587,7 +601,6 @@ export class CvService {
     const sourceVersion = cv.versions[sourceVersionIndex];
 
     const patchOperations = compare(sourceVersion.data, targetVersionObj.data);
-
     const operations = createJsonPathOperation(patchOperations);
 
     return {
