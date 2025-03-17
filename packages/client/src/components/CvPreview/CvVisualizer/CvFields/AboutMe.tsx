@@ -3,6 +3,7 @@ import type { CvEntryComponentProps, UpdateFieldProps } from '../types';
 import {
   GetAboutMeComponent,
   refetchGetAboutMeQuery,
+  refetchGetCvVersionHistoryQuery,
   useUpdateCvMutation,
 } from '../../../../generated/graphql';
 import { Box, Typography } from '@mui/material';
@@ -12,6 +13,9 @@ export const AboutMe = ({ cvId }: CvEntryComponentProps) => {
   const [updateAboutMe] = useUpdateCvMutation({
     refetchQueries: [
       refetchGetAboutMeQuery({
+        cvId,
+      }),
+      refetchGetCvVersionHistoryQuery({
         cvId,
       }),
     ],
