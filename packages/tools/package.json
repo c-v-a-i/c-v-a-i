@@ -1,5 +1,5 @@
 {
-  "name": "@c-v-a-i/tools",
+  "name": "@cvai/tools",
   "version": "1.0.0",
   "private": true,
   "main": "src/index.cjs",

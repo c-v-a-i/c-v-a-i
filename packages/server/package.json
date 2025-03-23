@@ -1,5 +1,5 @@
 {
-  "name": "@c-v-a-i/server",
+  "name": "@cvai/server",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -80,7 +80,7 @@
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
-    "@c-v-a-i/tools": "*",
+    "@cvai/tools": "*",
     "@types/cookie-parser": "^1",
     "@types/jest": "^29.5.14",
     "@types/js-yaml": "^4",

@@ -1,3 +1,3 @@
-const { prettierrc } = require("@c-v-a-i/tools");
+const { prettierrc } = require("@cvai/tools");
 
 module.exports = prettierrc;

@@ -1,5 +1,5 @@
 {
-  "name": "@c-v-a-i/client",
+  "name": "@cvai/client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -41,8 +41,7 @@
     "codecheck:fix": "yarn lint:fix && yarn prettier:fix"
   },
   "devDependencies": {
-    "@c-v-a-i/common": "*",
-    "@c-v-a-i/tools": "*",
+    "@cvai/tools": "*",
     "@graphql-codegen/cli": "5.0.3",
     "@graphql-codegen/client-preset": "4.5.0",
     "@graphql-codegen/schema-ast": "^4.1.0",
