@@ -24,8 +24,7 @@
     "react-toastify": "^10.0.6",
     "ts-pattern": "^5.5.0",
     "tslib": "^2.6.1",
-    "web-vitals": "^2.1.4",
-    "zod": "^3.23.8"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "dev": "vite --open",

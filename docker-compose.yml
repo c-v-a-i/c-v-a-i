@@ -1,8 +1,24 @@
-version: "3.8"
+version: '3.8'
 
 services:
+  web-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+      - mongo
+    env_file:
+      - packages/server/.env
+    environment:
+      - TYPEORM_PORT=5432
+      - TYPEORM_HOST=postgres
+
+
   postgres:
-    image: postgres:15
+    image: postgres:17
     container_name: cvai_postgres
     environment:
       - POSTGRES_USER=postgres
@@ -22,6 +38,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+
+# TODO: add ptp service. Fetch it from docker-hub
 
 volumes:
   postgres_data:
