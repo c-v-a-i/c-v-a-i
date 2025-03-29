@@ -43,14 +43,15 @@
     "dev": "concurrently -n client,server -c cyan,magenta 'yarn client dev' 'yarn server start:dev' --kill-others",
     "build": "yarn client build && yarn server build",
     "db:create": "chmod +x ./scripts/db_create.sh && ./scripts/db_create.sh",
-    "lint": "yarn client lint && yarn server lint",
+    "lint:check": "yarn client lint && yarn server lint",
     "lint:fix": "yarn client lint:fix && yarn server lint:fix",
     "prettier:check": "yarn client prettier:check && yarn server prettier:check",
     "prettier:fix": "yarn client prettier:fix && yarn server prettier:fix",
     "codecheck": "yarn client codecheck && yarn server codecheck",
     "codecheck:fix": "yarn client codecheck:fix && yarn server codecheck:fix",
     "prod:server": "yarn workspaces focus --production @cvai/server",
-    "prod:client": "yarn workspaces focus --production @cvai/client"
+    "prod:client": "yarn workspaces focus --production @cvai/client",
+    "tsc:check": "yarn client tsc:check && yarn server tsc:check"
   },
   "packageManager": "yarn@4.5.1"
 }

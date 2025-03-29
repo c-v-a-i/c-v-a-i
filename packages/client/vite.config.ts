@@ -25,6 +25,7 @@ export default defineConfig({
     alias: {
       '@ui': path.resolve(__dirname, './src'),
     },
+    conditions: ['mui-modern', 'module', 'browser', 'development|production']
   },
   base: '/cvai/',
   server: {
