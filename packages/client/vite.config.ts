@@ -26,7 +26,7 @@ export default defineConfig({
       '@ui': path.resolve(__dirname, './src'),
     },
   },
-
+  base: '/cvai/',
   server: {
     port: 3000,
     watch: {
@@ -34,6 +34,9 @@ export default defineConfig({
       interval: 300,
     },
   },
+  build: {
+
+  }
   // build: {
   //   sourcemap: false,
   // },

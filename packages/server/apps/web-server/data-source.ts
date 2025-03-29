@@ -11,6 +11,9 @@ export default new DataSource({
   password: process.env.TYPEORM_PASSWORD ?? 'postgres',
   database: process.env.TYPEORM_DATABASE ?? 'cvai',
   synchronize: false,
+  ssl: {
+    rejectUnauthorized: false,
+  },
   logging: 'all',
   entities: ['./libs/entities/**/*.entity.ts'],
   migrations: ['./apps/web-server/src/migrations/*.ts'],

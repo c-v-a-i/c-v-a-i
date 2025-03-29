@@ -26,4 +26,5 @@ COPY --from=builder /app/packages/server/apps/web-server/data-source.ts ./apps/w
 
 EXPOSE 4000
 
-CMD ["sh", "-c", "yarn migration:run && yarn start:prod:web-server"]
+# CMD ["sh", "-c", "yarn migration:run && yarn start:prod:web-server"]
+CMD ["sh", "-c", "echo username $TYPEORM_USERNAME && echo password: $TYPEORM_PASSWORD && echo typeorm database $TYPEORM_DATABASE && yarn migration:run && yarn start:prod:web-server"]
