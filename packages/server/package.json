@@ -80,14 +80,14 @@
     "ts-node": "^10.9.2",
     "ts-pattern": "^5.6.2",
     "typeorm": "^0.3.20",
-    "zod": "^3.23.8"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@cvai/tools": "*",
     "@types/cookie-parser": "^1",
     "@types/jest": "^29.5.14",
     "@types/js-yaml": "^4",
-    "@types/lodash": "^4.17.13",
+    "@types/lodash": "^4.17.16",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-jwt": "^4",

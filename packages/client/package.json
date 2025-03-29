@@ -16,6 +16,7 @@
     "graphql": "^16.9.0",
     "jiti": "^2.4.0",
     "jsondiffpatch": "^0.6.0",
+    "lodash": "^4.17.21",
     "openapi-fetch": "^0.13.0",
     "react": "^18.2.0",
     "react-dom": "latest",
@@ -25,7 +26,8 @@
     "react-toastify": "^10.0.6",
     "ts-pattern": "^5.5.0",
     "tslib": "^2.6.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zod": "^3.24.2"
   },
   "scripts": {
     "dev": "vite --open",
@@ -50,6 +52,7 @@
     "@parcel/watcher": "^2.4.1",
     "@types/apollo-upload-client": "^18",
     "@types/gh-pages": "^6",
+    "@types/lodash": "^4.17.16",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/parser": "^8.12.2",
