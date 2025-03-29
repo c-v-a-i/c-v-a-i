@@ -1,0 +1,10 @@
+{
+  "short_name": "cvai",
+  "name": "Create and manage CVs simply",
+  "icons": [
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
