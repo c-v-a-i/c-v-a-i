@@ -1,3 +1,5 @@
+name: Deploy Backend to Elastic Beanstalk
+
 on:
   push:
     branches:
