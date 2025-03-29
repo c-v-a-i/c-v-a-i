@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListItem, ListItemText, ListItemSecondaryAction } from '@mui/material';
+import { ListItemText, ListItemButton } from '@mui/material';
 import type { StandardListItemProps } from './types';
 
 export function StandardListItem<T>({
@@ -12,21 +12,22 @@ export function StandardListItem<T>({
   onClick,
   highlight,
   sx,
-}: StandardListItemProps<T>): JSX.Element {
+}: StandardListItemProps<T>) {
   const handleClick = () => {
     if (onClick) onClick(_id);
   };
 
   return (
-    <ListItem
-      // @ts-expect-error
-      button={!!onClick}
+    <ListItemButton
       onClick={handleClick}
       selected={selected}
       sx={{
         backgroundColor: highlight ? 'rgba(25, 118, 210, 0.08)' : 'transparent',
+        display: 'flex',
+        flexDirection: 'row',
         borderRadius: 1,
         padding: 1,
+        paddingX: 2,
         cursor: onClick ? 'pointer' : 'default',
         '&:hover': onClick
           ? {
@@ -38,7 +39,7 @@ export function StandardListItem<T>({
     >
       <ListItemText primary={primary} secondary={secondary} />
 
-      {actions && <ListItemSecondaryAction>{actions}</ListItemSecondaryAction>}
-    </ListItem>
+      {actions}
+    </ListItemButton>
   );
 }

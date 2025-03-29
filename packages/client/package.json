@@ -34,7 +34,7 @@
     "graphql-codegen": "graphql-codegen --config codegen.ts",
     "openapi-codegen": "openapi-typescript http://localhost:4000/api-docs-json --output src/generated/api-types.ts",
     "lint:check": "eslint src/**/*.{ts,tsx} --ignore-pattern '**/generated/**/*' --no-warn-ignored",
-    "lint:fix": "yarn lint --fix",
+    "lint:fix": "yarn lint:check --fix",
     "prettier:check": "prettier --check ./src/**/*.{ts,tsx,js,jsx,cjs}",
     "prettier:fix": "prettier --write ./src/**/*.{ts,tsx,js,jsx,cjs}",
     "tsc:check": "tsc --noEmit",
