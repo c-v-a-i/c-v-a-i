@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - main
-      - tas-32-cloud-deployment-and-github-actions
     paths:
       - 'packages/server/**'
 
