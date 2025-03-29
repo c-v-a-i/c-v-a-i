@@ -28,7 +28,6 @@ jobs:
       - name: Install minimal dependencies
         run: |
           # Only install TypeScript/ESLint related dependencies
-          yarn config set enableGlobalCache true
           yarn workspaces focus "@cvai/client" "@cvai/server" --no-production
 
       - name: Run TypeScript check
