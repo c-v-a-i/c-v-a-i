@@ -27,8 +27,7 @@ jobs:
 
       - name: Install minimal dependencies
         run: |
-          # Only install TypeScript/ESLint related dependencies
-          yarn workspaces focus "@cvai/client" "@cvai/server" --no-production
+          yarn
 
       - name: Run TypeScript check
         id: typecheck
