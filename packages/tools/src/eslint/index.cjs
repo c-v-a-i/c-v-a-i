@@ -7,7 +7,7 @@ const typescriptParser = require('@typescript-eslint/parser');
 
 const eslintrc = [
   {
-    files: ['**/*.{ts,tsx}', '!**/react-app-env.d.ts', '!**/graphql.tsx', '!**/generated/*'],
+    files: ['**/*.{ts,tsx}', '!**/react-app-env.d.ts'],
     plugins: {
       'react-hooks': reactHooks,
       lodash,
@@ -60,7 +60,7 @@ const eslintrc = [
     },
   },
   {
-    files: ['**/*.spec.ts', '**/*.spec.tsx', '!**/graphql.tsx', '!**/generated/*'],
+    files: ['**/*.spec.ts', '**/*.spec.tsx'],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {

@@ -21,11 +21,12 @@
     "migration:revert": "yarn typeorm migration:revert",
     "migration:run": "yarn typeorm migration:run",
     "test": "jest --passWithNoTests",
-    "lint": "eslint {apps,libs,config}/**/*.ts",
-    "lint:fix": "yarn lint --fix",
+    "lint:check": "eslint {apps,libs,config}/**/*.ts --ignore-pattern '**/migrations/*' --no-warn-ignored",
+    "lint:fix": "yarn lint:check --fix",
     "prettier:check": "prettier --check {apps,libs,config}/**/*.{ts,tsx}",
     "prettier:fix": "prettier --write {apps,libs,config}/**/*.{ts,tsx}",
-    "codecheck": "tsc --noEmit && yarn lint && yarn prettier:check",
+    "tsc:check": "tsc --noEmit",
+    "codecheck": "yarn tsc:check && yarn lint:check && yarn prettier:check",
     "codecheck:fix": "yarn lint:fix && yarn prettier:fix",
     "db:create": "chmod +x ./scripts/db_create.sh && ./scripts/db_create.sh",
     "db:restore": "chmod +x ./scripts/db_restore.sh && ./scripts/db_restore.sh",
@@ -79,20 +80,23 @@
     "ts-node": "^10.9.2",
     "ts-pattern": "^5.6.2",
     "typeorm": "^0.3.20",
-    "zod": "^3.23.8"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@cvai/tools": "*",
     "@types/cookie-parser": "^1",
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^5.0.1",
     "@types/jest": "^29.5.14",
     "@types/js-yaml": "^4",
-    "@types/lodash": "^4.17.13",
+    "@types/lodash": "^4.17.16",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-jwt": "^4",
     "@types/pg": "^8",
     "@types/supertest": "^6.0.2",
     "mongodb-memory-server": "^10.1.2",
-    "supertest": "^7.0.0"
+    "supertest": "^7.0.0",
+    "tslib": "^2.8.1"
   }
 }

@@ -18,6 +18,7 @@ import {
   reviewCvResponseFormat,
   transformCvResponseFormat,
 } from './types';
+import { CvManagerMethodProps } from "../cv/types";
 
 @Injectable()
 export class LlmIntegrationService {
@@ -77,9 +78,10 @@ export class LlmIntegrationService {
     };
   }
 
-  getReviewStatusForUser(userId: string): ReviewStatusType {
+  getReviewStatusForUser({ userId, cvId }: CvManagerMethodProps): ReviewStatusType {
     // TODO
     void userId;
+    void cvId;
     return ReviewStatusType.READY_FOR_REVIEW;
   }
 

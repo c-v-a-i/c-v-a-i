@@ -1,4 +1,4 @@
-import { CvData, FieldChange, ItemAction, SectionChange } from './types';
+import type { CvData, ItemAction, SectionChange } from './types';
 import { compareArrays, compareEntries, compareValues } from './utils';
 
 // Compare basic CV title

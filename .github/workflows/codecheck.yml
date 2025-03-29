@@ -1,0 +1,100 @@
+name: Code Quality Checks (Required)
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  code-quality:
+    name: TypeScript and ESLint Checks
+    runs-on: ubuntu-latest
+    # This is the key part that will make the check required for merging
+    permissions:
+      contents: read
+      pull-requests: read
+      checks: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+
+      - name: Install minimal dependencies
+        run: |
+          yarn
+
+      - name: Run TypeScript check
+        id: typecheck
+        run: yarn tsc:check
+        continue-on-error: true
+
+      - name: Run ESLint check
+        id: eslint
+        run: yarn lint:check
+        continue-on-error: true
+
+      # Create a check that will block PR merging if any check fails
+      - name: Report status
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const typecheckResult = '${{ steps.typecheck.outcome }}';
+            const eslintResult = '${{ steps.eslint.outcome }}';
+            const checksPassed = typecheckResult === 'success' && eslintResult === 'success';
+            
+            // Create TypeScript check
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'TypeScript Validation',
+              head_sha: context.payload.pull_request.head.sha,
+              status: 'completed',
+              conclusion: typecheckResult === 'success' ? 'success' : 'failure',
+              output: {
+                title: typecheckResult === 'success' ? 'TypeScript check passed' : 'TypeScript check failed',
+                summary: typecheckResult === 'success' 
+                  ? 'No TypeScript errors were found.' 
+                  : '⛔ TypeScript errors must be fixed before merging.'
+              }
+            });
+            
+            // Create ESLint check
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'ESLint Validation',
+              head_sha: context.payload.pull_request.head.sha,
+              status: 'completed',
+              conclusion: eslintResult === 'success' ? 'success' : 'failure',
+              output: {
+                title: eslintResult === 'success' ? 'ESLint check passed' : 'ESLint check failed',
+                summary: eslintResult === 'success' 
+                  ? 'No ESLint errors were found.' 
+                  : '⛔ ESLint errors must be fixed before merging.'
+              }
+            });
+            
+            // Create a summary check
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'Code Quality Summary',
+              head_sha: context.payload.pull_request.head.sha,
+              status: 'completed',
+              conclusion: checksPassed ? 'success' : 'failure',
+              output: {
+                title: checksPassed ? 'All code quality checks passed' : 'Code quality checks failed',
+                summary: checksPassed 
+                  ? '✅ All code quality checks have passed successfully.' 
+                  : '⛔ One or more code quality checks have failed. Please fix all issues before merging.'
+              }
+            });

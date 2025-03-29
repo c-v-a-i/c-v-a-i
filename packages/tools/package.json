@@ -6,17 +6,18 @@
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc",
-    "lint": "eslint src/**/*.ts",
-    "lint:fix": "yarn lint --fix",
+    "lint:check": "eslint src/**/*.ts",
+    "lint:fix": "yarn lint:check --fix",
     "prettier:check": "prettier --check src/**/*.{ts,tsx,js,jsx,cjs}",
     "prettier:fix": "prettier --write ./src/**/*.{ts,tsx,js,jsx,cjs}",
-    "codecheck": "tsc --noEmit && yarn lint && yarn prettier:check",
+    "codecheck": "tsc --noEmit && yarn lint:check && yarn prettier:check",
     "codecheck:fix": "yarn lint:fix && yarn prettier:fix"
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.1.0",
     "@rushstack/eslint-patch": "^1.10.4",
     "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.31.0",
@@ -34,7 +35,6 @@
     "@types/eslint__eslintrc": "^2.1.2",
     "@typescript-eslint/parser": "^8.12.2",
     "eslint": "^9.14.0",
-    "eslint-config-airbnb": "^19.0.4",
     "jiti": "^2.4.0",
     "prettier": "^3.3.3",
     "typescript-eslint": "^8.12.2"

@@ -17,7 +17,6 @@ export const CvGenerationLoading = () => {
         Transforming your CV
       </Typography>
       <Box
-        component="div"
         sx={{
           width: 48,
           height: 48,
@@ -29,7 +28,6 @@ export const CvGenerationLoading = () => {
         }}
       >
         <Box
-          component="div"
           sx={{
             width: 24,
             height: 24,
