@@ -34,3 +34,14 @@ yarn-error.log*
 node_modules
 **/node_modules
 tsconfig.tsbuildinfo
+
+.env
+packages/**/.env*
+!packages/**/.env.development
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+deploy.zip

@@ -14,6 +14,10 @@ const localhostEnvCorsUrls = [
   'http://localhost:4000',
 ];
 
+const productionEnvCorsUrls = [
+  'https://cvai.github.io',
+]
+
 async function bootstrap() {
   const app = await NestFactory.create(WebServerModule);
 
@@ -36,6 +40,8 @@ async function bootstrap() {
 
   if (environment === 'local') {
     origin.push(...localhostEnvCorsUrls);
+  } else {
+    origin.push(...productionEnvCorsUrls)
   }
 
   app.enableCors({

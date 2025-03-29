@@ -1,0 +1,40 @@
+name: Deploy Frontend to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - tas-32-cloud-deployment-and-github-actions
+    paths:
+      - 'packages/client/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        working-directory: packages/client
+        run: yarn install --frozen-lockfile
+
+      - name: Build Frontend
+        working-directory: packages/client
+        run: yarn build
+
+      # Important for SPA routing on GitHub Pages:
+      - name: Setup SPA routing (404.html)
+        run: cp packages/client/dist/index.html packages/client/dist/404.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: packages/client/dist

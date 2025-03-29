@@ -1,5 +1,5 @@
 {
-  "name": "@c-v-a-i/server",
+  "name": "@cvai/server",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -32,12 +32,10 @@
     "db:import": "yarn db:create && yarn db:restore"
   },
   "peerDependencies": {
-    "@types/node": "*",
     "eslint": "*",
     "eslint-plugin-import": "*",
     "jest": "*",
     "prettier": "*",
-    "ts-node": "*",
     "tsconfig-paths": "*",
     "typescript": "5.6.3"
   },
@@ -58,8 +56,9 @@
     "@nestjs/swagger": "^8.0.7",
     "@nestjs/testing": "^10.4.8",
     "@nestjs/typeorm": "^10.0.2",
-    "@types/lodash": "^4.17.13",
+    "@types/node": "*",
     "argon2": "^0.41.1",
+    "axios": "^1.8.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.7",
@@ -73,27 +72,27 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
+    "pg": "^8.13.1",
     "rand-token": "^1.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "ts-jest": "^29.2.5",
-    "typeorm": "^0.3.20"
+    "ts-node": "^10.9.2",
+    "ts-pattern": "^5.6.2",
+    "typeorm": "^0.3.20",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@c-v-a-i/tools": "*",
+    "@cvai/tools": "*",
     "@types/cookie-parser": "^1",
     "@types/jest": "^29.5.14",
     "@types/js-yaml": "^4",
+    "@types/lodash": "^4.17.13",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-jwt": "^4",
     "@types/pg": "^8",
     "@types/supertest": "^6.0.2",
-    "eslint": "^9.14.0",
-    "jest": "^29.7.0",
     "mongodb-memory-server": "^10.1.2",
-    "pg": "^8.13.1",
-    "supertest": "^7.0.0",
-    "typescript": "^5.6.3"
+    "supertest": "^7.0.0"
   }
 }

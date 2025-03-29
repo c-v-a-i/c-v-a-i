@@ -1,10 +1,9 @@
 {
-  "name": "@c-v-a-i/client",
+  "name": "@cvai/client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.13.1",
-    "@c-v-a-i/common": "*",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@graphql-codegen/typescript-operations": "^4.3.1",
@@ -25,12 +24,12 @@
     "react-toastify": "^10.0.6",
     "ts-pattern": "^5.5.0",
     "tslib": "^2.6.1",
-    "web-vitals": "^2.1.4",
-    "zod": "^3.23.8"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "dev": "vite --open",
     "build": "tsc && vite build",
+    "gh-pages:deploy": "gh-pages -d dist",
     "preview": "vite preview",
     "graphql-codegen": "graphql-codegen --config codegen.ts",
     "openapi-codegen": "openapi-typescript http://localhost:4000/api-docs-json --output src/generated/api-types.ts",
@@ -42,19 +41,20 @@
     "codecheck:fix": "yarn lint:fix && yarn prettier:fix"
   },
   "devDependencies": {
-    "@c-v-a-i/common": "*",
-    "@c-v-a-i/tools": "*",
+    "@cvai/tools": "*",
     "@graphql-codegen/cli": "5.0.3",
     "@graphql-codegen/client-preset": "4.5.0",
     "@graphql-codegen/schema-ast": "^4.1.0",
     "@parcel/watcher": "^2.4.1",
     "@types/apollo-upload-client": "^18",
+    "@types/gh-pages": "^6",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/parser": "^8.12.2",
     "@vitejs/plugin-react": "^4.3.3",
     "eslint": "^9.14.0",
     "eslint-plugin-react": "^7.36.1",
+    "gh-pages": "^6.3.0",
     "openapi-typescript": "^7.4.3",
     "prettier": "^3.3.3",
     "typescript": "^5.6.3",

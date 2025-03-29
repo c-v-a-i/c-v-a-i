@@ -35,7 +35,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Google OAuth2 callback' })
   @ApiResponse({ status: 302, description: 'Redirects to frontend after successful authentication' })
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
-    const userPayload = req.user as {
+    const userPayload = req['user'] as {
       user: User;
       accessToken: string;
       refreshToken: string;

@@ -1,0 +1,26 @@
+branch-defaults:
+  default:
+    environment: cvai-env
+    group_suffix: null
+  tas-32-cloud-deployment-and-github-actions:
+    environment: cvai-env
+deploy:
+  artifact: deploy.zip
+environment-defaults:
+  cvai-env:
+    branch: null
+    repository: null
+global:
+  application_name: cvai-app
+  branch: null
+  default_ec2_keyname: null
+  default_platform: Docker running on 64bit Amazon Linux 2023
+  default_region: eu-central-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  repository: null
+  sc: git
+  workspace_type: Application

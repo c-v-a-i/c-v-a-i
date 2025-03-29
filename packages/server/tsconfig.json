@@ -26,10 +26,5 @@
       "@server/core": ["libs/core/src"],
       "@server/core/*": ["libs/core/src/*"]
     }
-  },
-  "references": [
-    {
-      "path": "../common/tsconfig.json",
-    }
-  ]
+  }
 }

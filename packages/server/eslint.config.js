@@ -1,4 +1,4 @@
-const { eslintrc } = require("@c-v-a-i/tools");
+const { eslintrc } = require("@cvai/tools");
 
 module.exports = eslintrc;
 //   ...eslintrc,
