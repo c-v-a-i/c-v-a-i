@@ -37,8 +37,8 @@ export const compareArrays = (
   oldArray: string[] | null | undefined,
   newArray: string[] | null | undefined
 ): FieldChange | null => {
-  const oldValue = oldArray?.join(', ') || null;
-  const newValue = newArray?.join(', ') || null;
+  const oldValue = oldArray?.join(', ') ?? null;
+  const newValue = newArray?.join(', ') ?? null;
 
   if (oldValue === newValue) return null;
 

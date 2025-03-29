@@ -21,7 +21,7 @@
     "migration:revert": "yarn typeorm migration:revert",
     "migration:run": "yarn typeorm migration:run",
     "test": "jest --passWithNoTests",
-    "lint": "eslint {apps,libs,config}/**/*.ts",
+    "lint": "eslint {apps,libs,config}/**/*.ts --ignore-pattern '**/migrations/*' --no-warn-ignored",
     "lint:fix": "yarn lint --fix",
     "prettier:check": "prettier --check {apps,libs,config}/**/*.{ts,tsx}",
     "prettier:fix": "prettier --write {apps,libs,config}/**/*.{ts,tsx}",
