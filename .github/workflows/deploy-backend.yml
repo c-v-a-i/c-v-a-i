@@ -76,6 +76,5 @@ jobs:
           application_name: cvai-app
           environment_name: cvai-env
           region: ${{ vars.AWS_REGION }}
-#          version_label is questionable. I think they don't support having both version_label and deployment_package
-          version_label: "deploy-${{ github.sha }}"
+          version_label: "deploy-${{ github.sha }}-${{ format('YY-MM-DD-HH-mm', github.event.head_commit.timestamp) }}"
           deployment_package: deploy.zip
