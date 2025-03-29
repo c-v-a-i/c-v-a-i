@@ -6,11 +6,11 @@
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc",
-    "lint": "eslint src/**/*.ts",
-    "lint:fix": "yarn lint --fix",
+    "lint:check": "eslint src/**/*.ts",
+    "lint:fix": "yarn lint:check --fix",
     "prettier:check": "prettier --check src/**/*.{ts,tsx,js,jsx,cjs}",
     "prettier:fix": "prettier --write ./src/**/*.{ts,tsx,js,jsx,cjs}",
-    "codecheck": "tsc --noEmit && yarn lint && yarn prettier:check",
+    "codecheck": "tsc --noEmit && yarn lint:check && yarn prettier:check",
     "codecheck:fix": "yarn lint:fix && yarn prettier:fix"
   },
   "dependencies": {
