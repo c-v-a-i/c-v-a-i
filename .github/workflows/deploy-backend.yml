@@ -76,5 +76,6 @@ jobs:
           application_name: cvai-app
           environment_name: cvai-env
           region: ${{ vars.AWS_REGION }}
-          version_label: "deploy-${{ github.sha }}-${{ format('YY-MM-DD-HH-mm', github.event.head_commit.timestamp) }}"
+          version_label: "deploy-${{ github.sha }}-${{ github.run_id }}"
           deployment_package: deploy.zip
+          use_existing_version_if_available: true
