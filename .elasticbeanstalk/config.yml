@@ -2,7 +2,7 @@ branch-defaults:
   default:
     environment: cvai-env
     group_suffix: null
-  tas-32-cloud-deployment-and-github-actions:
+  main:
     environment: cvai-env
 deploy:
   artifact: deploy.zip
