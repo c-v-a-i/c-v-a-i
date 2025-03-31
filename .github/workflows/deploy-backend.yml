@@ -5,7 +5,12 @@ on:
     branches:
       - main
     paths:
-      - 'packages/server/**'
+      - 'packages/server/**/*'
+      - '.ebextensions/**/*'
+      - '.platform/**/*'
+      - '.elasticbeanstalk/**/*'
+      - 'Dockerrun.aws.json'
+      - 'Dockerfile.server'
 
   workflow_dispatch:
 
