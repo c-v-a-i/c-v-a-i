@@ -2,7 +2,6 @@
   "name": "cvai",
   "private": true,
   "version": "0.1.0",
-  "homepage": "https://SkuratovichA.github.io",
   "engines": {
     "node": "22"
   },
