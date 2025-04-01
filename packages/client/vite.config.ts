@@ -27,7 +27,7 @@ export default defineConfig({
     },
     conditions: ['mui-modern', 'module', 'browser', 'development|production']
   },
-  base: '/',
+  base: '/cvai/',
   server: {
     port: 3000,
     watch: {
