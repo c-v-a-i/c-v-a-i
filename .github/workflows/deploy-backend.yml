@@ -11,6 +11,7 @@ on:
       - '.elasticbeanstalk/**/*'
       - 'Dockerrun.aws.json'
       - 'Dockerfile.server'
+      - '.platform/**/*'
 
   workflow_dispatch:
 
@@ -71,7 +72,7 @@ jobs:
           echo "image_uri_latest=$VARIABLE" >> $GITHUB_OUTPUT
 
       - name: Generate Deployment Package
-        run: zip -r deploy.zip Dockerrun.aws.json .ebextensions
+        run: zip -r deploy.zip Dockerrun.aws.json .ebextensions .platform
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
