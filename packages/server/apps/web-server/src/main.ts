@@ -15,7 +15,7 @@ const localhostEnvCorsUrls = [
 ];
 
 const productionEnvCorsUrls = [
-  'https://cvai.github.io',
+  'https://cva-i.github.io',
 ]
 
 async function bootstrap() {
