@@ -47,16 +47,8 @@ export class AuthController {
 
     const { accessToken, refreshToken } = userPayload;
 
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: this.appConfiguration.isProduction,
-      sameSite: 'lax',
-    });
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: this.appConfiguration.isProduction,
-      sameSite: 'lax',
-    });
+    res.cookie('accessToken', accessToken, this.appConfiguration.cookieOptions);
+    res.cookie('refreshToken', refreshToken, this.appConfiguration.cookieOptions);
 
     res.redirect(this.appConfiguration.frontendUrl);
   }

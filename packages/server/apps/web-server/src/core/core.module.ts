@@ -1,31 +1,37 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module, ValidationPipe } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { HealthcheckController } from './healthcheck.controller';
+import { appConfig, AppConfig } from '../config/app.config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, cache: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      load: [appConfig],
+    }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      useFactory: () => ({
-        autoSchemaFile: true,
-        installSubscriptionHandlers: true,
-        autoTransformHttpErrors: true,
-        introspection: true, // take from env variables
-        playground: false, // take from env variables
-        // {
-        //   settings: {
-        //     'request.credentials': 'include',
-        //   },
-        // },
-        cors: {
-          credentials: true,
-          origin: true,
-        },
-      }),
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const appConfig = configService.get<AppConfig>('app');
+
+        if (!appConfig) {
+          throw new Error('App configuration not found');
+        }
+
+        return {
+          autoSchemaFile: true,
+          installSubscriptionHandlers: true,
+          autoTransformHttpErrors: true,
+          introspection: appConfig.graphql.introspection,
+          playground: appConfig.graphql.playground,
+          cors: appConfig.cors,
+        };
+      },
     }),
   ],
   providers: [{ provide: APP_PIPE, useClass: ValidationPipe }],
