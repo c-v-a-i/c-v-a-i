@@ -6,49 +6,25 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import passport from 'passport';
 import { graphqlUploadExpress } from 'graphql-upload-ts';
-
-const localhostEnvCorsUrls = [
-  'http://localhost:3000',
-  'http://127.0.0.1:3000',
-  // localhost Gql playground
-  'http://localhost:4000',
-];
-
-const productionEnvCorsUrls = [
-  'https://cva-i.github.io',
-  'https://arstoien.org',
-]
+import type { AppConfig } from './config/app.config';
+import type { NestExpressApplication } from "@nestjs/platform-express";
 
 async function bootstrap() {
-  const app = await NestFactory.create(WebServerModule);
-
+  const app = await NestFactory.create<NestExpressApplication>(WebServerModule);
   const configService = app.get(ConfigService);
-  const environment = configService.get<string>('ENVIRONMENT', 'local');
-  const port = configService.get<number>('PORT', 4000);
+
+  const appConfig = configService.get<AppConfig>('app');
+
+  if (!appConfig) {
+    throw new Error('App configuration not found');
+  }
 
   app.use(passport.initialize());
   app.use(cookieParser());
-  app.use(
-    graphqlUploadExpress({
-      maxFileSize: 10 * 1024 * 1024 /* 10MB */,
-      maxFiles: 10,
-    })
-  );
+  app.use(graphqlUploadExpress(appConfig.upload));
 
-  const host = '0.0.0.0';
-
-  const origin: string[] = [];
-
-  if (environment === 'local') {
-    origin.push(...localhostEnvCorsUrls);
-  } else {
-    origin.push(...productionEnvCorsUrls)
-  }
-
-  app.enableCors({
-    credentials: true,
-    origin,
-  });
+  app.enableCors(appConfig.cors);
+  app.set('trust proxy', true)
 
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
@@ -60,11 +36,12 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
+
   app.use('/api-docs-json', (_req: Request, res: Response) => {
     res.json(document);
   });
 
-  await app.listen(port, host);
+  await app.listen(appConfig.port, appConfig.host);
 }
 
 void bootstrap();
