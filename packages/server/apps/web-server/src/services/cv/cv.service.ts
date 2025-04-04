@@ -201,23 +201,19 @@ export class CvService {
   }: Omit<CvEntryItemManagerProps, 'entryItemId'>) {
     const cv = await this.validateUserOwnership(cvId, userId);
 
-    // Get the current version
     const currentVersion = this.getCurrentVersionFromCv(cv);
     const entryMapKey = cvEntryTypeToCvEntryNameMap[entryFieldName];
 
-    // Create new entry
     const newEntry = this.createEntryItem({
       entryFieldName,
       positionIndex: keys(currentVersion.data[entryMapKey]).length,
     });
 
-    // Clone and update data
     const newData = cloneDeep(currentVersion.data);
     newData[entryMapKey][newEntry._id] = newEntry as ConvertOrTypeToAndType<
       typeof newEntry
     >;
 
-    // Create a new version
     const newVersionId = new Types.ObjectId().toString();
     const newVersion: CvVersion = {
       _id: newVersionId,
@@ -226,7 +222,6 @@ export class CvService {
       createdAt: new Date(),
     };
 
-    // Update the CV with the new version
     await this.cvModel
       .findByIdAndUpdate(cvId, {
         $push: { versions: newVersion },
@@ -448,14 +443,10 @@ export class CvService {
             ...(value as typeof newData.aboutMe),
           } as typeof newData.aboutMe;
         })
-        .when(isCvObjectTypeKeyForItemizedEntries, () => {
-          const entryMapKey =
-            cvEntryTypeToCvEntryNameMap[
-              key as keyof typeof cvEntryTypeToCvEntryNameMap
-            ];
-          const updates = value as Array<{ _id: string }>;
+        .when(isCvObjectTypeKeyForItemizedEntries, (entryMapKey) => {
+          const updates = value as (typeof updates)[typeof entryMapKey]
 
-          updates.forEach((update) => {
+          updates.forEach((update: typeof updates[number]) => {
             const entry = newData[entryMapKey][update._id];
             if (!entry) {
               throw new NotFoundException(`Entry ${update._id} not found`);
@@ -495,10 +486,8 @@ export class CvService {
       throw new NotFoundException('Template CV not found');
     }
 
-    // Get current version from template
     const templateVersion = this.getCurrentVersionFromCv(templateCv);
 
-    // Create new CV using template data
     return this.createNewCvWithVersion(userId, templateVersion.data);
   }
 
@@ -511,19 +500,16 @@ export class CvService {
     cvId: string;
     versionId: string;
   }): Promise<CvObjectType> {
-    // Get the CV
     const cv = await this.cvModel.findById(cvId).exec();
     if (!cv) {
       throw new NotFoundException('CV not found');
     }
 
-    // Find the specified version
     const version = cv.versions.find((v) => v._id === versionId);
     if (!version) {
       throw new NotFoundException('Version not found');
     }
 
-    // Create a new CV based on this version
     return this.createNewCvWithVersion(userId, version.data);
   }
 
@@ -534,11 +520,9 @@ export class CvService {
     const cv = await this.validateUserOwnership(cvId, userId);
     const { versions, versionCursor } = cv;
 
-    // Determine new cursor position based on direction
     const newCursor =
       direction === 'previous' ? versionCursor - 1 : versionCursor + 1;
 
-    // Validate cursor bounds
     if (newCursor < 0) {
       throw new BadRequestException('Cannot undo: already at oldest version');
     }
@@ -549,7 +533,6 @@ export class CvService {
 
     const targetVersionId = versions[newCursor]._id;
 
-    // Update the CV document
     await this.cvModel
       .findByIdAndUpdate(cvId, {
         $set: {
