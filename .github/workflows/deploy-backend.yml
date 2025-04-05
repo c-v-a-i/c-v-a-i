@@ -95,8 +95,7 @@ jobs:
 
       - name: Health check
         run: |
-          HEALTH_URL="http://${{ vars.EB_ENVIRONMENT_NAME }}.${{ vars.AWS_REGION }}.elasticbeanstalk.com/healthcheck"
-          curl --fail $HEALTH_URL || (echo "Deployment health check failed" && exit 1)
+          curl --fail ${{ vars.HEALTHCHECK_URL }} || (echo "Deployment health check failed" && exit 1)
 
 
   push-sentry-sourcemap:
