@@ -17,7 +17,10 @@ export type GraphQLConfig = {
   introspection: boolean;
 };
 
-export type CookieConfig = {};
+export type SentryConfig = {
+  dsn: string;
+  enabled: boolean;
+}
 
 export type AppConfig = {
   environment: string;
@@ -29,6 +32,7 @@ export type AppConfig = {
   graphql: GraphQLConfig;
   upload: UploadConfig;
   cookieOptions: CookieOptions;
+  sentry: SentryConfig;
 };
 
 export const appConfig = registerAs('app', (): AppConfig => {
@@ -59,5 +63,9 @@ export const appConfig = registerAs('app', (): AppConfig => {
       maxFileSize: 10 * 1024 * 1024,
       maxFiles: 3,
     },
+    sentry: {
+      dsn: process.env.SENTRY_DSN ?? '',
+      enabled: isProduction,
+    }
   };
 });

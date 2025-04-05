@@ -1,1 +1,1 @@
-export { TimeoutInterceptor } from './timeout-interceptor';
+export { TimeoutInterceptor } from './timeout.interceptor';

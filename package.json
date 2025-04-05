@@ -52,5 +52,5 @@
     "prod:client": "yarn workspaces focus --production @cvai/client",
     "tsc:check": "yarn client tsc:check && yarn server tsc:check"
   },
-  "packageManager": "yarn@4.5.1"
+  "packageManager": "yarn@4.8.1"
 }

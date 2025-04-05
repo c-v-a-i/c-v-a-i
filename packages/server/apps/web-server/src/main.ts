@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/nestjs";
+
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
@@ -25,6 +27,8 @@ async function bootstrap() {
 
   app.enableCors(appConfig.cors);
   app.set('trust proxy', true)
+
+  Sentry.init(appConfig.sentry);
 
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
