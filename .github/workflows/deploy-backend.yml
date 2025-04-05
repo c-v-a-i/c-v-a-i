@@ -12,6 +12,7 @@ on:
       - 'Dockerrun.aws.json'
       - 'Dockerfile.server'
       - '.platform/**/*'
+      - '.github/workflows/deploy-backend.yml'
 
   workflow_dispatch:
 
