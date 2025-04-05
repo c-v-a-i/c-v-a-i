@@ -7,7 +7,7 @@ export class TimeoutInterceptor implements NestInterceptor {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   intercept(_context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      timeout(60000),
+      timeout(60000 * 2),
       catchError((err) => {
         if (err instanceof TimeoutError) {
           return throwError(new RequestTimeoutException());
