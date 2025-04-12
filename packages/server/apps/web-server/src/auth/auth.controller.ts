@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, ForbiddenException, Inject, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, ForbiddenException, Inject, UseGuards, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
@@ -8,10 +8,14 @@ import { User } from '@server/entities';
 import { Request, Response } from 'express';
 import { UrlResponseDto } from './dto';
 import { GoogleAuthGuard } from './guards/google-auth/google-auth.guard';
+import { RefreshTokenGuard } from './guards/refresh-token/refresh-token.guard';
+import { tryCatch } from "@server/common/utils";
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
+  private readonly logger = new Logger(AuthController.name);
+
   constructor(
     private readonly authService: AuthService,
     @Inject(appConfig.KEY)
@@ -53,26 +57,38 @@ export class AuthController {
     res.redirect(this.appConfiguration.frontendUrl);
   }
 
-  // TODO: do something with refresh function
-  // @Post('refresh')
-  // @UseGuards(RefreshTokenGuard)
-  // @ApiOperation({ summary: 'Refresh access token' })
-  // async refresh(@Req() req: Request, @Res() res: Response) {
-  //   const refreshToken = req.cookies.refreshToken;
-  //   const newAccessToken = await this.authService.reissueAccessToken(refreshToken);
-  //
-  //   if (!newAccessToken) {
-  //     res.clearCookie('accessToken');
-  //     res.clearCookie('refreshToken');
-  //     throw new ForbiddenException('Invalid refresh token');
-  //   }
-  //
-  //   res.cookie('accessToken', newAccessToken, {
-  //     httpOnly: true,
-  //     secure: this.appConfiguration.isProduction,
-  //     sameSite: 'lax',
-  //   });
-  //
-  //   res.send({ accessToken: newAccessToken });
-  // }
+  @Public()
+  @Post('refresh')
+  @UseGuards(RefreshTokenGuard)
+  @ApiOperation({ summary: 'Refresh access token' })
+  async refresh(@Req() req: Request, @Res() res: Response) {
+    const refreshToken = req.cookies.refreshToken;
+
+    const [newAccessToken, accessTokenError] = await tryCatch(
+      this.authService.reissueAccessToken(refreshToken)
+    );
+
+    if (accessTokenError || !newAccessToken) {
+      this.logger.warn(
+        `Failed to refresh token: ${accessTokenError?.message ?? 'Invalid token'}`
+      );
+
+      res.clearCookie('accessToken', this.appConfiguration.cookieOptions);
+      res.clearCookie('refreshToken', this.appConfiguration.cookieOptions);
+
+      const [, blacklistError] = await tryCatch(
+        this.authService.invalidateTokens(refreshToken)
+      );
+
+      if (blacklistError) {
+        this.logger.error(`Failed to blacklist token: ${blacklistError.message}`);
+      }
+
+      throw new ForbiddenException('Invalid refresh token');
+    }
+
+    res.cookie('accessToken', newAccessToken, this.appConfiguration.cookieOptions);
+
+    return res.send({ accessToken: newAccessToken });
+  }
 }
