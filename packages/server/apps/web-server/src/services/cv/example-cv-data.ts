@@ -26,7 +26,7 @@ export const exampleEducationEntries: ZodArray<typeof createEducationSchema> = [
       'Deep Learning',
     ],
     location: 'Brno, Czechia',
-    positionIndex: 0,
+    positionIndex: 1,
   },
   {
     name: 'Unicorn University',
@@ -35,7 +35,7 @@ export const exampleEducationEntries: ZodArray<typeof createEducationSchema> = [
     description: 'Not top 1% student',
     skills: ['Economics', 'Management', 'Finance'],
     location: 'Prague, Czechia',
-    positionIndex: 1,
+    positionIndex: 0,
   },
 ];
 
@@ -66,7 +66,7 @@ export const exampleWorkExperienceEntries: ZodArray<
       'GraphQl',
       'UX/UI',
     ],
-    positionIndex: 0,
+    positionIndex: 3,
   },
   {
     position: 'Senior Software Engineer',
@@ -91,7 +91,7 @@ export const exampleWorkExperienceEntries: ZodArray<
       'Kubernetes',
       'Docker',
     ],
-    positionIndex: 1,
+    positionIndex: 2,
   },
   {
     position: 'Software Engineer',
@@ -114,7 +114,7 @@ export const exampleWorkExperienceEntries: ZodArray<
       'Jenkins',
       'ThreeJS',
     ],
-    positionIndex: 2,
+    positionIndex: 1,
   },
   {
     position: 'AI Researcher',
@@ -138,7 +138,7 @@ export const exampleWorkExperienceEntries: ZodArray<
       'Pandas',
       'Pytorch/HuggingFace/Nvidia NeMo',
     ],
-    positionIndex: 3,
+    positionIndex: 0,
   },
 ];
 
@@ -151,7 +151,7 @@ export const exampleProjectEntries: ZodArray<typeof createProjectSchema> = [
       .map(withDot)
       .join('\n'),
     skills: ['TypeScript', 'NestJS', 'React', 'OpenAI API', 'GraphQl', 'UI/UX'],
-    positionIndex: 0,
+    positionIndex: 2,
   },
   {
     name: 'Various Coding Projects',
@@ -192,7 +192,7 @@ export const exampleProjectEntries: ZodArray<typeof createProjectSchema> = [
       'NLP',
       'ASR',
     ],
-    positionIndex: 2,
+    positionIndex: 0,
   },
 ];
 
@@ -202,7 +202,7 @@ export const exampleContactInfoEntries: ZodArray<
   {
     linkName: 'LinkedIn',
     link: 'https://www.linkedin.com/in/aliaksandr-skuratovich-4a2ab01a0',
-    positionIndex: 0,
+    positionIndex: 2,
   },
   {
     linkName: 'Github',
@@ -212,7 +212,7 @@ export const exampleContactInfoEntries: ZodArray<
   {
     linkName: 'Email',
     link: 'skuratovich.aliaksandr@gmail.com',
-    positionIndex: 2,
+    positionIndex: 0,
   },
 ];
 
@@ -225,7 +225,7 @@ export const exampleSkillEntries: ZodArray<typeof createSkillSchema> = [
       'Working under tight deadlines',
       'Problem Solving',
     ],
-    positionIndex: 0,
+    positionIndex: 2,
   },
   {
     category: 'Tools',
@@ -244,7 +244,7 @@ export const exampleSkillEntries: ZodArray<typeof createSkillSchema> = [
   {
     category: 'Languages',
     skills: ['Czech', 'English', 'Ukrainian'],
-    positionIndex: 2,
+    positionIndex: 0,
   },
 ];
 
