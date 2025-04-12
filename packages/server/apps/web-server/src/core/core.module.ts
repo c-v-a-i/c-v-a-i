@@ -6,8 +6,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { HealthcheckController } from './healthcheck.controller';
 import { appConfig, AppConfig } from '../config/app.config';
 import { TimeoutInterceptor } from '@server/core/interceptors';
-import { SentryGlobalFilter } from '@sentry/nestjs/setup'
-
+import { SentryGlobalFilter } from '@sentry/nestjs/setup';
 
 @Module({
   imports: [

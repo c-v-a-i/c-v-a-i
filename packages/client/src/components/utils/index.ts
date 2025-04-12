@@ -9,4 +9,4 @@ export function widthToPerc(fraction: number): `${number}%` {
 
 export const sortByPosition = <T extends { positionIndex: number }>(
   arr: Array<T>
-) => sortBy(arr, 'positionIndex');
+) => sortBy(arr, (o) => -o.positionIndex);

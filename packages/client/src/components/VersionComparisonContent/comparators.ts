@@ -33,7 +33,11 @@ export const compareAboutMe = (
   const fields = [
     compareValues('Name', leftAbout?.name, rightAbout?.name),
     compareValues('Field', leftAbout?.fieldName, rightAbout?.fieldName),
-    compareValues('Description', leftAbout?.description, rightAbout?.description),
+    compareValues(
+      'Description',
+      leftAbout?.description,
+      rightAbout?.description
+    ),
   ].flatMap((x) => (x ? [x] : []));
 
   if (fields.length === 0) return null;
@@ -113,7 +117,11 @@ export const compareWorkExperience = (left: CvData, right: CvData) =>
         compareValues('Position', leftItem.position, rightItem.position),
         compareValues('Duration', leftItem.duration, rightItem.duration),
         compareValues('Location', leftItem.location, rightItem.location),
-        compareValues('Description', leftItem.description, rightItem.description),
+        compareValues(
+          'Description',
+          leftItem.description,
+          rightItem.description
+        ),
         compareArrays('Skills', leftItem.skills, rightItem.skills),
       ].flatMap((x) => (x ? [x] : []));
     }
@@ -175,7 +183,11 @@ export const compareEducation = (left: CvData, right: CvData) =>
         compareValues('Degree', leftItem.degree, rightItem.degree),
         compareValues('Duration', leftItem.duration, rightItem.duration),
         compareValues('Location', leftItem.location, rightItem.location),
-        compareValues('Description', leftItem.description, rightItem.description),
+        compareValues(
+          'Description',
+          leftItem.description,
+          rightItem.description
+        ),
         compareArrays('Skills', leftItem.skills, rightItem.skills),
       ].flatMap((x) => (x ? [x] : []));
     }
@@ -216,7 +228,11 @@ export const compareProjects = (left: CvData, right: CvData) =>
 
       return [
         compareValues('Name', leftItem.name, rightItem.name),
-        compareValues('Description', leftItem.description, rightItem.description),
+        compareValues(
+          'Description',
+          leftItem.description,
+          rightItem.description
+        ),
         compareArrays('Skills', leftItem.skills, rightItem.skills),
       ].flatMap((x) => (x ? [x] : []));
     }

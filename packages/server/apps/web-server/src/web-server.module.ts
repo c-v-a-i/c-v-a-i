@@ -9,7 +9,7 @@ import { UserModule } from './entity-modules/user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CvModule } from './services/cv/cv.module';
 import { LlmIntegrationModule } from './services/llm-integration/llm-integration.module';
-import { SentryModule } from "@sentry/nestjs/setup";
+import { SentryModule } from '@sentry/nestjs/setup';
 
 @Module({
   imports: [

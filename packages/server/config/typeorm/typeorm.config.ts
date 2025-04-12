@@ -22,7 +22,10 @@ export const typeormConfig = registerAs(
     autoLoadEntities: true,
     useUTC: true,
     extra: {
-      ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : false,
+      ssl:
+        process.env.DATABASE_SSL === 'true'
+          ? { rejectUnauthorized: false }
+          : false,
       connectionTimeoutMillis: 60000,
     },
     migrations: [join(__dirname, '../../**', 'migrations/*.{ts,js}')],

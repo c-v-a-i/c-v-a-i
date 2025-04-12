@@ -31,6 +31,7 @@ export const VersionComparisonDialog = ({
   } = useGetCvQuery({
     variables: {
       cvId,
+      versionId,
     },
     fetchPolicy: 'no-cache',
   });
@@ -42,7 +43,6 @@ export const VersionComparisonDialog = ({
   } = useGetCvQuery({
     variables: {
       cvId,
-      versionId,
     },
     fetchPolicy: 'no-cache',
   });
