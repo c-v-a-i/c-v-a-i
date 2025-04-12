@@ -22,11 +22,19 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
 
-  async validate(_accessToken: string, _refreshToken: string, profile: Profile, done: Function) {
+  async validate(
+    _accessToken: string,
+    _refreshToken: string,
+    profile: Profile,
+    done: Function
+  ) {
     const { emails, name, id } = profile;
 
     if (!emails || emails.length === 0) {
-      return done(new UnauthorizedException('No email associated with this account'), false);
+      return done(
+        new UnauthorizedException('No email associated with this account'),
+        false
+      );
     }
 
     const googleUser: CreateUserDto = {

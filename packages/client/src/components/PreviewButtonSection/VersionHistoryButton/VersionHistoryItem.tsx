@@ -12,7 +12,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DifferenceIcon from '@mui/icons-material/Difference';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { StandardListItem } from '../../atoms/List';
-import type { CvVersionHistoryEntryObjectType } from "../../../generated/graphql";
+import type { CvVersionHistoryEntryObjectType } from '../../../generated/graphql';
 
 interface VersionHistoryItemProps {
   version: CvVersionHistoryEntryObjectType;

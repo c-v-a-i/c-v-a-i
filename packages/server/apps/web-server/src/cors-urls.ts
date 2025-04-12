@@ -8,7 +8,7 @@ export const localhostEnvCorsUrls = [
 export const productionEnvCorsUrls = [
   'https://cva-i.github.io',
   'https://arstoien.org',
-]
+];
 
 export function getCorsUrls(environment: string) {
   return environment === 'local' ? localhostEnvCorsUrls : productionEnvCorsUrls;

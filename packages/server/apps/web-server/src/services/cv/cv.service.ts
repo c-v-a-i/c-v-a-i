@@ -444,9 +444,9 @@ export class CvService {
           } as typeof newData.aboutMe;
         })
         .when(isCvObjectTypeKeyForItemizedEntries, (entryMapKey) => {
-          const updates = value as (typeof updates)[typeof entryMapKey]
+          const updates = value as (typeof updates)[typeof entryMapKey];
 
-          updates.forEach((update: typeof updates[number]) => {
+          updates.forEach((update: (typeof updates)[number]) => {
             const entry = newData[entryMapKey][update._id];
             if (!entry) {
               throw new NotFoundException(`Entry ${update._id} not found`);

@@ -1,4 +1,9 @@
-import { Injectable, Inject, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../entity-modules/user/user.service';
 import { RefreshTokenService } from '../entity-modules/refresh-token/refresh-token.service';
@@ -8,7 +13,7 @@ import { ConfigType } from '@nestjs/config';
 import { refreshJwtConfig } from './config/refresh-jwt.config';
 import { JwtPayload } from './types';
 import { Request } from 'express';
-import { tryCatch } from "@server/common/utils";
+import { tryCatch } from '@server/common/utils';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +24,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly refreshTokenService: RefreshTokenService,
     @Inject(refreshJwtConfig.KEY)
-    private readonly refreshJwtConfiguration: ConfigType<typeof refreshJwtConfig>
+    private readonly refreshJwtConfiguration: ConfigType<
+      typeof refreshJwtConfig
+    >
   ) {}
 
   async validateGoogleUser(googleUser: CreateUserDto) {
@@ -72,7 +79,8 @@ export class AuthService {
   }
 
   async reissueAccessToken(refreshToken: string): Promise<string | null> {
-    const existingRefreshToken = await this.refreshTokenService.getValidTokenWithUser(refreshToken);
+    const existingRefreshToken =
+      await this.refreshTokenService.getValidTokenWithUser(refreshToken);
     if (!existingRefreshToken) {
       return null;
     }
@@ -88,8 +96,12 @@ export class AuthService {
     await this.refreshTokenService.update(token, { lastUsed: new Date() });
   }
 
-  async reauthenticateWithRefreshToken(req: Request, refreshToken: string): Promise<JwtPayload> {
-    const existingRefreshToken = await this.refreshTokenService.getValidTokenWithUser(refreshToken);
+  async reauthenticateWithRefreshToken(
+    req: Request,
+    refreshToken: string
+  ): Promise<JwtPayload> {
+    const existingRefreshToken =
+      await this.refreshTokenService.getValidTokenWithUser(refreshToken);
 
     if (!existingRefreshToken) {
       this.logger.warn(`Invalid or expired refresh token: ${refreshToken}`);
@@ -121,7 +133,7 @@ export class AuthService {
 
     const [, error] = await tryCatch(
       this.refreshTokenService.blacklistToken(refreshToken)
-    )
+    );
     if (error) {
       this.logger.error(`Failed to blacklist refresh token: ${error.message}`);
       return;

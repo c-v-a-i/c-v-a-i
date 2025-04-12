@@ -26,7 +26,7 @@ export const CvList = React.memo(
     const [renameDialogOpen, setRenameDialogOpen] = useState(false);
     const [cvToRename, setCvToRename] = useState<ListItem | null>(null);
 
-    const [updateCv, ] = useUpdateCvMutation();
+    const [updateCv] = useUpdateCvMutation();
 
     const handleRename = useCallback(
       (cvId: string) => {

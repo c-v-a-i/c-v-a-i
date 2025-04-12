@@ -20,7 +20,7 @@ export type GraphQLConfig = {
 export type SentryConfig = {
   dsn: string;
   enabled: boolean;
-}
+};
 
 export type AppConfig = {
   environment: string;
@@ -66,6 +66,6 @@ export const appConfig = registerAs('app', (): AppConfig => {
     sentry: {
       dsn: process.env.SENTRY_DSN ?? '',
       enabled: isProduction,
-    }
+    },
   };
 });

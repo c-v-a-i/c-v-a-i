@@ -12,7 +12,7 @@ import { jwtConfig } from '../config/jwt.config';
 import { JwtPayload } from '../types';
 import { DecodedUserObjectType } from '../dto';
 import { Request } from 'express';
-import { tryCatch } from "@server/common/utils";
+import { tryCatch } from '@server/common/utils';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

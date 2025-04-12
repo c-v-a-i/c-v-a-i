@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Req, Res, ForbiddenException, Inject, UseGuards, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  ForbiddenException,
+  Inject,
+  UseGuards,
+  Logger,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
@@ -9,7 +19,7 @@ import { Request, Response } from 'express';
 import { UrlResponseDto } from './dto';
 import { GoogleAuthGuard } from './guards/google-auth/google-auth.guard';
 import { RefreshTokenGuard } from './guards/refresh-token/refresh-token.guard';
-import { tryCatch } from "@server/common/utils";
+import { tryCatch } from '@server/common/utils';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -37,7 +47,10 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   @ApiOperation({ summary: 'Google OAuth2 callback' })
-  @ApiResponse({ status: 302, description: 'Redirects to frontend after successful authentication' })
+  @ApiResponse({
+    status: 302,
+    description: 'Redirects to frontend after successful authentication',
+  })
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
     const userPayload = req['user'] as {
       user: User;
@@ -52,7 +65,11 @@ export class AuthController {
     const { accessToken, refreshToken } = userPayload;
 
     res.cookie('accessToken', accessToken, this.appConfiguration.cookieOptions);
-    res.cookie('refreshToken', refreshToken, this.appConfiguration.cookieOptions);
+    res.cookie(
+      'refreshToken',
+      refreshToken,
+      this.appConfiguration.cookieOptions
+    );
 
     res.redirect(this.appConfiguration.frontendUrl);
   }
@@ -81,13 +98,19 @@ export class AuthController {
       );
 
       if (blacklistError) {
-        this.logger.error(`Failed to blacklist token: ${blacklistError.message}`);
+        this.logger.error(
+          `Failed to blacklist token: ${blacklistError.message}`
+        );
       }
 
       throw new ForbiddenException('Invalid refresh token');
     }
 
-    res.cookie('accessToken', newAccessToken, this.appConfiguration.cookieOptions);
+    res.cookie(
+      'accessToken',
+      newAccessToken,
+      this.appConfiguration.cookieOptions
+    );
 
     return res.send({ accessToken: newAccessToken });
   }

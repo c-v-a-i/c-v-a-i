@@ -25,7 +25,7 @@ export class LlmIntegrationResolver {
     @CurrentUser() { client_id: userId }: DecodedUserObjectType,
     @Args('cvId', { type: () => ID }) cvId: string
   ): Promise<ReviewStatusType> {
-    return this.llmIntegrationService.getReviewStatusForUser({userId, cvId});
+    return this.llmIntegrationService.getReviewStatusForUser({ userId, cvId });
   }
 
   @Mutation(() => ReviewCvOutput)

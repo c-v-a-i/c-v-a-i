@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/nestjs";
+import * as Sentry from '@sentry/nestjs';
 
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -9,7 +9,7 @@ import type { Request, Response } from 'express';
 import passport from 'passport';
 import { graphqlUploadExpress } from 'graphql-upload-ts';
 import type { AppConfig } from './config/app.config';
-import type { NestExpressApplication } from "@nestjs/platform-express";
+import type { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(WebServerModule);
@@ -26,7 +26,7 @@ async function bootstrap() {
   app.use(graphqlUploadExpress(appConfig.upload));
 
   app.enableCors(appConfig.cors);
-  app.set('trust proxy', true)
+  app.set('trust proxy', true);
 
   Sentry.init(appConfig.sentry);
 
