@@ -3,6 +3,8 @@ import type { BoxProps, TypographyProps } from '@mui/material';
 import { Box, Typography } from '@mui/material';
 import { AddEntryButton } from '../../CvVisualizer/CvFields/WorkExperience/AddEntryButton';
 import type { CvEntryItem } from '../../CvVisualizer/types';
+import { PopupMenu, Row } from '../../../atoms';
+import { usePreviewMode } from "../../../../contexts";
 
 type GenericEntriesSectionProps<TEntry extends CvEntryItem> = {
   title?: string;
@@ -29,6 +31,8 @@ export function GenericEntriesSection<TEntry extends CvEntryItem>({
   sx,
   gap = 2,
 }: GenericEntriesSectionProps<TEntry>) {
+  const { isPreviewing } = usePreviewMode();
+
   if (loading) {
     return <Typography>Loading...</Typography>;
   }
@@ -36,11 +40,22 @@ export function GenericEntriesSection<TEntry extends CvEntryItem>({
   return (
     <Box sx={sx}>
       {title && (
-        <Box display="flex" justifyContent="space-between" width={'100%'}>
+        <Row justifyContent="space-between" alignItems="center">
           <Typography variant="h4" gutterBottom sx={titleStyles}>
             {title}
           </Typography>
-        </Box>
+          {!isPreviewing && (
+            <PopupMenu
+              id={`${title}-popup`}
+              options={[
+                {
+                  label: 'Add Entry',
+                  action: () => onAdd?.(),
+                },
+              ]}
+            />
+          )}
+        </Row>
       )}
 
       <Box
@@ -51,7 +66,7 @@ export function GenericEntriesSection<TEntry extends CvEntryItem>({
       >
         {entries.map((entry) => renderEntry(entry))}
         {!entries.length && <Typography>{noEntriesText}</Typography>}
-        {onAdd && (
+        {!title && onAdd && (
           <AddEntryButton
             onAddEntry={async () => onAdd()}
             sx={{ alignSelf: 'center' }}

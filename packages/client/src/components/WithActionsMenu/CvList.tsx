@@ -81,27 +81,22 @@ export const CvList = React.memo(
       [onDeleteItem, onDuplicateItem, setTemplateId, openDialog, handleRename]
     );
 
-    const renderCvItem = useCallback(
-      (item: ListItem) => (
-        <StandardListItem
-          _id={item._id}
-          key={item._id}
-          item={item}
-          primary={item.name}
-          onClick={handleSelectCv}
-          actions={<PopupMenu id={item._id} options={[...menuOptions]} />}
-          highlight={currentCvId === item._id}
-        />
-      ),
-      [currentCvId, handleSelectCv, menuOptions]
-    );
-
     return (
       <>
         <ListContainer>
           <BaseList
             items={items}
-            renderItem={renderCvItem}
+            renderItem={(item: ListItem) => (
+              <StandardListItem
+                _id={item._id}
+                key={item._id}
+                item={item}
+                primary={item.name}
+                onClick={handleSelectCv}
+                actions={<PopupMenu id={item._id} options={[...menuOptions]} />}
+                highlight={currentCvId === item._id}
+              />
+            )}
             emptyMessage="No CVs available. Create your first CV!"
           />
         </ListContainer>
