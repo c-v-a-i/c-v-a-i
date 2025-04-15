@@ -36,7 +36,7 @@ export const LocationAndDate: React.FC<LocationAndDateProps> = ({
   );
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="start">
+    <Box display="flex" flexDirection="column" textAlign="right">
       {shouldShowDuration && (
         <EditableTypography
           id={`we-duration-${id}`}
