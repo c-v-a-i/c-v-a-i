@@ -24,7 +24,7 @@ const MainContent = styled('div', {
   marginLeft: open ? `${drawerWidth}px` : 0,
 }));
 
-export const BurgerMenu = ({ children }: React.PropsWithChildren) => {
+export const WithActionsMenu = ({ children }: React.PropsWithChildren) => {
   const [open, setOpen] = useState(false);
   const { user } = useUser();
   const { isPreviewing } = usePreviewMode();

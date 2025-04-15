@@ -249,7 +249,6 @@ export const exampleSkillEntries: ZodArray<typeof createSkillSchema> = [
 ];
 
 export const exampleAboutMe: z.infer<typeof createAboutMeSchema> = {
-  name: 'Aliaksandr Skuratovich',
   fieldName: 'whoami',
   description: [
     'An engineer with a mix of fullstack development experience and AI',

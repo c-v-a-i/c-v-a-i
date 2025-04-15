@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Box, Button } from '@mui/material';
 import { environment } from '../environment';
-import { BurgerMenu } from './BurgerMenu';
+import { WithActionsMenu } from './WithActionsMenu';
 import { CurrentCvPreview } from './CvPreview';
 import { CenteredBox } from './atoms';
 import {
@@ -45,9 +45,9 @@ export const IndexPage = () => {
           <CvCreationFlowProvider>
             <PreviewModeProvider>
               <Box sx={{ display: 'flex' }}>
-                <BurgerMenu>
+                <WithActionsMenu>
                   <CurrentCvPreview />
-                </BurgerMenu>
+                </WithActionsMenu>
               </Box>
             </PreviewModeProvider>
 

@@ -2,11 +2,17 @@ import React from 'react';
 import { ContactInfoEntry } from './ContactInfoEntry';
 import type { CvEntryComponentProps } from '../../types';
 import type { ContactInfo as ContactInfoGraphqlType } from '../../../../../generated/graphql';
-import { useGetCvQuery } from '../../../../../generated/graphql';
-import { refetchGetContactInfoEntriesQuery } from '../../../../../generated/graphql';
-import { GenericEntriesSection, useCvEntries } from '../../../components';
+import {
+  refetchGetContactInfoEntriesQuery,
+  useGetCvQuery,
+} from '../../../../../generated/graphql';
+import {
+  GenericEntriesSection,
+  useCvEntries,
+  WithRemoveEntryButton,
+} from '../../../components';
 
-export const ContactInfo: React.FC<CvEntryComponentProps> = ({ cvId }) => {
+export const ContactInfo = ({ cvId }: CvEntryComponentProps) => {
   const useGetEntriesQueryResult = useGetCvQuery({
     variables: { cvId },
   });
@@ -18,28 +24,29 @@ export const ContactInfo: React.FC<CvEntryComponentProps> = ({ cvId }) => {
       refetchQueries: [refetchGetContactInfoEntriesQuery({ cvId })],
     });
 
-  const renderEntry = (contactInfo: ContactInfoGraphqlType) => (
-    <ContactInfoEntry
-      cvId={cvId}
-      key={contactInfo._id}
-      entry={contactInfo}
-      updateField={updateField}
-      removeEntry={() => removeEntry(contactInfo._id)}
-    />
-  );
-
   return (
     <GenericEntriesSection<ContactInfoGraphqlType>
-      title="Links"
-      titleStyles={{
-        textAlign: 'right',
-        width: '100%',
-      }}
+      flexDirection="row"
       loading={loading}
       entries={entries}
       noEntriesText="No contact info entries available."
-      renderEntry={renderEntry}
+      renderEntry={(contactInfo) => (
+        <WithRemoveEntryButton
+          removeEntry={() => removeEntry(contactInfo._id)}
+          key={contactInfo._id}
+        >
+          <ContactInfoEntry
+            cvId={cvId}
+            entry={contactInfo}
+            updateField={updateField}
+          />
+        </WithRemoveEntryButton>
+      )}
       onAdd={handleAddEntry}
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-around',
+      }}
     />
   );
 };

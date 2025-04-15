@@ -272,6 +272,7 @@ export class CvService {
   ): Promise<CvObjectType> {
     const versionData: CvData = {
       title: params.title,
+      name: params.name,
       aboutMe: params.aboutMe ?? undefined,
       educationEntries: arrayToMap(params.educationEntries ?? []),
       workExperienceEntries: arrayToMap(params.workExperienceEntries ?? []),
@@ -433,8 +434,8 @@ export class CvService {
 
     for (const [key, value] of entries(updates)) {
       match(key)
-        .with('title', () => {
-          newData.title = value as string;
+        .with('title', 'name', (field) => {
+          newData[field] = value as string;
         })
         .with('aboutMe', () => {
           // FIXME: make it better. it's shit now.
@@ -453,7 +454,8 @@ export class CvService {
             }
             Object.assign(entry, update);
           });
-        });
+        })
+        .exhaustive();
     }
 
     return newData;
@@ -464,6 +466,7 @@ export class CvService {
   }: Pick<CvManagerMethodProps, 'userId'>): Promise<CvObjectType> {
     return this.createCv(userId, {
       title: 'Example CV',
+      name: 'Skaliaksandr Uratovich', // TODO: get name from google account
       aboutMe: exampleAboutMe,
       educationEntries: exampleEducationEntries,
       workExperienceEntries: exampleWorkExperienceEntries,

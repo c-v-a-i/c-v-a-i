@@ -52,7 +52,6 @@ export const EditableTypographyBase = React.forwardRef<
     const commonStyles = {
       typography: variant,
       width: '100%',
-      padding: '0 2px',
     };
     const typographyWidth = useMeasureTextWidth({
       text: value ?? valueRender?.(undefined) ?? Array(16).fill('A').toString(),

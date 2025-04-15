@@ -1,13 +1,18 @@
 import React from 'react';
 import { ProjectEntry } from './ProjectEntry';
-import { useCvEntries } from '../../../components';
+import {
+  GenericEntriesSection,
+  useCvEntries,
+  WithRemoveEntryButton,
+} from '../../../components';
 import type { CvEntryComponentProps } from '../../types';
 import type { Project as ProjectGraphqlType } from '../../../../../generated/graphql';
-import { useGetCvQuery } from '../../../../../generated/graphql';
-import { refetchGetProjectEntriesQuery } from '../../../../../generated/graphql';
-import { GenericEntriesSection } from '../../../components';
+import {
+  refetchGetProjectEntriesQuery,
+  useGetCvQuery,
+} from '../../../../../generated/graphql';
 
-export const Projects: React.FC<CvEntryComponentProps> = ({ cvId }) => {
+export const Projects = ({ cvId }: CvEntryComponentProps) => {
   const useGetEntriesQueryResult = useGetCvQuery({
     variables: { cvId },
   });
@@ -19,23 +24,24 @@ export const Projects: React.FC<CvEntryComponentProps> = ({ cvId }) => {
       refetchQueries: [refetchGetProjectEntriesQuery({ cvId })],
     });
 
-  const renderEntry = (project: ProjectGraphqlType) => (
-    <ProjectEntry
-      cvId={cvId}
-      key={project._id}
-      entry={project}
-      updateField={updateField}
-      removeEntry={() => removeEntry(project._id)}
-    />
-  );
-
   return (
     <GenericEntriesSection<ProjectGraphqlType>
       title="Projects"
       loading={loading}
       entries={entries}
       noEntriesText="No project entries."
-      renderEntry={renderEntry}
+      renderEntry={(project) => (
+        <WithRemoveEntryButton
+          removeEntry={() => removeEntry(project._id)}
+          key={project._id}
+        >
+          <ProjectEntry
+            cvId={cvId}
+            entry={project}
+            updateField={updateField}
+          />
+        </WithRemoveEntryButton>
+      )}
       onAdd={handleAddEntry}
     />
   );

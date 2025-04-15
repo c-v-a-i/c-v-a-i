@@ -3,7 +3,6 @@ import { z } from 'zod';
 export const createPositionIndexSchema = z.number();
 
 export const createAboutMeSchema = z.object({
-  name: z.string(),
   fieldName: z.string(),
   description: z.string(),
 });
@@ -50,6 +49,7 @@ export const createContactInfoSchema = z.object({
 
 export const createCreateCvParamsSchema = z.object({
   title: z.string(),
+  name: z.string(),
   aboutMe: createAboutMeSchema.nullable().optional(),
   educationEntries: z.array(createEducationSchema).nullable().optional(),
   workExperienceEntries: z

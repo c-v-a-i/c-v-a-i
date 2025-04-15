@@ -1,40 +1,30 @@
 import React from 'react';
-import { EditableTypography } from '../../../../atoms';
+import { Column, EditableTypography } from '../../../../atoms';
 import type { CvEntryItemProps } from '../../types';
-import {
-  RightCvColumnEntriesContainer,
-  WithRemoveEntryButton,
-} from '../../../components';
 
 export const ContactInfoEntry = ({
   entry: contactInfo,
   updateField,
   isEditing,
-  removeEntry,
 }: CvEntryItemProps<'contactInfoEntries'>) => {
   return (
-    <RightCvColumnEntriesContainer>
-      <WithRemoveEntryButton
-        removeEntry={removeEntry}
-        flexDirection={'row-reverse'}
-      >
-        <EditableTypography
-          id={`contactInfo-category-${contactInfo._id}`}
-          value={contactInfo.linkName}
-          onSave={(value) =>
-            updateField({
-              _id: contactInfo._id,
-              fieldName: 'linkName',
-              value,
-            })
-          }
-          variant="h6"
-          sx={{
-            width: '100%',
-          }}
-          isEditing={isEditing}
-        />
-      </WithRemoveEntryButton>
+    <Column>
+      <EditableTypography
+        id={`contactInfo-category-${contactInfo._id}`}
+        value={contactInfo.linkName}
+        onSave={(value) =>
+          updateField({
+            _id: contactInfo._id,
+            fieldName: 'linkName',
+            value,
+          })
+        }
+        variant="body1"
+        isEditing={isEditing}
+        sx={{
+          textAlign: 'center',
+        }}
+      />
 
       {/* TODO: make it actually a link */}
       <EditableTypography
@@ -47,12 +37,12 @@ export const ContactInfoEntry = ({
             value,
           })
         }
-        variant="body1"
-        sx={{
-          width: '100%',
-        }}
+        variant="body2"
         isEditing={isEditing}
+        sx={{
+          color: 'primary.main',
+        }}
       />
-    </RightCvColumnEntriesContainer>
+    </Column>
   );
 };

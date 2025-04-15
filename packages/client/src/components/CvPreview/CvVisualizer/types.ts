@@ -62,6 +62,6 @@ export type CvEntryItemProps<T extends CvEntryArrayFieldName> = {
   entry: CvFieldNameToObjectType[T];
   isEditing?: boolean;
   cvId: string;
-  removeEntry: () => Promise<void>;
+  // removeEntry: () => Promise<void>;
   updateField: (props: UpdateItemizedFieldProps<T>) => Promise<void>;
 };

@@ -3,7 +3,6 @@ directive @connection(filter: [String]!, key: String!) on FIELD
 type AboutMe {
   description: String!
   fieldName: String!
-  name: String!
 }
 
 type ContactInfo {
@@ -31,6 +30,7 @@ type CvObjectType {
   aboutMe: AboutMe
   contactInfoEntries: [ContactInfo!]
   educationEntries: [Education!]
+  name: String!
   projectEntries: [Project!]
   skillEntries: [Skill!]
   title: String!
@@ -148,7 +148,6 @@ type TransformCvObjectType {
 input UpdateAboutMeInput {
   description: String
   fieldName: String
-  name: String
 }
 
 input UpdateContactInfoInput {
@@ -161,6 +160,7 @@ input UpdateCvInput {
   aboutMe: UpdateAboutMeInput
   contactInfoEntries: [UpdateContactInfoInput!]
   educationEntries: [UpdateEducationInput!]
+  name: String
   projectEntries: [UpdateProjectInput!]
   skillEntries: [UpdateSkillInput!]
   title: String

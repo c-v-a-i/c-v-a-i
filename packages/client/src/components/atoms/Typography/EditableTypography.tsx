@@ -1,6 +1,8 @@
-import React, { useRef, useCallback, useEffect } from 'react';
-import { useEditableTypographyBase } from '../../../hooks';
-import { useTypographyActionsPortal } from '../../../hooks';
+import React, { useCallback, useEffect, useRef } from 'react';
+import {
+  useEditableTypographyBase,
+  useTypographyActionsPortal,
+} from '../../../hooks';
 import { EditableTypographyBase } from './EditableTypographyBase';
 import { grey } from '@mui/material/colors';
 import type { EditableTypographyProps } from './types';
@@ -69,7 +71,7 @@ export const EditableTypography = ({
   return (
     <EditableTypographyBase
       ref={textRef}
-      sx={sx}
+      sx={{ alignContent: 'center', ...sx }}
       onMouseDown={onMouseDown}
       onContextMenu={handleContextMenu}
       typographyProps={{

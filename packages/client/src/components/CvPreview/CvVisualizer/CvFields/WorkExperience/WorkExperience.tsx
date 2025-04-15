@@ -1,12 +1,18 @@
 import React from 'react';
 import { WorkExperienceEntry } from './WorkExperienceEntry';
-import { GenericEntriesSection, useCvEntries } from '../../../components';
+import {
+  GenericEntriesSection,
+  useCvEntries,
+  WithRemoveEntryButton,
+} from '../../../components';
 import type { CvEntryComponentProps } from '../../types';
 import type { WorkExperience as WorkExperienceGraphqlType } from '../../../../../generated/graphql';
-import { useGetCvQuery } from '../../../../../generated/graphql';
-import { refetchGetWorkExperienceEntriesQuery } from '../../../../../generated/graphql';
+import {
+  refetchGetWorkExperienceEntriesQuery,
+  useGetCvQuery,
+} from '../../../../../generated/graphql';
 
-export const WorkExperience: React.FC<CvEntryComponentProps> = ({ cvId }) => {
+export const WorkExperience = ({ cvId }: CvEntryComponentProps) => {
   const useGetEntriesQueryResult = useGetCvQuery({
     variables: { cvId },
   });
@@ -18,23 +24,24 @@ export const WorkExperience: React.FC<CvEntryComponentProps> = ({ cvId }) => {
       refetchQueries: [refetchGetWorkExperienceEntriesQuery({ cvId })],
     });
 
-  const renderEntry = (we: WorkExperienceGraphqlType) => (
-    <WorkExperienceEntry
-      cvId={cvId}
-      key={we._id}
-      entry={we}
-      updateField={updateField}
-      removeEntry={() => removeEntry(we._id)}
-    />
-  );
-
   return (
     <GenericEntriesSection<WorkExperienceGraphqlType>
       title="Work Experience"
       loading={loading}
       entries={entries}
       noEntriesText="No work experience entries."
-      renderEntry={renderEntry}
+      renderEntry={(entry) => (
+        <WithRemoveEntryButton
+          removeEntry={() => removeEntry(entry._id)}
+          key={entry._id}
+        >
+          <WorkExperienceEntry
+            cvId={cvId}
+            entry={entry}
+            updateField={updateField}
+          />
+        </WithRemoveEntryButton>
+      )}
       onAdd={handleAddEntry}
     />
   );

@@ -10,13 +10,13 @@ interface SkillsListProps {
   editSkill: (idx: number, newValue: string) => Promise<void>;
 }
 
-export const SkillsList: React.FC<SkillsListProps> = ({
+export const SkillsList = ({
   skillIds,
   skills,
   isEditing,
   removeSkill,
   editSkill,
-}) => {
+}: SkillsListProps) => {
   return (
     <Box display="flex" flexDirection="column" alignItems="flex-end" gap="2px">
       {skills.map((skillItem, idx) => (

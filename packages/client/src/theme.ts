@@ -4,7 +4,7 @@ import { grey } from '@mui/material/colors';
 const customPalette = {
   primary: {
     light: '#d6d6dc',
-    main: '#bfbfc4',
+    main: '#757575',
     dark: '#7d7d81',
     contrastText: '#17171a',
   },

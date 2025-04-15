@@ -16,6 +16,7 @@ export const RemoveEntryButton = ({ onClick }: IconButtonProps) => {
         justifyContent: 'start',
         alignItems: 'start',
         flexDirection: 'column',
+        alignContent: 'center',
       })}
     >
       <RemoveIcon />

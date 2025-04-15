@@ -1,45 +1,52 @@
-import React, { useMemo } from 'react';
-import { Box } from '@mui/material';
+import type { ReactNode } from 'react';
+import React from 'react';
 import { grey } from '@mui/material/colors';
-import { EditableTypography } from '../../atoms';
+import { Typography } from '@mui/material';
 import type { EditableTypographyProps } from '../../atoms/Typography/types';
-import { usePreviewMode } from '../../../contexts';
+import { CommaSeparatedList } from '../../CommaSeparatedList';
 
 type SkillsForItemizedEntryEditorProps = Pick<
   EditableTypographyProps,
   'onSave' | 'id' | 'isEditing' | 'value'
->;
+> & {
+  labelPrefix?: ReactNode;
+};
 
 export const SkillsForItemizedEntryEditor: React.FC<
   SkillsForItemizedEntryEditorProps
-> = ({ id, isEditing, value, onSave }) => {
-  const { isPreviewing } = usePreviewMode();
+> = ({ id, isEditing, value, onSave, labelPrefix }) => {
+  const items = value ? value.split(',').map((s) => s.trim()) : [];
 
-  const shouldShowSkills = useMemo(
-    () => !isPreviewing || value,
-    [isPreviewing, value]
+  const handleSave = async (newItems: string[]) => {
+    await onSave(newItems.join(', '));
+  };
+
+  const defaultLabelPrefix = (
+    <Typography
+      variant="body2"
+      component="span"
+      sx={{
+        color: grey[600],
+        fontWeight: 'bold',
+      }}
+    >
+      Skills:
+    </Typography>
   );
 
-  if (!shouldShowSkills) {
-    return null;
-  }
+  const finalLabelPrefix =
+    labelPrefix === undefined ? defaultLabelPrefix : labelPrefix;
+
   return (
-    <Box color={grey[600]}>
-      <EditableTypography
-        id={id}
-        variant={'body2'}
-        color={grey[600]}
-        isEditing={isEditing}
-        value={value}
-        valueRender={(value) => `Skills: ${value ?? '(empty)'}`}
-        multiline
-        onSave={onSave}
-        textFieldProps={{
-          sx: {
-            width: '100%',
-          },
-        }}
-      />
-    </Box>
+    <CommaSeparatedList
+      id={id}
+      isEditing={isEditing}
+      items={items}
+      onSave={handleSave}
+      labelPrefix={finalLabelPrefix}
+      sx={{ color: grey[600] }}
+      textSx={{ color: grey[600] }}
+      variant="body2"
+    />
   );
 };
