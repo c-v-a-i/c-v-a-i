@@ -31,10 +31,12 @@ export const Projects = ({ cvId }: CvEntryComponentProps) => {
       entries={entries}
       noEntriesText="No project entries."
       renderEntry={(project) => (
-        <WithRemoveEntryButton removeEntry={() => removeEntry(project._id)}>
+        <WithRemoveEntryButton
+          removeEntry={() => removeEntry(project._id)}
+          key={project._id}
+        >
           <ProjectEntry
             cvId={cvId}
-            key={project._id}
             entry={project}
             updateField={updateField}
           />

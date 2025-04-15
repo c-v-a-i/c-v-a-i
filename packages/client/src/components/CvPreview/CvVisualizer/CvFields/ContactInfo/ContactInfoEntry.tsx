@@ -1,56 +1,48 @@
 import React from 'react';
 import { Column, EditableTypography } from '../../../../atoms';
 import type { CvEntryItemProps } from '../../types';
-import { WithRemoveEntryButton } from '../../../components';
 
 export const ContactInfoEntry = ({
   entry: contactInfo,
   updateField,
   isEditing,
-  removeEntry,
 }: CvEntryItemProps<'contactInfoEntries'>) => {
   return (
-    <WithRemoveEntryButton
-      removeEntry={removeEntry}
-      flexDirection={'row'}
-      height={'100%'}
-    >
-      <Column>
-        <EditableTypography
-          id={`contactInfo-category-${contactInfo._id}`}
-          value={contactInfo.linkName}
-          onSave={(value) =>
-            updateField({
-              _id: contactInfo._id,
-              fieldName: 'linkName',
-              value,
-            })
-          }
-          variant="body1"
-          isEditing={isEditing}
-          sx={{
-            textAlign: 'center',
-          }}
-        />
+    <Column>
+      <EditableTypography
+        id={`contactInfo-category-${contactInfo._id}`}
+        value={contactInfo.linkName}
+        onSave={(value) =>
+          updateField({
+            _id: contactInfo._id,
+            fieldName: 'linkName',
+            value,
+          })
+        }
+        variant="body1"
+        isEditing={isEditing}
+        sx={{
+          textAlign: 'center',
+        }}
+      />
 
-        {/* TODO: make it actually a link */}
-        <EditableTypography
-          id={`contactInfo-category-${contactInfo._id}`}
-          value={contactInfo.link}
-          onSave={(value) =>
-            updateField({
-              _id: contactInfo._id,
-              fieldName: 'link',
-              value,
-            })
-          }
-          variant="body2"
-          isEditing={isEditing}
-          sx={{
-            color: 'primary.main',
-          }}
-        />
-      </Column>
-    </WithRemoveEntryButton>
+      {/* TODO: make it actually a link */}
+      <EditableTypography
+        id={`contactInfo-category-${contactInfo._id}`}
+        value={contactInfo.link}
+        onSave={(value) =>
+          updateField({
+            _id: contactInfo._id,
+            fieldName: 'link',
+            value,
+          })
+        }
+        variant="body2"
+        isEditing={isEditing}
+        sx={{
+          color: 'primary.main',
+        }}
+      />
+    </Column>
   );
 };

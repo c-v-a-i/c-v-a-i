@@ -6,7 +6,11 @@ import {
   refetchGetContactInfoEntriesQuery,
   useGetCvQuery,
 } from '../../../../../generated/graphql';
-import { GenericEntriesSection, useCvEntries } from '../../../components';
+import {
+  GenericEntriesSection,
+  useCvEntries,
+  WithRemoveEntryButton,
+} from '../../../components';
 
 export const ContactInfo = ({ cvId }: CvEntryComponentProps) => {
   const useGetEntriesQueryResult = useGetCvQuery({
@@ -27,13 +31,16 @@ export const ContactInfo = ({ cvId }: CvEntryComponentProps) => {
       entries={entries}
       noEntriesText="No contact info entries available."
       renderEntry={(contactInfo) => (
-        <ContactInfoEntry
-          cvId={cvId}
-          key={contactInfo._id}
-          entry={contactInfo}
-          updateField={updateField}
+        <WithRemoveEntryButton
           removeEntry={() => removeEntry(contactInfo._id)}
-        />
+          key={contactInfo._id}
+        >
+          <ContactInfoEntry
+            cvId={cvId}
+            entry={contactInfo}
+            updateField={updateField}
+          />
+        </WithRemoveEntryButton>
       )}
       onAdd={handleAddEntry}
       sx={{

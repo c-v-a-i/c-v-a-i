@@ -32,10 +32,12 @@ export const Skills: React.FC<CvEntryComponentProps> = ({ cvId }) => {
       entries={entries}
       noEntriesText="No skills available."
       renderEntry={(skill) => (
-        <WithRemoveEntryButton removeEntry={() => removeEntry(skill._id)}>
+        <WithRemoveEntryButton
+          removeEntry={() => removeEntry(skill._id)}
+          key={skill._id}
+        >
           <SkillEntry
             cvId={cvId}
-            key={skill._id}
             entry={skill}
             updateField={updateField}
           />

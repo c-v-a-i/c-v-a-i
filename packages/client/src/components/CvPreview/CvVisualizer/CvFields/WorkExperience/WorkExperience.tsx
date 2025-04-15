@@ -31,10 +31,12 @@ export const WorkExperience = ({ cvId }: CvEntryComponentProps) => {
       entries={entries}
       noEntriesText="No work experience entries."
       renderEntry={(entry) => (
-        <WithRemoveEntryButton removeEntry={() => removeEntry(entry._id)}>
+        <WithRemoveEntryButton
+          removeEntry={() => removeEntry(entry._id)}
+          key={entry._id}
+        >
           <WorkExperienceEntry
             cvId={cvId}
-            key={entry._id}
             entry={entry}
             updateField={updateField}
           />
