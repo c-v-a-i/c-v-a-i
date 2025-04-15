@@ -8,6 +8,14 @@ query GetSkillEntries (
   }
 }
 
+query GetName (
+  $cvId: ID!
+) {
+  getCv(cvId: $cvId) {
+    name
+  }
+}
+
 query GetEducationEntries (
   $cvId: ID!
 ) {

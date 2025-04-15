@@ -51,19 +51,6 @@ export const AboutMe = ({ cvId }: CvEntryComponentProps) => {
         return (
           <Box>
             <EditableTypography
-              id={`about-me-name`}
-              value={aboutMe.name}
-              onSave={(value) =>
-                updateField({
-                  fieldName: 'name',
-                  value,
-                })
-              }
-              variant="h3"
-              gutterBottom
-            />
-
-            <EditableTypography
               id={`about-me-fieldName`}
               value={aboutMe.fieldName}
               onSave={(value) =>

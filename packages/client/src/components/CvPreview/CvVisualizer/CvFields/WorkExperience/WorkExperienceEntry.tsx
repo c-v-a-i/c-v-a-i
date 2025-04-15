@@ -1,12 +1,11 @@
 import React from 'react';
-import { Box } from '@mui/material';
-import { EditableTypography } from '../../../../atoms';
+import { Box, Typography } from '@mui/material';
+import { EditableTypography, Row } from '../../../../atoms';
 import type { CvEntryItemProps } from '../../types';
 import {
   DescriptionTextSection,
   JobTypeTextSection,
   SkillsForItemizedEntryEditor,
-  WithRemoveEntryButton,
 } from '../../../components';
 import { LocationAndDate } from './LocationAndDate';
 
@@ -14,7 +13,6 @@ export const WorkExperienceEntry = ({
   entry: we,
   updateField,
   isEditing,
-  removeEntry,
 }: CvEntryItemProps<'workExperienceEntries'>) => {
   return (
     <Box display="flex" flexDirection="column" gap={1} width={'100%'}>
@@ -22,10 +20,27 @@ export const WorkExperienceEntry = ({
         display={'flex'}
         justifyContent={'space-between'}
         alignItems={'start'}
-        width={'100%'}
       >
         <Box display={'flex'} flexDirection={'column'}>
-          <WithRemoveEntryButton removeEntry={removeEntry}>
+          <Row gap={1}>
+            <EditableTypography
+              id={`we-position-${we._id}`}
+              value={we.position}
+              onSave={(value) =>
+                updateField({
+                  _id: we._id,
+                  fieldName: 'position',
+                  value,
+                })
+              }
+              variant="h6"
+              isEditing={isEditing}
+              sx={{
+                textWrap: 'nowrap',
+                alignItems: 'center',
+              }}
+            />
+            <Typography variant={'h6'}>@</Typography>
             <EditableTypography
               id={`we-name-${we._id}`}
               value={we.name}
@@ -38,22 +53,12 @@ export const WorkExperienceEntry = ({
               }
               variant="h6"
               isEditing={isEditing}
+              sx={{
+                textWrap: 'nowrap',
+              }}
             />
-          </WithRemoveEntryButton>
-
-          <EditableTypography
-            id={`we-position-${we._id}`}
-            value={we.position}
-            onSave={(value) =>
-              updateField({
-                _id: we._id,
-                fieldName: 'position',
-                value,
-              })
-            }
-            variant="body1"
-            isEditing={isEditing}
-          />
+          </Row>
+          {/* </WithRemoveEntryButton>*/}
 
           <JobTypeTextSection
             id={we._id}

@@ -1,6 +1,7 @@
 fragment CvFragment on CvObjectType {
   _id
   title
+  name
   aboutMe {
     ...AboutMeFragment
   }
@@ -22,7 +23,6 @@ fragment CvFragment on CvObjectType {
 }
 
 fragment AboutMeFragment on AboutMe {
-  name
   fieldName
   description
 }

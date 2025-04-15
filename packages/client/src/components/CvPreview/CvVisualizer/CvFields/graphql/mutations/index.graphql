@@ -30,6 +30,19 @@ mutation GenerateNewEntryItem(
   }
 }
 
+mutation UpdateCvName (
+  $cvId: ID!
+  $name: String!
+) {
+  updateCv(
+    cvId: $cvId
+    data: {
+      name: $name
+    }
+  ) {
+    name
+  }
+}
 
 mutation DeleteEntryItem (
   $cvId: ID!

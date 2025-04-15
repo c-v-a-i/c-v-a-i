@@ -12,13 +12,13 @@ interface SkillItemProps {
   onEdit: (newValue: string) => void;
 }
 
-export const SkillItem: React.FC<SkillItemProps> = ({
+export const SkillItem = ({
   skillId,
   skillValue,
   isEditing,
   onRemove,
   onEdit,
-}) => {
+}: SkillItemProps) => {
   const { isPreviewing } = usePreviewMode();
 
   return (

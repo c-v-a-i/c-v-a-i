@@ -37,22 +37,6 @@ export const LocationAndDate: React.FC<LocationAndDateProps> = ({
 
   return (
     <Box display="flex" flexDirection="column" alignItems="start">
-      {shouldShowLocation && (
-        <EditableTypography
-          id={`we-location-${id}`}
-          valueRender={(v) => v ?? 'Location (empty)'}
-          value={location}
-          onSave={async (value) =>
-            updateField({
-              _id: id,
-              fieldName: 'location',
-              value,
-            })
-          }
-          variant="body2"
-          isEditing={isEditing}
-        />
-      )}
       {shouldShowDuration && (
         <EditableTypography
           id={`we-duration-${id}`}
@@ -62,6 +46,23 @@ export const LocationAndDate: React.FC<LocationAndDateProps> = ({
             updateField({
               _id: id,
               fieldName: 'duration',
+              value,
+            })
+          }
+          variant="body1"
+          isEditing={isEditing}
+        />
+      )}
+
+      {shouldShowLocation && (
+        <EditableTypography
+          id={`we-location-${id}`}
+          valueRender={(v) => v ?? 'Location (empty)'}
+          value={location}
+          onSave={async (value) =>
+            updateField({
+              _id: id,
+              fieldName: 'location',
               value,
             })
           }

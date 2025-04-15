@@ -1,10 +1,16 @@
 import React from 'react';
 import { SkillEntry } from './SkillEntry';
-import { useCvEntries, GenericEntriesSection } from '../../../components';
+import {
+  GenericEntriesSection,
+  useCvEntries,
+  WithRemoveEntryButton,
+} from '../../../components';
 import type { CvEntryComponentProps } from '../../types';
 import type { Skill as SkillGraphqlType } from '../../../../../generated/graphql';
-import { useGetCvQuery } from '../../../../../generated/graphql';
-import { refetchGetSkillEntriesQuery } from '../../../../../generated/graphql';
+import {
+  refetchGetSkillEntriesQuery,
+  useGetCvQuery,
+} from '../../../../../generated/graphql';
 
 export const Skills: React.FC<CvEntryComponentProps> = ({ cvId }) => {
   const useGetEntriesQueryResult = useGetCvQuery({
@@ -18,27 +24,23 @@ export const Skills: React.FC<CvEntryComponentProps> = ({ cvId }) => {
       refetchQueries: [refetchGetSkillEntriesQuery({ cvId })],
     });
 
-  const renderEntry = (skill: SkillGraphqlType) => (
-    <SkillEntry
-      cvId={cvId}
-      key={skill._id}
-      entry={skill}
-      updateField={updateField}
-      removeEntry={() => removeEntry(skill._id)}
-    />
-  );
-
   return (
     <GenericEntriesSection<SkillGraphqlType>
+      gap={0}
       title="Skills"
-      titleStyles={{
-        textAlign: 'right',
-        width: '100%',
-      }}
       loading={loading}
       entries={entries}
       noEntriesText="No skills available."
-      renderEntry={renderEntry}
+      renderEntry={(skill) => (
+        <WithRemoveEntryButton removeEntry={() => removeEntry(skill._id)}>
+          <SkillEntry
+            cvId={cvId}
+            key={skill._id}
+            entry={skill}
+            updateField={updateField}
+          />
+        </WithRemoveEntryButton>
+      )}
       onAdd={handleAddEntry}
     />
   );

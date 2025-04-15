@@ -19,6 +19,9 @@ export class CvObjectType {
   _id!: string;
 
   @Field(() => String)
+  name!: string;
+
+  @Field(() => String)
   title!: string;
 
   @Field(() => String)
@@ -71,6 +74,7 @@ export const createObjectType = ({
 }): CvObjectType => {
   return {
     _id: String(cv._id),
+    name: cvVersion.data.name,
     userId: cv.userId,
     title: cvVersion.data.title,
     aboutMe: cvVersion.data.aboutMe,

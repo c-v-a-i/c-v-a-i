@@ -64,6 +64,9 @@ export class UpdateCvInput {
   @Field(() => String, { nullable: true })
   title?: string;
 
+  @Field(() => String, { nullable: true })
+  name?: string;
+
   @Field(() => UpdateAboutMeInput, { nullable: true })
   aboutMe?: UpdateAboutMeInput;
 

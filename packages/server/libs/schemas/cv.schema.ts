@@ -9,6 +9,7 @@ import { Project } from './project.schema';
 
 export class CvData {
   title!: string;
+  name!: string;
   aboutMe?: AboutMe;
   educationEntries!: Record<string, Education>;
   workExperienceEntries!: Record<string, WorkExperience>;

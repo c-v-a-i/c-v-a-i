@@ -2,11 +2,15 @@ import React from 'react';
 import type { CvEntryComponentProps } from '../../types';
 import type { Education as EducationGraphqlType } from '../../../../../generated/graphql';
 import {
-  useGetCvQuery,
   refetchGetEducationEntriesQuery,
+  useGetCvQuery,
 } from '../../../../../generated/graphql';
 import { EducationEntry } from './EducationEntry';
-import { GenericEntriesSection, useCvEntries } from '../../../components';
+import {
+  GenericEntriesSection,
+  useCvEntries,
+  WithRemoveEntryButton,
+} from '../../../components';
 
 export const Education: React.FC<CvEntryComponentProps> = ({ cvId }) => {
   const useGetEntriesQueryResult = useGetCvQuery({
@@ -21,27 +25,23 @@ export const Education: React.FC<CvEntryComponentProps> = ({ cvId }) => {
       refetchQueries: [refetchGetEducationEntriesQuery({ cvId })],
     });
 
-  const renderEntry = (ed: EducationGraphqlType) => (
-    <EducationEntry
-      key={ed._id}
-      cvId={cvId}
-      entry={ed}
-      updateField={updateField}
-      removeEntry={() => removeEntry(ed._id)}
-    />
-  );
-
   return (
     <GenericEntriesSection<EducationGraphqlType>
       title="Education"
-      titleStyles={{
-        textAlign: 'right',
-        width: '100%',
-      }}
       loading={loading}
       entries={entries}
       noEntriesText="No education entries available."
-      renderEntry={renderEntry}
+      renderEntry={(entry) => (
+        <WithRemoveEntryButton removeEntry={() => removeEntry(entry._id)}>
+          <EducationEntry
+            key={entry._id}
+            cvId={cvId}
+            entry={entry}
+            updateField={updateField}
+            removeEntry={() => removeEntry(entry._id)}
+          />
+        </WithRemoveEntryButton>
+      )}
       onAdd={handleAddEntry}
     />
   );
