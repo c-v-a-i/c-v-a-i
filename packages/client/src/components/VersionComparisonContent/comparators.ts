@@ -20,7 +20,24 @@ export const compareCvTitle = (
   };
 };
 
-// Compare About Me section
+export const compareName = (
+  left: CvData,
+  right: CvData
+): SectionChange | null => {
+  if (left.name === right.name) return null;
+
+  return {
+    section: 'Basic Information',
+    items: [
+      {
+        name: 'Name',
+        action: 'modified',
+        fields: [compareValues('Name', left.name, right.name)!],
+      },
+    ],
+  };
+};
+
 export const compareAboutMe = (
   left: CvData,
   right: CvData
@@ -31,7 +48,6 @@ export const compareAboutMe = (
   const rightAbout = right.aboutMe;
 
   const fields = [
-    compareValues('Name', leftAbout?.name, rightAbout?.name),
     compareValues('Field', leftAbout?.fieldName, rightAbout?.fieldName),
     compareValues(
       'Description',
@@ -43,9 +59,9 @@ export const compareAboutMe = (
   if (fields.length === 0) return null;
 
   const action: ItemAction =
-    !leftAbout?.name && !leftAbout?.fieldName
+    !leftAbout?.fieldName
       ? 'added'
-      : !rightAbout?.name && !rightAbout?.fieldName
+      : !rightAbout?.fieldName
         ? 'removed'
         : 'modified';
 
@@ -61,7 +77,7 @@ export const compareAboutMe = (
   };
 };
 
-// Compare Work Experience
+
 export const compareWorkExperience = (left: CvData, right: CvData) =>
   compareEntries(
     'Work Experience',

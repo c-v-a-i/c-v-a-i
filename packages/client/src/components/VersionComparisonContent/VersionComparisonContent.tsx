@@ -5,7 +5,7 @@ import {
   compareAboutMe,
   compareContactInfo,
   compareCvTitle,
-  compareEducation,
+  compareEducation, compareName,
   compareProjects,
   compareSkills,
   compareWorkExperience,
@@ -18,9 +18,9 @@ export const VersionComparisonContent = ({
   right,
 }: VersionComparisonContentProps) => {
   const changes = useMemo(() => {
-    // Combine all sections
     return [
       compareCvTitle(left, right),
+      compareName(left, right),
       compareAboutMe(left, right),
       compareWorkExperience(left, right),
       compareEducation(left, right),
