@@ -23,6 +23,8 @@ export class LlmCommunicationService {
       systemPrompt: string;
       userContent: OpenAI.ChatCompletionContentPart[];
       model: string;
+      temperature?: number;
+      maxTokens?: number;
     },
     responseSchemaObject: Record<string, ZodSchema<T>>,
     images?: string[]
@@ -44,6 +46,8 @@ export class LlmCommunicationService {
     const response = await this.openai.beta.chat.completions.parse({
       model: params.model,
       messages,
+      temperature: params.temperature ?? 0,
+      max_tokens: params?.maxTokens,
       response_format: zodResponseFormat(responseSchema, responseSchemaName),
     });
 
