@@ -46,7 +46,7 @@ export class LlmCommunicationService {
     const response = await this.openai.beta.chat.completions.parse({
       model: params.model,
       messages,
-      temperature: params.temperature ?? 0,
+      temperature: params.temperature,
       max_tokens: params?.maxTokens,
       response_format: zodResponseFormat(responseSchema, responseSchemaName),
     });
