@@ -93,10 +93,12 @@ export class LlmIntegrationService {
 
     const completionParams = {
       systemPrompt: this.cvReviewSystemPrompt,
+      temperature: 0.0,
+      maxTokens: 2048,
       userContent: [
         { type: 'text' as const, text: CvFormatter.cvToJsonCodeBlock(cv) },
       ],
-      model: 'gpt-4o',
+      model: 'ft:gpt-4o-mini-2024-07-18:personal::B2jewu6X',
     };
     const result = await this.llmService.createStructuredResponse(
       completionParams,
