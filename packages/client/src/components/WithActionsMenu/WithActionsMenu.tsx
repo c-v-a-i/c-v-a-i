@@ -9,6 +9,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { ResumeAssistantSection } from '../LLMAssistantSection';
 import { MenuHeader } from './MenuHeader';
 import { CvCreationActions } from './CvCreationActions/CvCreationActions';
+import { customPalette, shadowStyles } from '../../theme';
 
 const drawerWidth = 600;
 
@@ -25,7 +26,7 @@ const MainContent = styled('div', {
 }));
 
 export const WithActionsMenu = ({ children }: React.PropsWithChildren) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(() => true);
   const { user } = useUser();
   const { isPreviewing } = usePreviewMode();
 
@@ -36,7 +37,7 @@ export const WithActionsMenu = ({ children }: React.PropsWithChildren) => {
   const handleDrawerClose = useCallback(() => {
     setOpen(false);
   }, []);
-  const savedState = useRef(false);
+  const savedState = useRef(open);
 
   useEffect(() => {
     if (isPreviewing) {
@@ -60,7 +61,13 @@ export const WithActionsMenu = ({ children }: React.PropsWithChildren) => {
         </BadgeButton>
       )}
       <Drawer open={open}>
-        <DrawerContainer justifyContent={'space-between'}>
+        <DrawerContainer
+          justifyContent={'space-between'}
+          sx={{
+            backgroundColor: customPalette.background.surface,
+            boxShadow: shadowStyles.section.boxShadow,
+          }}
+        >
           <Box
             sx={{
               flexShrink: 0,

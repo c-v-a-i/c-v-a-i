@@ -1,7 +1,7 @@
 import { alpha, createTheme } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
-const customPalette = {
+export const customPalette = {
   primary: {
     light: '#d6d6dc',
     main: '#757575',
@@ -23,8 +23,15 @@ const customPalette = {
   background: {
     default: '#FAFBFF',
     paper: '#FAFBFF',
+    surface: '#FFFFFF',
   },
 };
+
+export const shadowStyles = {
+  section: {
+    boxShadow: `-2px 2px 8px ${alpha('#000', 0.25)}`,
+  },
+} as const;
 
 const radius = {
   small: '12px',
