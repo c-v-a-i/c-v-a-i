@@ -15,6 +15,7 @@ import {
   refetchGetNameQuery,
   useUpdateCvNameMutation,
 } from '../../../generated/graphql';
+import { customPalette, shadowStyles } from "../../../theme";
 
 type CvVisualizerProps = {
   cvId: string;
@@ -54,6 +55,8 @@ export const CvVisualizer = ({ cvId }: CvVisualizerProps) => {
         maxWidth: '1400px',
         padding: '80px 80px',
         justifyContent: 'center',
+        backgroundColor: customPalette.background.surface,
+        boxShadow: shadowStyles.section.boxShadow
       }}
     >
       <GetNameComponent variables={{ cvId }}>

@@ -98,8 +98,9 @@ export class LlmIntegrationService {
       userContent: [
         { type: 'text' as const, text: CvFormatter.cvToJsonCodeBlock(cv) },
       ],
-      model: 'ft:gpt-4o-mini-2024-07-18:personal::B2jewu6X',
+      model: 'gpt-4o',
     };
+
     const result = await this.llmService.createStructuredResponse(
       completionParams,
       { reviewCvResponseFormat }
